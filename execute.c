@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 12:41:35 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/13 19:29:38 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/14 15:42:14 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,24 @@ static int
 void
 	execute(t_list *command, t_shell *shell)
 {
+	t_list	*current;
 	char	*cmd;
 
 	if (!command)
 		return ;
-	cmd = getcmd(command);
-	if (cmd[0] == '/')
-		; //execve
-	else if (builtin(command, shell) == -1)
-		puterror(strerror(errno));
+	current = command;
+	while (current)
+	{
+		cmd = getcmd(command);
+		if (getcommandtype(current) == SIMPLE)
+		{
+			if (cmd[0] == '/')
+				; //execve
+			else if (builtin(command, shell) == -1)
+				puterror(strerror(errno));
+		}
+		else
+			printf("PIPE ET REDIRECTIONS PAS ENCORE FAIT DESO LES COCOS\n");
+		current = current->next;
+	}
 }
