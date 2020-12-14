@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 12:41:35 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 16:05:36 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/14 17:16:57 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,10 @@ void
 		if (getcommandtype(current) == SIMPLE)
 		{
 			if (cmd[0] == '/')
-				; //execve
+			{
+				if (process(current, shell) == -1)
+					puterror(strerror(errno));
+			}
 			else if (builtin(current, shell) == -1)
 				puterror(strerror(errno));
 		}

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 16:03:26 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/14 18:20:25 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ static t_shell
 	t_shell	shell;
 
 	shell.env = NULL;
-	shell.processstatus = PROCESS_OK;
 	return (shell);
 }
 
@@ -54,9 +53,7 @@ int
 		if (!(input = prompt()))
 			puterror(strerror(errno));
 		token = tokenize(input, shell.env);
-		//ft_lstiter(token, showtoken);
 		command = makecommands(token);
-		//ft_lstiter(command, showcommand);
 		execute(command, &shell);
 		free(input);
 		ft_lstclear(&token, deltoken);

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 10:34:27 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/13 18:20:52 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/14 17:42:50 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int
 
 	current = token;
 	argc = countargv(current);
-	if (!(argv = ft_calloc(sizeof(*argv), argc + 1)))
+	if (!(argv = ft_calloc(argc + 1, sizeof(*argv))))
 		return (-1);
 	argv[argc] = NULL;
 	i = 0;

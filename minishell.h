@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2020/12/14 16:03:13 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/14 18:08:47 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@
 # define STDOUT						1
 # define STDERR						2
 
-# define ERROR_CMD_NOT_FOUND		"Command not found\n"
-# define ERROR_PARSE				"Parse error\n"
-# define ERROR_TOO_MANY_ARG			"Too many arguments\n"
-# define ERROR_NOT_ENOUGH_ARG		"Not enough arguments\n"
-# define ERROR_INVALID_IDENTIFIER	"Invalid identifier\n"
+# define ERROR_CMD_NOT_FOUND		"Command not found"
+# define ERROR_PARSE				"Parse error"
+# define ERROR_TOO_MANY_ARG			"Too many arguments"
+# define ERROR_NOT_ENOUGH_ARG		"Not enough arguments"
+# define ERROR_INVALID_IDENTIFIER	"Invalid identifier"
 
 # define PROCESS_FAIL				0
 # define PROCESS_OK					1
@@ -92,17 +92,20 @@ void	assigncmd(t_list *token, t_list *command);
 int		assignargv(t_list *token, t_list *command);
 char	*getcmd(t_list *command);
 char	**getcommandargv(t_list *command);
+char	**getprocessargv(char **argv, char *path);
 void	delcommand(void *p);
 
 //Environment
 t_list	*findenv(t_list *env, const char *name);
 char	*getenvname(t_list *env);
 char	*getenvval(t_list *env);
+char	**getenvp(t_list *env);
 int		addenv(t_list **aenv, char *input);
 void	delenv(void *p);
 
 //Execution
 void	execute(t_list *command, t_shell *shell);
+int		process(t_list *command, t_shell *shell);
 
 //Builtins
 int		cd(char **argv);

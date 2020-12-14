@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 14:05:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/13 13:49:08 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/14 17:20:40 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void
 	puterror(char *msg)
 {
 	write(STDERR, msg, ft_strlen(msg));
+	write(STDERR, "\n", 1);
 }
 
 void
