@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:35:57 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/13 20:16:44 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/14 11:04:14 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int
 }
 
 t_list
-	*tokenize(char *input)
+	*tokenize(char *input, t_list *env)
 {
 	t_list			*r;
 	unsigned int	i;
@@ -46,7 +46,7 @@ t_list
 		if (!(qt = quote(qt, input[i])) && ismetachar(input[i]))
 		{
 			l--;
-			if (addword(&r, input, i, l) == -1)
+			if (addword(&r, input, i, l, env) == -1)
 				return (NULL);
 			while (ismetachar(input[i]))
 				if (addmetachar(&r, input, i++) == -1)
@@ -56,7 +56,7 @@ t_list
 		else
 			i++;
 	}
-	if (addword(&r, input, i, l) == -1)
+	if (addword(&r, input, i, l, env) == -1)
 		return (NULL);
 	return (r);
 }

@@ -6,12 +6,12 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 08:39:15 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 10:33:51 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/14 15:19:58 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
+
 static char
 	*detectidentifier(char *s, t_list *env)
 {
@@ -21,10 +21,11 @@ static char
 	
 	idlen = 0;
 	i = 0;
-	if (ft_isalpha(s[i++]))
+	if (ft_isalpha(s[i]) || s[i] == '_')
 		idlen++;
 	else
 		return (NULL);
+	i++;
 	while (ft_isalnum(s[i]) || s[i] == '_')
 	{
 		idlen++;
@@ -41,53 +42,80 @@ static char
 }
 
 static size_t
-	getlen(char *s)
+	getlen(char *s, t_list *env)
 {
 	size_t	r;
 	size_t	i;
+	char	*param;
 
 	r = 0;
 	i = 0;
 	while (s[i])
 	{
-		
-		i++;
+		if (s[i] == '$')
+		{
+			if ((param = detectidentifier(&s[i + 1], env)))
+				r += ft_strlen(param);
+			i++;
+			while (ft_isalnum(s[i]) || s[i] == '_')
+				i++;
+		}
+		else
+		{
+			r++;
+			i++;
+		}
 	}
 	return (r);
 }
-*/
+
 char
-	*unquote(char *s)
+	*unquote(char *s, t_list *env)
 {
 	char	*r;
-	char	*scpy;
 	size_t	l;
 	size_t	i;
+	size_t	j;
 	int		q;
+	char	*param;
 
-	l = ft_strlen(s);
+	l = getlen(s, env);
 	if (!(r = malloc(l + 1)))
 	{
 		free(s);
 		return (NULL);
 	}
+	r[l] = '\0';
 	q = 0;
 	i = 0;
-	scpy = s;
-	while (*s)
+	j = 0;
+	while (s[j])
 	{
-		if (!q && isquote(*s))
+		if (!q && isquote(s[j]))
+		{
 			q = *s;
-		else if (q && q == *s)
+			j++;
+		}
+		else if (q && q == s[j])
+		{
 			q = 0;
+			j++;
+		}
 		else
 		{
-			r[i] = *s;
-			i++;
+			if (q != 34 && s[j] == '$')
+			{
+				if (!s[j + 1] || ft_isspht(s[j + 1]))
+					r[i++] = s[j++]; //Remove token if token is only expanded unexisting param
+				else if ((param = detectidentifier(&s[++j], env)))
+					i += ft_strlcpy(&r[i], param, l + 1);
+				while (ft_isalnum(s[j]) || s[j] == '_')
+					j++;
+			}
+			else
+				r[i++] = s[j++];
 		}
-		s++;
 	}
-	r[i] = '\0';
-	free(scpy);
+	free(s);
 	return (r);
 }

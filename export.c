@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 17:52:33 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 09:08:25 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/14 14:52:47 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 static int
 	isidentifiervalid(char *s)
 {
-	if (!ft_isalpha(*s++))
+	if (!(ft_isalpha(*s) || *s == '_'))
 		return (0);
+	s++;
 	while (*s && *s != '=')
 	{
 		if (!(ft_isalnum(*s) || *s == '_'))

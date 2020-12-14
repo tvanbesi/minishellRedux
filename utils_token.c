@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 16:25:49 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 08:56:49 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/14 11:02:46 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static t_list
 }
 
 int
-	addword(t_list **atoken, char *input, unsigned int i, size_t l)
+	addword(t_list **atoken, char *input, unsigned int i, size_t l, t_list *env)
 {
 	t_list	*token;
 	t_token	*content;
@@ -42,7 +42,7 @@ int
 
 	if (l)
 	{
-		if (!(s = ft_substr(input, i - l, l)) || !(s = unquote(s)))
+		if (!(s = ft_substr(input, i - l, l)) || !(s = unquote(s, env)))
 		{
 			puterror(strerror(errno));
 			return (-1);

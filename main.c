@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 09:09:22 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/14 11:04:01 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int
 		ft_putstr("> ");
 		if (!(input = prompt()))
 			puterror(strerror(errno));
-		token = tokenize(input);
+		token = tokenize(input, shell.env);
 		//ft_lstiter(token, showtoken);
 		command = makecommands(token);
 		//ft_lstiter(command, showcommand);

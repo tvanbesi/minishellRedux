@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2020/12/14 08:50:27 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/14 11:03:24 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,12 @@ typedef	struct	s_shell
 }				t_shell;
 
 //Parsing
-t_list	*tokenize(char *input);
+t_list	*tokenize(char *input, t_list *env);
 t_list	*makecommands(t_list *tokens);
 
 //Tokens
-char	*unquote(char *s);
-int		addword(t_list **atoken, char *input, unsigned int i, size_t l);
+char	*unquote(char *s, t_list *env);
+int		addword(t_list **atoken, char *input, unsigned int i, size_t l, t_list *env);
 int		addmetachar(t_list **atoken, char *input, unsigned int i);
 int		gettokentype(t_list *token);
 char	*gettokenstr(t_list *token);
