@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 11:04:01 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/14 16:03:26 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static t_shell
 	t_shell	shell;
 
 	shell.env = NULL;
+	shell.processstatus = PROCESS_OK;
 	return (shell);
 }
 

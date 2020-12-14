@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2020/12/14 11:03:24 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/14 16:03:13 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@
 # define ERROR_TOO_MANY_ARG			"Too many arguments\n"
 # define ERROR_NOT_ENOUGH_ARG		"Not enough arguments\n"
 # define ERROR_INVALID_IDENTIFIER	"Invalid identifier\n"
+
+# define PROCESS_FAIL				0
+# define PROCESS_OK					1
 
 //Remove for defense
 #include <stdio.h>
@@ -67,6 +70,7 @@ typedef	struct	s_env
 typedef	struct	s_shell
 {
 	t_list	*env;
+	int		processstatus;
 }				t_shell;
 
 //Parsing

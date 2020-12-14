@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 12:41:35 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 15:42:14 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/14 16:05:36 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,12 @@ void
 	current = command;
 	while (current)
 	{
-		cmd = getcmd(command);
+		cmd = getcmd(current);
 		if (getcommandtype(current) == SIMPLE)
 		{
 			if (cmd[0] == '/')
 				; //execve
-			else if (builtin(command, shell) == -1)
+			else if (builtin(current, shell) == -1)
 				puterror(strerror(errno));
 		}
 		else
