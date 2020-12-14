@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:07:04 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/13 18:24:15 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/14 15:37:15 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int
 	char		*path;
 
 	if (!argv[0])
-		return (chdir(""));	//cd to HOME
+		return (0);
 	if (argv[1])
 	{
 		puterror(ERROR_TOO_MANY_ARG);
