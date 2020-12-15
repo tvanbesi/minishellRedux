@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 18:27:26 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/15 09:32:55 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/15 10:39:16 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,11 @@ int
 		dup2(fd[0], STDIN);
 		close(fd[1]);
 		close(fd[0]);
+		if (getcommandtype(command->next) == PIPE)
+		{
+			command = command->next;
+			minipipe(command, shell);
+		}
 		execute(command->next, shell);
 	}
 	return (0);
