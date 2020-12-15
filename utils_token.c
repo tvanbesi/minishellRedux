@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 16:25:49 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 11:02:46 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/15 11:06:45 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,26 @@ static t_list
 	return (token);
 }
 
+static int
+	emptytokenexception(char *word, t_list *env)
+{
+	int	i;
+
+	i = 0;
+	if (word[i++] != '$')
+		return (0);
+	if (!word[i])
+		return (0);
+	if (!(ft_isalpha(word[i]) || word[i] == '_'))
+		return (0);
+	while (word[++i])
+	{
+		if (!(ft_isalnum(word[i]) || word[i] == '_'))
+			return (0);
+	}
+	return (1);
+}
+
 int
 	addword(t_list **atoken, char *input, unsigned int i, size_t l, t_list *env)
 {
@@ -42,7 +62,17 @@ int
 
 	if (l)
 	{
-		if (!(s = ft_substr(input, i - l, l)) || !(s = unquote(s, env)))
+		if (!(s = ft_substr(input, i - l, l)))
+		{
+			puterror(strerror(errno));
+			return (-1);
+		}
+		if (emptytokenexception(s, env))
+		{
+			free(s);
+			return (0);
+		}
+		if (!(s = unquote(s, env)))
 		{
 			puterror(strerror(errno));
 			return (-1);
