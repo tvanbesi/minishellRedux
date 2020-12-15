@@ -6,11 +6,20 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 18:15:49 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 18:10:36 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/14 19:15:01 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int
+	getcommandtype(t_list *command)
+{
+	t_command	*content;
+
+	content = command->content;
+	return (content->type);
+}
 
 char
 	*getcmd(t_list *command)

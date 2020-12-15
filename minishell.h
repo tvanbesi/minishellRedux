@@ -6,12 +6,13 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2020/12/14 18:08:47 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/15 09:47:17 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+# include <fcntl.h>
 # include <string.h>
 # include <sys/errno.h>
 # include <sys/wait.h>
@@ -27,9 +28,7 @@
 # define ERROR_TOO_MANY_ARG			"Too many arguments"
 # define ERROR_NOT_ENOUGH_ARG		"Not enough arguments"
 # define ERROR_INVALID_IDENTIFIER	"Invalid identifier"
-
-# define PROCESS_FAIL				0
-# define PROCESS_OK					1
+# define ERROR_GNL					"Prompt fail"
 
 //Remove for defense
 #include <stdio.h>
@@ -70,7 +69,8 @@ typedef	struct	s_env
 typedef	struct	s_shell
 {
 	t_list	*env;
-	int		processstatus;
+	int		stdincpy;
+	int		stdoutcpy;
 }				t_shell;
 
 //Parsing
@@ -84,12 +84,13 @@ int		addmetachar(t_list **atoken, char *input, unsigned int i);
 int		gettokentype(t_list *token);
 char	*gettokenstr(t_list *token);
 int		getoperatortype(t_list *token);
-int		getcommandtype(t_list *token);
+int		gettokencommandtype(t_list *token);
 void	deltoken(void *p);
 
 //Commands
 void	assigncmd(t_list *token, t_list *command);
 int		assignargv(t_list *token, t_list *command);
+int		getcommandtype(t_list *command);
 char	*getcmd(t_list *command);
 char	**getcommandargv(t_list *command);
 char	**getprocessargv(char **argv, char *path);
@@ -104,8 +105,10 @@ int		addenv(t_list **aenv, char *input);
 void	delenv(void *p);
 
 //Execution
+void	cyclecommand(t_list *command, t_shell *shell);
 void	execute(t_list *command, t_shell *shell);
 int		process(t_list *command, t_shell *shell);
+int		minipipe(t_list *command, t_shell *shell);
 
 //Builtins
 int		cd(char **argv);

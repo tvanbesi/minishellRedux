@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 15:06:13 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/13 16:02:42 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/14 19:14:08 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ t_list
 	while (current)
 	{
 		current = skipmeta(current);
-		if (!(command = newcommand(getcommandtype(current))))
+		if (!(command = newcommand(gettokencommandtype(current))))
 			return (error(strerror(errno)));
 		if (gettokentype(current) == WORD)
 			assigncmd(current, command);

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 12:41:35 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 17:16:57 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/15 10:00:06 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,27 +41,47 @@ static int
 void
 	execute(t_list *command, t_shell *shell)
 {
-	t_list	*current;
 	char	*cmd;
+
+	cmd = getcmd(command);
+	if (cmd[0] == '/')
+	{
+		if (process(command, shell) == -1)
+			puterror(strerror(errno));
+	}
+	else if (builtin(command, shell) == -1)
+		puterror(strerror(errno));
+}
+
+void
+	cyclecommand(t_list *command, t_shell *shell)
+{
+	t_list	*current;
+	int		commandtype;
 
 	if (!command)
 		return ;
 	current = command;
 	while (current)
 	{
-		cmd = getcmd(current);
-		if (getcommandtype(current) == SIMPLE)
+		commandtype = getcommandtype(current);
+		if (commandtype == SIMPLE)
 		{
-			if (cmd[0] == '/')
-			{
-				if (process(current, shell) == -1)
-					puterror(strerror(errno));
-			}
-			else if (builtin(current, shell) == -1)
+			execute(current, shell);
+			current = current->next;
+		}
+		else if (commandtype == PIPE)
+		{
+			if (minipipe(current, shell) == -1)
 				puterror(strerror(errno));
+			while (getcommandtype(current) == PIPE)
+				current = current->next;
+			current = current->next;
 		}
 		else
-			printf("PIPE ET REDIRECTIONS PAS ENCORE FAIT DESO LES COCOS\n");
-		current = current->next;
+		{
+			puterror("Unsupported operator");
+			current = current->next;
+		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 18:20:25 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/15 09:57:59 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,18 @@ static char
 	*prompt(void)
 {
 	char	*line;
-	char	*r;
 	int		gnl;
 
-	r = NULL;
-	while ((gnl = get_next_line(0, &line)) > 0)
+	while ((gnl = get_next_line(STDIN, &line)) != 1)
 	{
-		r = ft_strdup(line);
 		free(line);
+		if (gnl == -1)
+		{
+			puterror(ERROR_GNL);
+			return (NULL);
+		}
 	}
-	free(line);
-	return (r);
+	return (line);
 }
 
 static t_shell
@@ -35,6 +36,8 @@ static t_shell
 	t_shell	shell;
 
 	shell.env = NULL;
+	shell.stdincpy = dup(STDIN);
+	shell.stdoutcpy = dup(STDOUT);
 	return (shell);
 }
 
@@ -49,12 +52,14 @@ int
 	shell = initshell();
 	while (1)
 	{
-		ft_putstr("> ");
+		write(STDOUT, "> ", 2);
 		if (!(input = prompt()))
 			puterror(strerror(errno));
 		token = tokenize(input, shell.env);
 		command = makecommands(token);
-		execute(command, &shell);
+		cyclecommand(command, &shell);
+		dup2(shell.stdincpy, STDIN);
+		dup2(shell.stdoutcpy, STDOUT);
 		free(input);
 		ft_lstclear(&token, deltoken);
 		ft_lstclear(&command, delcommand);
