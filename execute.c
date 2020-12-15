@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 12:41:35 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/15 10:00:06 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/15 11:41:45 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,15 @@ void
 				current = current->next;
 			current = current->next;
 		}
-		else
+		else if (commandtype == REDIRECTION)
 		{
-			puterror("Unsupported operator");
+			if (redirect(current, shell) == -1)
+				puterror(strerror(errno));
+			while (getcommandtype(current) == REDIRECTION)
+				current = current->next;
 			current = current->next;
 		}
+		else
+			puterror("CYCLING ERROR");
 	}
 }

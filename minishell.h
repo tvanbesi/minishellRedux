@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2020/12/15 09:47:17 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/15 11:37:40 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ void	cyclecommand(t_list *command, t_shell *shell);
 void	execute(t_list *command, t_shell *shell);
 int		process(t_list *command, t_shell *shell);
 int		minipipe(t_list *command, t_shell *shell);
+int		redirect(t_list *command, t_shell *shell);
 
 //Builtins
 int		cd(char **argv);
