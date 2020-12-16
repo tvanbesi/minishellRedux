@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 12:41:35 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/16 17:13:19 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 17:34:09 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int
 	if (!ft_strncmp(cmd, "echo", 5))
 		return (echo(argv));
 	else if (!ft_strncmp(cmd, "cd", 3))
-		return (cd(argv));
+		return (cd(argv, &shell->env));
 	else if (!ft_strncmp(cmd, "pwd", 4))
 		return (pwd(argv));
 	else if (!ft_strncmp(cmd, "export", 7))

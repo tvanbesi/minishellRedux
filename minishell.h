@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2020/12/16 17:10:50 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 17:38:53 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void	sigint(int n);
 void	sigquit(int n);
 
 //Builtins
-int		cd(char **argv);
+int		cd(char **argv, t_list **aenv);
 int		echo(char **argv);
 int		pwd(char **argv);
 int		env(char **argv, t_list *env);
