@@ -6,17 +6,11 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:35:57 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 11:04:14 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 09:24:31 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int
-	ismetachar(int c)
-{
-	return (c == ' ' || c == '\t' || c == ';' || c == '<' || c == '>' || c == '|');
-}
 
 static int
 	quote(int qt, int c)
@@ -46,17 +40,18 @@ t_list
 		if (!(qt = quote(qt, input[i])) && ismetachar(input[i]))
 		{
 			l--;
-			if (addword(&r, input, i, l, env) == -1)
+			if (addword(&r, &input[i - l], l, env) == -1)
+				return (NULL);
+			if (addmetachar(&r, &input[i]) == -1)
 				return (NULL);
 			while (ismetachar(input[i]))
-				if (addmetachar(&r, input, i++) == -1)
-					return (NULL);
+				i++;
 			l = 0;
 		}
 		else
 			i++;
 	}
-	if (addword(&r, input, i, l, env) == -1)
+	if (addword(&r, &input[i - l], l, env) == -1)
 		return (NULL);
 	return (r);
 }

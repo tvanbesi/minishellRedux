@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 13:29:19 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/13 14:48:50 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 09:26:24 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ void
 		printf("WORD\t\t");
 	else if (token->type == OPERATOR)
 		printf("OPERATOR\t");
-	else if (token->type == METACHARACTER)
-		printf("METACHARACTER\t");
 	printf("|%s|\n", token->s);
 }
 
@@ -38,7 +36,7 @@ void
 		printf("SIMPLE\t\t");
 	if (command->type == PIPE)
 		printf("PIPE\t\t");
-	if (command->type == REDIRECTION)
+	if (command->type > REDIRECTION)
 		printf("REDIRECTION\t");
 	printf("CMD:|%s|\tARGV\t", command->cmd);
 	i = 0;

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 12:41:35 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/15 11:41:45 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 07:00:17 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,17 +76,19 @@ void
 				puterror(strerror(errno));
 			while (getcommandtype(current) == PIPE)
 				current = current->next;
-			current = current->next;
+			if (getcommandtype(current) == SIMPLE)
+				current = current->next;
 		}
-		else if (commandtype == REDIRECTION)
+		else if (commandtype > REDIRECTION)
 		{
 			if (redirect(current, shell) == -1)
 				puterror(strerror(errno));
-			while (getcommandtype(current) == REDIRECTION)
+			while (getcommandtype(current) > REDIRECTION)
 				current = current->next;
-			current = current->next;
+			if (getcommandtype(current) == SIMPLE)
+				current = current->next;
 		}
 		else
-			puterror("CYCLING ERROR");
+			puterror(ERROR_CYCLING);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 10:29:31 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 19:13:27 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 09:32:41 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,24 +30,8 @@ char
 	return (content->s);
 }
 
-int
-	getoperatortype(t_list *token)
-{
-	t_token	*content;
-
-	content = token->content;
-	if (content->s[0] == ';')
-		return (SIMPLE);
-	else if (content->s[0] == '|')
-		return (PIPE);
-	else if (content->s[0] == '>' || content->s[0] == '<')
-		return (REDIRECTION);
-	else
-		return (-1);
-}
-
-int
-	gettokencommandtype(t_list *token)
+static t_list
+	*nextoperator(t_list *token)
 {
 	t_list	*current;
 
@@ -55,9 +39,32 @@ int
 	while (current)
 	{
 		if (gettokentype(current) == OPERATOR)
-			return (getoperatortype(current));
+			return (current);
 		current = current->next;
 	}
-	return (SIMPLE);
+	return (current);
+}
+
+int
+	gettokencommandtype(t_list *token)
+{
+	t_token	*content;
+
+	token = nextoperator(token);
+	if (!token)
+		return (SIMPLE);
+	content = token->content;
+	if (!ft_strncmp(content->s, ";", 2))
+		return (SIMPLE);
+	else if (!ft_strncmp(content->s, "|", 2))
+		return (PIPE);
+	else if (!ft_strncmp(content->s, ">", 2))
+		return (REDIRTRUNC);
+	else if (!ft_strncmp(content->s, "<", 2))
+		return (REDIRIN);
+	else if (!ft_strncmp(content->s, ">>", 3))
+		return (REDIRAPPEND);
+	else
+		return (-1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2020/12/15 11:37:40 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 09:03:11 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define ERROR_NOT_ENOUGH_ARG		"Not enough arguments"
 # define ERROR_INVALID_IDENTIFIER	"Invalid identifier"
 # define ERROR_GNL					"Prompt fail"
+# define ERROR_CYCLING				"Execution cycling error"
 
 //Remove for defense
 #include <stdio.h>
@@ -37,7 +38,6 @@ typedef	enum	e_tokentype
 {
 	WORD,
 	OPERATOR,
-	METACHARACTER
 }				t_tokentype;
 
 typedef	struct	s_token
@@ -50,7 +50,10 @@ typedef	enum	e_commandtype
 {
 	SIMPLE,
 	PIPE,
-	REDIRECTION
+	REDIRECTION,
+	REDIRIN,
+	REDIRTRUNC,
+	REDIRAPPEND
 }				t_commandtype;
 
 typedef	struct	s_command
@@ -78,13 +81,16 @@ t_list	*tokenize(char *input, t_list *env);
 t_list	*makecommands(t_list *tokens);
 
 //Tokens
+int		addword(t_list **atoken, const char *input, size_t l, t_list *env);
+int		addmetachar(t_list **atoken, const char *input);
 char	*unquote(char *s, t_list *env);
-int		addword(t_list **atoken, char *input, unsigned int i, size_t l, t_list *env);
-int		addmetachar(t_list **atoken, char *input, unsigned int i);
 int		gettokentype(t_list *token);
 char	*gettokenstr(t_list *token);
-int		getoperatortype(t_list *token);
 int		gettokencommandtype(t_list *token);
+int		emptytokenexception(char *word, t_list *env);
+int		isquote(int c);
+int		ismetachar(int c);
+int		isoperator(int c);
 void	deltoken(void *p);
 
 //Commands
@@ -119,9 +125,6 @@ int		env(char **argv, t_list *env);
 int		export(char **argv, t_list **aenv);
 int		unset(char **argv, t_list **aenv);
 int		exitshell(char **argv);
-
-//Miscellaneous
-int		isquote(int c);
 
 //Error
 void	puterror(char *msg);

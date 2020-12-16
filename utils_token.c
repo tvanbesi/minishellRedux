@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 16:25:49 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/15 11:06:45 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 08:25:27 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,19 @@ int
 	return (c == 34 || c == 39);
 }
 
-static t_list
-	*newtoken(int type)
+int
+	ismetachar(int c)
 {
-	t_list	*token;
-	t_token	*content;
-
-	if (!(content = malloc(sizeof(*content))))
-		return (NULL);
-	content->type = type;
-	content->s = NULL;
-	if (!(token = ft_lstnew(content)))
-		free(content);
-	return (token);
+	return (c == ' ' || c == '\t' || c == ';' || c == '<' || c == '>' || c == '|');
 }
 
-static int
+int
+	isoperator(int c)
+{
+	return (c == ';' || c == '<' || c == '>' || c == '|');
+}
+
+int
 	emptytokenexception(char *word, t_list *env)
 {
 	int	i;
@@ -51,67 +48,4 @@ static int
 			return (0);
 	}
 	return (1);
-}
-
-int
-	addword(t_list **atoken, char *input, unsigned int i, size_t l, t_list *env)
-{
-	t_list	*token;
-	t_token	*content;
-	char	*s;
-
-	if (l)
-	{
-		if (!(s = ft_substr(input, i - l, l)))
-		{
-			puterror(strerror(errno));
-			return (-1);
-		}
-		if (emptytokenexception(s, env))
-		{
-			free(s);
-			return (0);
-		}
-		if (!(s = unquote(s, env)))
-		{
-			puterror(strerror(errno));
-			return (-1);
-		}
-		if (!(token = newtoken(WORD)))
-		{
-			free(s);
-			puterror(strerror(errno));
-			return (-1);
-		}
-		content = token->content;
-		content->s = s;
-		ft_lstadd_back(atoken, token);
-	}
-	return (0);
-}
-
-int
-	addmetachar(t_list **atoken, char *input, unsigned int i)
-{
-	t_list	*token;
-	t_token	*content;
-	char	*s;
-	int		tokentype;
-
-	if (!(s = ft_substr(input, i, 1)))
-	{
-		puterror(strerror(errno));
-		return (-1);
-	}
-	tokentype = ft_isspht(input[i]) ? METACHARACTER : OPERATOR;
-	if (!(token = newtoken(tokentype)))
-	{
-		free(s);
-		puterror(strerror(errno));
-		return (-1);
-	}
-	content = token->content;
-	content->s = s;
-	ft_lstadd_back(atoken, token);
-	return (0);
 }

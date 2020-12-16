@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 15:06:13 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 19:14:08 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 09:33:34 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,53 +29,41 @@ static t_list
 }
 
 static t_list
-	*skipmeta(t_list *token)
+	*skipwords(t_list *token)
 {
 	t_list	*current;
 
 	current = token;
 	while (current)
 	{
-		if (gettokentype(current) != METACHARACTER)
-			return (current);
-		current = current->next;
-	}
-	return (NULL);
-}
-
-static t_list
-	*skipcommand(t_list *token)
-{
-	t_list	*current;
-
-	current = token;
-	while (current)
-	{
-		if (gettokentype(current) == OPERATOR)
+		if (gettokentype(current) != WORD)
 			return (current->next);
 		current = current->next;
 	}
-	return (NULL);
+	return (current);
 }
 
 t_list
-	*makecommands(t_list *tokens)
+	*makecommands(t_list *token)
 {
 	t_list	*r;
 	t_list	*current;
 	t_list	*command;
+	int		commandtype;
 
 	r = NULL;
-	current = tokens;
+	current = token;
 	while (current)
 	{
-		current = skipmeta(current);
-		if (!(command = newcommand(gettokencommandtype(current))))
+		if ((commandtype = gettokencommandtype(current)) == -1)
+			return (error(ERROR_PARSE));
+		if (!(command = newcommand(commandtype)))
 			return (error(strerror(errno)));
 		if (gettokentype(current) == WORD)
 			assigncmd(current, command);
 		else
 		{
+			//Empty word for implicit stdin and stdout for redirection
 			ft_lstdelone(command, delcommand);
 			return (error(ERROR_PARSE));
 		}
@@ -85,7 +73,7 @@ t_list
 			return (error(strerror(errno)));
 		}
 		ft_lstadd_back(&r, command);
-		current = skipcommand(current);
+		current = skipwords(current);
 	}
 	return (r);
 }
