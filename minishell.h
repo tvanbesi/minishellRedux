@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2020/12/16 18:44:58 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 23:21:01 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # define ERROR_PARSE				"Parse error"
 # define ERROR_TOO_MANY_ARG			"Too many arguments"
 # define ERROR_NOT_ENOUGH_ARG		"Not enough arguments"
+# define ERROR_NAN					"Numeric argument required"
 # define ERROR_INVALID_IDENTIFIER	"Invalid identifier"
 # define ERROR_GNL					"Prompt fail"
 # define ERROR_CYCLING				"Execution cycling error"
