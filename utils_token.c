@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 16:25:49 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/16 08:25:27 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 19:08:05 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,7 @@ int
 		if (!(ft_isalnum(word[i]) || word[i] == '_'))
 			return (0);
 	}
+	if (findenv(env, &word[1]))
+		return (0);
 	return (1);
 }

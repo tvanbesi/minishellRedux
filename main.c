@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/16 18:00:02 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 19:08:40 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,11 @@ int
 
 	signal(SIGINT, sigint);
 	signal(SIGQUIT, sigquit);
-	shell = initshell(envp);
+	if (!(shell = initshell(envp)))
+	{
+		puterror(strerror(errno));
+		return (errno);	//Should return correct exit status
+	}
 	while (1)
 	{
 		write(STDOUT, "> ", 2);

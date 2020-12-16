@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:07:04 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/16 17:54:25 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 18:47:29 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,38 @@
 int
 	cd(char **argv, t_list **aenv)
 {
-	char		*pwd;
 	t_list		*home;
+	char		*wd;
+	char		*addenvinput;
+	int			r;
 
-	if (!argv[0])
-	{
-		if (!(home = findenv(*aenv, "HOME")))
-			return (0);
-		if (!(pwd = getcwd(NULL, 0)))
-			return (-1);
-		if (!(pwd = ft_strjoin("PATH=", pwd)))
-			return (-1);
-		//This will leak, need fixing
-		if (addenv(aenv, pwd) == -1)
-			return (-1);
-		return (chdir(getenvval(home)));
-	}
-	if (argv[1])
+	if (argv[0] && argv[1])
 	{
 		puterror(ERROR_TOO_MANY_ARG);
 		return (-2);
 	}
-	return (chdir(argv[0]));
+	if (!argv[0])
+	{
+		if (!(home = findenv(*aenv, "HOME")))
+			return (0);
+		if ((r = chdir(getenvval(home))) == -1)
+			return (-1);
+	}
+	else if ((r = chdir(argv[0])) == -1)
+		return (-1);
+	if (!(wd = getcwd(NULL, 0)))
+		return (-1);
+	if (!(addenvinput = ft_strjoin("PWD=", wd)))
+	{
+		free(wd);
+		return (-1);
+	}
+	free(wd);
+	if (addenv(aenv, addenvinput) == -1)
+	{
+		free(addenvinput);
+		return (-1);
+	}
+	free(addenvinput);
+	return (r);
 }
