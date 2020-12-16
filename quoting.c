@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expansion.c                                        :+:      :+:    :+:   */
+/*   quoting.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 08:39:15 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/15 11:06:10 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 23:10:05 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,10 +102,15 @@ char
 		}
 		else
 		{
-			if (q != 34 && s[j] == '$')
+			if (q != 39 && s[j] == '\\')
+			{
+				r[i++] = s[++j];
+				j++;
+			}
+			else if (q != 39 && s[j] == '$')
 			{
 				if (!s[j + 1] || ft_isspht(s[j + 1]))
-					r[i++] = s[j++]; //Remove token if token is only expanded unexisting param
+					r[i++] = s[j++];
 				else if ((param = detectidentifier(&s[++j], env)))
 					i += ft_strlcpy(&r[i], param, l + 1);
 				while (ft_isalnum(s[j]) || s[j] == '_')
