@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 18:27:26 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/15 10:39:16 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 12:43:28 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,13 @@ int
 		if (getcommandtype(command->next) == PIPE)
 		{
 			command = command->next;
-			minipipe(command, shell);
+			if (minipipe(command, shell) == -1)
+				return (-1);
 		}
-		execute(command->next, shell);
+		if (getcommandtype(command->next) > REDIRECTION)
+			redirect(command->next, shell);
+		else
+			execute(command->next, shell);
 	}
 	return (0);
 }

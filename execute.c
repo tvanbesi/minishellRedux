@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 12:41:35 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/16 07:00:17 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 12:48:27 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void
 		{
 			if (minipipe(current, shell) == -1)
 				puterror(strerror(errno));
-			while (getcommandtype(current) == PIPE)
+			while (getcommandtype(current) >= PIPE)
 				current = current->next;
 			if (getcommandtype(current) == SIMPLE)
 				current = current->next;
