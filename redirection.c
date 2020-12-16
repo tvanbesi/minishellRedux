@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 11:17:08 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/16 06:57:33 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 10:56:29 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,9 @@ int
 	}
 	else if (getcommandtype(command) == REDIRIN)
 	{
-		if ((file = open(getcmd(command->next), O_RDONLY)))
+		if ((file = open(getcmd(command->next), O_RDONLY)) < 0)
 			return (-1);
+		printf("plop\n");
 		dup2(file, STDIN);
 		execute(command, shell);
 	}

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 13:29:19 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/16 09:26:24 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 10:50:00 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,16 @@ void
 	command = p;
 	if (command->type == SIMPLE)
 		printf("SIMPLE\t\t");
-	if (command->type == PIPE)
+	else if (command->type == PIPE)
 		printf("PIPE\t\t");
-	if (command->type > REDIRECTION)
-		printf("REDIRECTION\t");
+	else if (command->type == REDIRTRUNC)
+		printf("REDIRTRUNC\t");
+	else if (command->type == REDIRAPPEND)
+		printf("REDIRAPPEND\t");
+	else if (command->type == REDIRIN)
+		printf("REDIRIN\t\t");
+	else
+		printf("TYPERROR\t");
 	printf("CMD:|%s|\tARGV\t", command->cmd);
 	i = 0;
 	while (command->argv[i])
