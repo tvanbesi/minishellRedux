@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 12:41:35 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/16 13:58:29 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 14:10:44 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,17 +66,13 @@ void
 	{
 		commandtype = getcommandtype(current);
 		if (commandtype == SIMPLE)
-		{
 			execute(current, shell);
-			current = current->next;
-		}
 		else if (commandtype == PIPE)
 		{
 			if (minipipe(current, shell) == -1)
 				puterror(strerror(errno));
 			while (getcommandtype(current) >= PIPE)
 				current = current->next;
-			current = current->next;
 		}
 		else if (commandtype > REDIRECTION)
 		{
@@ -84,9 +80,11 @@ void
 				puterror(strerror(errno));
 			while (getcommandtype(current) >= PIPE)
 				current = current->next;
-			current = current->next;
 		}
 		else
 			puterror(ERROR_CYCLING);
+		dup2(shell->stdincpy, STDIN);
+		dup2(shell->stdoutcpy, STDOUT);
+		current = current->next;
 	}
 }
