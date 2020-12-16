@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/16 14:12:11 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 16:42:58 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,11 @@ static char
 	while ((gnl = get_next_line(STDIN, &line)) != 1)
 	{
 		free(line);
+		if (gnl == 0)
+		{
+			write(STDOUT, "exit", 4);
+			exit(0);	//Should return correct exit status
+		}
 		if (gnl == -1)
 		{
 			puterror(ERROR_GNL);
@@ -42,13 +47,15 @@ static t_shell
 }
 
 int
-	main(void)
+	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
 	char	*input;
 	t_list	*token;
 	t_list	*command;
 
+	signal(SIGINT, sigint);
+	signal(SIGQUIT, sigquit);
 	shell = initshell();
 	while (1)
 	{

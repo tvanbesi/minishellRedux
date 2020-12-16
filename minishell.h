@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2020/12/16 09:03:11 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 16:43:20 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,10 @@ void	execute(t_list *command, t_shell *shell);
 int		process(t_list *command, t_shell *shell);
 int		minipipe(t_list *command, t_shell *shell);
 int		redirect(t_list *command, t_shell *shell);
+
+//Signal
+void	sigint(int n);
+void	sigquit(int n);
 
 //Builtins
 int		cd(char **argv);
