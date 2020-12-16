@@ -6,14 +6,14 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/16 16:42:58 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 17:13:35 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static char
-	*prompt(void)
+	*prompt(t_shell *shell)
 {
 	char	*line;
 	int		gnl;
@@ -23,8 +23,13 @@ static char
 		free(line);
 		if (gnl == 0)
 		{
-			write(STDOUT, "exit", 4);
-			exit(0);	//Should return correct exit status
+			if (shell->exit)
+			{
+				write(STDOUT, "exit", 4);
+				exit(0);	//Should return correct exit status
+			}
+			else
+				shell->exit = 1;
 		}
 		if (gnl == -1)
 		{
@@ -43,6 +48,7 @@ static t_shell
 	shell.env = NULL;
 	shell.stdincpy = dup(STDIN);
 	shell.stdoutcpy = dup(STDOUT);
+	shell.exit = 1;
 	return (shell);
 }
 
@@ -60,7 +66,7 @@ int
 	while (1)
 	{
 		write(STDOUT, "> ", 2);
-		if (!(input = prompt()))
+		if (!(input = prompt(&shell)))
 			puterror(strerror(errno));
 		token = tokenize(input, shell.env);
 		command = makecommands(token);

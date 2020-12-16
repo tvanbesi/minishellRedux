@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 12:41:35 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/16 14:10:44 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 17:13:19 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void
 		{
 			if (redirect(current, shell) == -1)
 				puterror(strerror(errno));
-			while (getcommandtype(current) >= PIPE)
+			while (getcommandtype(current) > REDIRECTION)
 				current = current->next;
 		}
 		else
@@ -87,4 +87,5 @@ void
 		dup2(shell->stdoutcpy, STDOUT);
 		current = current->next;
 	}
+	shell->exit = 0;
 }

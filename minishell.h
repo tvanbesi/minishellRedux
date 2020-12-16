@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2020/12/16 16:43:20 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/16 17:10:50 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ typedef	struct	s_shell
 	t_list	*env;
 	int		stdincpy;
 	int		stdoutcpy;
+	int		exit;
 }				t_shell;
 
 //Parsing
