@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 15:06:13 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/16 10:50:09 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/17 14:13:16 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,23 @@ static t_list
 	return (current);
 }
 
+static int
+	commandsanity(t_list *command)
+{
+	t_list	*current;
+
+	current = command;
+	while (current)
+	{
+		if (!getcmd(current))
+			return (0);
+		current = current->next;
+	}
+	command = ft_lstlast(command);
+	showcommand(command->content);
+	return (getcommandtype(command) == SIMPLE);
+}
+
 t_list
 	*makecommands(t_list *token)
 {
@@ -55,18 +72,11 @@ t_list
 	current = token;
 	while (current)
 	{
-		if ((commandtype = gettokencommandtype(current)) == -1)
-			return (error(ERROR_PARSE));
+		commandtype = gettokencommandtype(current);
 		if (!(command = newcommand(commandtype)))
 			return (error(strerror(errno)));
 		if (gettokentype(current) == WORD)
 			assigncmd(current, command);
-		else
-		{
-			//Empty word for implicit stdin and stdout for redirection
-			ft_lstdelone(command, delcommand);
-			return (error(ERROR_PARSE));
-		}
 		if (assignargv(current->next, command) == -1)
 		{
 			ft_lstdelone(command, delcommand);
@@ -74,6 +84,11 @@ t_list
 		}
 		ft_lstadd_back(&r, command);
 		current = skipwords(current);
+	}
+	if (!commandsanity(r))
+	{
+		puterror(ERROR_PARSE);
+		ft_lstclear(&r, delcommand);
 	}
 	return (r);
 }
