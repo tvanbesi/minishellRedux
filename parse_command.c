@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 15:06:13 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/17 14:13:16 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/17 14:17:12 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ static int
 		current = current->next;
 	}
 	command = ft_lstlast(command);
-	showcommand(command->content);
 	return (getcommandtype(command) == SIMPLE);
 }
 
