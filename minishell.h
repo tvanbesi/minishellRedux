@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2020/12/16 23:21:01 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/17 11:57:51 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <string.h>
 # include <sys/errno.h>
 # include <sys/wait.h>
+# include <dirent.h>
 # include "libft.h"
 # include "get_next_line.h"
 
@@ -115,7 +116,7 @@ void	delenv(void *p);
 //Execution
 void	cyclecommand(t_list *command, t_shell *shell);
 void	execute(t_list *command, t_shell *shell);
-int		process(t_list *command, t_shell *shell);
+int		process(char *path, t_list *command, t_shell *shell);
 int		minipipe(t_list *command, t_shell *shell);
 int		redirect(t_list *command, t_shell *shell);
 

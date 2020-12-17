@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 12:41:35 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/16 17:34:09 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/17 13:17:41 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,87 @@ static int
 		return (env(argv, shell->env));
 	else if (!ft_strncmp(cmd, "exit", 5))
 		return (exitshell(argv));
-	puterror(ERROR_CMD_NOT_FOUND);
 	return (-2);
+}
+
+static int
+	findexec(char *filename, char **paths, char **executable)
+{
+	DIR				*stream;
+	struct	dirent	*entry;
+	size_t			filenamelen;
+	size_t			fullpathlen;
+
+	filenamelen = ft_strlen(filename);
+	*executable = NULL;
+	while (*paths)
+	{
+		if (!(stream = opendir(*paths)))
+			return (-1);
+		while ((entry = readdir(stream)))
+		{
+			if (!ft_strncmp(entry->d_name, filename, filenamelen + 1))
+			{
+				if (entry->d_type == 8)
+				{
+					fullpathlen = ft_strlen(*paths) + entry->d_namlen + 2;
+					if (!(*executable = malloc(fullpathlen)))
+					{
+						closedir(stream);
+						return (-1);
+					}
+					ft_strlcpy(*executable, *paths, fullpathlen);
+					ft_strlcat(*executable, "/", fullpathlen);
+					ft_strlcat(*executable, entry->d_name, fullpathlen);
+				}
+				if (closedir(stream) == -1)
+					return (-1);
+				return (entry->d_type == 8);
+			}
+		}
+		if (errno != 0)
+			return (-1);
+		if (closedir(stream) == -1)
+			return (-1);
+		paths++;
+	}
+	return (0);
 }
 
 void
 	execute(t_list *command, t_shell *shell)
 {
 	char	*cmd;
+	int		builtinret;
+	int		execfound;
+	char	*executable;
+	t_list	*pathenv;
+	char	**paths;
 
 	cmd = getcmd(command);
-	if (cmd[0] == '/')
+	if (!(ft_strchr(cmd, '/')))
 	{
-		if (process(command, shell) == -1)
+		if ((builtinret = builtin(command, shell)) == -1)
 			puterror(strerror(errno));
+		else if (builtinret == -2)
+		{
+			if (!(pathenv = findenv(shell->env, "PATH")))
+				return ;	//To do
+			if (!(paths = ft_split(getenvval(pathenv), ':')))
+				puterror(strerror(errno));
+			else if ((execfound = findexec(cmd, paths, &executable)) == -1)
+				puterror(strerror(errno));
+			else if (execfound)
+			{
+				if (process(executable, command, shell) == -1)
+					puterror(strerror(errno));
+			}
+			else
+				puterror(ERROR_CMD_NOT_FOUND);
+			free(executable);
+		}
 	}
-	else if (builtin(command, shell) == -1)
+	else if (process(cmd, command, shell) == -1)
 		puterror(strerror(errno));
 }
 
