@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 12:41:35 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/17 13:17:41 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/17 14:33:30 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,9 +148,6 @@ void
 		}
 		else
 			puterror(ERROR_CYCLING);
-		dup2(shell->stdincpy, STDIN);
-		dup2(shell->stdoutcpy, STDOUT);
 		current = current->next;
 	}
-	shell->exit = 0;
 }

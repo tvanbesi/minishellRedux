@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2020/12/17 11:57:51 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/17 14:23:31 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ typedef	struct	s_shell
 	t_list	*env;
 	int		stdincpy;
 	int		stdoutcpy;
-	int		exit;
 }				t_shell;
 
 //Parsing
@@ -141,5 +140,7 @@ void	*error(char *msg);
 void	showtoken(void *p);
 void	showcommand(void *p);
 void	showenv(void *p);
+
+extern	int		g_skipeof;
 
 #endif

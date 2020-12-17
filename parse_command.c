@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 15:06:13 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/17 14:17:12 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/17 14:29:48 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ static int
 {
 	t_list	*current;
 
+	if (!command)
+		return (1);
 	current = command;
 	while (current)
 	{

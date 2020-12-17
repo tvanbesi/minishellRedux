@@ -6,11 +6,13 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/16 19:08:40 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/17 14:46:56 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int		g_skipeof;
 
 static char
 	*prompt(t_shell *shell)
@@ -23,13 +25,13 @@ static char
 		free(line);
 		if (gnl == 0)
 		{
-			if (shell->exit)
+			if (!g_skipeof)
 			{
 				write(STDOUT, "exit", 4);
 				exit(0);	//Should return correct exit status
 			}
 			else
-				shell->exit = 1;
+				g_skipeof = 0;
 		}
 		if (gnl == -1)
 		{
@@ -55,7 +57,6 @@ static t_shell
 	}
 	shell->stdincpy = dup(STDIN);
 	shell->stdoutcpy = dup(STDOUT);
-	shell->exit = 1;
 	return (shell);
 }
 
@@ -74,6 +75,7 @@ int
 		puterror(strerror(errno));
 		return (errno);	//Should return correct exit status
 	}
+	g_skipeof = 0;
 	while (1)
 	{
 		write(STDOUT, "> ", 2);
@@ -82,6 +84,9 @@ int
 		token = tokenize(input, shell->env);
 		command = makecommands(token);
 		cyclecommand(command, shell);
+		g_skipeof = 1;
+		dup2(shell->stdincpy, STDIN);
+		dup2(shell->stdoutcpy, STDOUT);
 		free(input);
 		ft_lstclear(&token, deltoken);
 		ft_lstclear(&command, delcommand);
