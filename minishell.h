@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2020/12/17 14:23:31 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/18 08:52:04 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,5 +142,6 @@ void	showcommand(void *p);
 void	showenv(void *p);
 
 extern	int		g_skipeof;
+extern	int		g_pid;
 
 #endif

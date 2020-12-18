@@ -6,13 +6,14 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/17 14:46:56 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/18 08:51:14 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int		g_skipeof;
+pid_t	g_pid;
 
 static char
 	*prompt(t_shell *shell)
@@ -76,6 +77,7 @@ int
 		return (errno);	//Should return correct exit status
 	}
 	g_skipeof = 0;
+	g_pid = 0;
 	while (1)
 	{
 		write(STDOUT, "> ", 2);
@@ -84,6 +86,7 @@ int
 		token = tokenize(input, shell->env);
 		command = makecommands(token);
 		cyclecommand(command, shell);
+		g_pid = 0;
 		g_skipeof = 1;
 		dup2(shell->stdincpy, STDIN);
 		dup2(shell->stdoutcpy, STDOUT);
