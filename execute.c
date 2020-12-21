@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 12:41:35 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/21 13:37:07 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/21 17:54:49 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ void
 	{
 		if ((builtinret = builtin(command, shell)) == -1)
 			puterror(strerror(errno));
+		else if (builtinret == 1)
+			g_exitstatus = 1;
 		else if (builtinret == -2)
 		{
 			if (!(pathenv = findenv(shell->env, "PATH")))
