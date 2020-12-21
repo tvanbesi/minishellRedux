@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 16:08:27 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/21 13:28:11 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/21 17:45:24 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@ void
 	sigint(int n)
 {
 	if (g_pid == 0)
+	{
 		write(STDOUT, "\b\b  \n> ", 7);
+		g_exitstatus = 1;
+	}
 	else
 	{
 		write(STDOUT, "\n", 1);
