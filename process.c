@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 15:46:31 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/18 08:53:15 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/21 15:32:18 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,22 @@
 int
 	process(char *path, t_list *command, t_shell *shell)
 {
-	int		stat_loc;
-	char	**argv;
-	char	**envp;
+	int				stat_loc;
+	struct	stat	buf;
+	char			**argv;
+	char			**envp;
 
+	if (stat(path, &buf) == -1)
+		return (-1);
+	if (buf.st_mode & S_IFDIR || !(buf.st_mode & S_IXUSR))
+	{
+		if (buf.st_mode & S_IFDIR)
+			puterror(ERROR_ISDIR);
+		else
+			puterror(ERROR_ISNEXEC);
+		g_exitstatus = 126;
+		return (0);
+	}
 	if ((g_pid = fork()) == -1)
 		return (-1);
 	if (g_pid == 0)

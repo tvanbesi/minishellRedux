@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2020/12/21 13:58:33 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/21 15:32:00 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <string.h>
 # include <sys/errno.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <dirent.h>
 # include "libft.h"
 # include "get_next_line.h"
@@ -32,6 +33,8 @@
 # define ERROR_INVALID_IDENTIFIER	"Invalid identifier"
 # define ERROR_GNL					"Prompt fail"
 # define ERROR_CYCLING				"Execution cycling error"
+# define ERROR_ISDIR				"Cannot execute directory"
+# define ERROR_ISNEXEC				"Cannot execute"
 
 //Remove for defense
 #include <stdio.h>
