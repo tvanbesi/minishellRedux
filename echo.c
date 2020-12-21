@@ -6,31 +6,38 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:13:32 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 09:13:01 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/21 14:18:59 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char
-	*getoption(char *arg)
+static int
+	optionnl(char *arg)
 {
-	if (arg && arg[0] == '-')
-		return (&arg[1]);
-	return (NULL);
+	size_t	i;
+
+	if (!arg)
+		return (1);
+	if (arg[0] != '-')
+		return (1);
+	if (!arg[1])
+		return (1);
+	i = 1;
+	while (arg[i])
+		if (arg[i++] != 'n')
+			return (1);
+	return (0);
 }
 
 int
 	echo(char **argv)
 {
-	char		*option;
 	int			nl;
 	int			i;
 
-	nl = 1;
-	if ((option = getoption(argv[0])) && ft_strchr(option, 'n'))
-		nl = 0;
-	i = option ? 1 : 0;
+	nl = optionnl(argv[0]);
+	i = nl ? 0 : 1;
 	while (argv[i])
 	{
 		if (write(STDOUT, argv[i], ft_strlen(argv[i])) == -1)
