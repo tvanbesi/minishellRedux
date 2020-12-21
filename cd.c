@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:07:04 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/16 18:47:29 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/21 16:00:10 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,13 @@ int
 	char		*addenvinput;
 	int			r;
 
-	if (argv[0] && argv[1])
-	{
-		puterror(ERROR_TOO_MANY_ARG);
-		return (-2);
-	}
 	if (!argv[0])
 	{
 		if (!(home = findenv(*aenv, "HOME")))
-			return (0);
+		{
+			puterror(ERROR_NOHOME);
+			return (1);
+		}
 		if ((r = chdir(getenvval(home))) == -1)
 			return (-1);
 	}

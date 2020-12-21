@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 17:52:33 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 14:52:47 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/21 16:15:39 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,20 @@ int
 {
 	t_list	*env;
 	int		i;
+	int		r;
 
 	i = 0;
+	r = 0;
 	while (argv[i])
 	{
 		if (!isidentifiervalid(argv[i]))
 		{
 			puterror(ERROR_INVALID_IDENTIFIER);
-			return (-2);
+			r = 1;
 		}
-		if (addenv(aenv, argv[i++]) == -1)
+		else if (addenv(aenv, argv[i]) == -1)
 			return (-1);
+		i++;
 	}
-	return (0);
+	return (1);
 }

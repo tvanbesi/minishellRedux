@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 18:50:51 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/13 19:28:45 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/21 16:16:21 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,6 @@ int
 {
 	int	i;
 
-	if (!argv[0])
-	{
-		puterror(ERROR_NOT_ENOUGH_ARG);
-		return (-2);
-	}
 	i = 0;
 	while (argv[i])
 		removeenv(aenv, argv[i++]);

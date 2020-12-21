@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2020/12/21 15:32:00 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/21 15:51:42 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 # define ERROR_CYCLING				"Execution cycling error"
 # define ERROR_ISDIR				"Cannot execute directory"
 # define ERROR_ISNEXEC				"Cannot execute"
+# define ERROR_NOHOME				"HOME not set"
 
 //Remove for defense
 #include <stdio.h>
