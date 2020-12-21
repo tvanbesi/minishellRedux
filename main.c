@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/18 08:51:14 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/21 12:26:32 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int		g_skipeof;
 pid_t	g_pid;
+int		g_exitstatus;
 
 static char
 	*prompt(t_shell *shell)
@@ -78,6 +79,7 @@ int
 	}
 	g_skipeof = 0;
 	g_pid = 0;
+	g_exitstatus = 0;
 	while (1)
 	{
 		write(STDOUT, "> ", 2);

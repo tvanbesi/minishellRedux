@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 08:39:15 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/16 23:10:05 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/18 09:34:58 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,19 @@ static size_t
 	{
 		if (s[i] == '$')
 		{
-			if ((param = detectidentifier(&s[i + 1], env)))
-				r += ft_strlen(param);
-			i++;
-			while (ft_isalnum(s[i]) || s[i] == '_')
+			if (s[i + 1] == '?')
+			{
+				r += 3;
+				i += 2;
+			}
+			else
+			{
+				if ((param = detectidentifier(&s[i + 1], env)))
+					r += ft_strlen(param);
 				i++;
+				while (ft_isalnum(s[i]) || s[i] == '_')
+					i++;
+			}
 		}
 		else
 		{
@@ -109,12 +117,20 @@ char
 			}
 			else if (q != 39 && s[j] == '$')
 			{
-				if (!s[j + 1] || ft_isspht(s[j + 1]))
-					r[i++] = s[j++];
-				else if ((param = detectidentifier(&s[++j], env)))
-					i += ft_strlcpy(&r[i], param, l + 1);
-				while (ft_isalnum(s[j]) || s[j] == '_')
-					j++;
+				if (s[j + 1] == '?')
+				{
+					i += ft_strlcpy(&r[i], ft_itoa(g_exitstatus), l + 1);
+					j += 2;
+				}
+				else
+				{
+					if (!s[j + 1] || ft_isspht(s[j + 1]))
+						r[i++] = s[j++];
+					else if ((param = detectidentifier(&s[++j], env)))
+						i += ft_strlcpy(&r[i], param, l + 1);
+					while (ft_isalnum(s[j]) || s[j] == '_')
+						j++;
+				}
 			}
 			else
 				r[i++] = s[j++];

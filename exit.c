@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 14:35:01 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/16 23:26:57 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/21 13:50:16 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int
 	int	i;
 
 	if (!argv[0])
-		exit(0);	//Parameter should be exit status of last command
+		exit(g_exitstatus);
 	if (argv[1])
 	{
 		puterror(ERROR_TOO_MANY_ARG);

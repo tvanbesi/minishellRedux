@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 12:41:35 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/17 14:33:30 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/21 13:37:07 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,19 @@ static int
 	cmd = getcmd(command);
 	argv = getcommandargv(command);
 	if (!ft_strncmp(cmd, "echo", 5))
-		return (echo(argv));
+		return ((g_exitstatus = echo(argv)));
 	else if (!ft_strncmp(cmd, "cd", 3))
-		return (cd(argv, &shell->env));
+		return ((g_exitstatus = cd(argv, &shell->env)));
 	else if (!ft_strncmp(cmd, "pwd", 4))
-		return (pwd(argv));
+		return ((g_exitstatus = pwd(argv)));
 	else if (!ft_strncmp(cmd, "export", 7))
-		return (export(argv, &shell->env));
+		return ((g_exitstatus = export(argv, &shell->env)));
 	else if (!ft_strncmp(cmd, "unset", 6))
-		return (unset(argv, &shell->env));
+		return ((g_exitstatus = unset(argv, &shell->env)));
 	else if (!ft_strncmp(cmd, "env", 4))
-		return (env(argv, shell->env));
+		return ((g_exitstatus = env(argv, shell->env)));
 	else if (!ft_strncmp(cmd, "exit", 5))
-		return (exitshell(argv));
+		return ((g_exitstatus = exitshell(argv)));
 	return (-2);
 }
 
@@ -110,7 +110,10 @@ void
 					puterror(strerror(errno));
 			}
 			else
+			{
+				g_exitstatus = 127;
 				puterror(ERROR_CMD_NOT_FOUND);
+			}
 			free(executable);
 		}
 	}
