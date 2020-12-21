@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 16:25:49 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/16 19:08:05 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/21 14:00:21 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,12 @@ int
 	isoperator(int c)
 {
 	return (c == ';' || c == '<' || c == '>' || c == '|');
+}
+
+int
+	isspecialchar(int c)
+{
+	return (c == '$' || c == '\\' || isquote(c));
 }
 
 int

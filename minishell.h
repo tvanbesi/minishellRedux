@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2020/12/18 09:34:35 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/21 13:58:33 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ int		emptytokenexception(char *word, t_list *env);
 int		isquote(int c);
 int		ismetachar(int c);
 int		isoperator(int c);
+int		isspecialchar(int c);
 void	deltoken(void *p);
 
 //Commands
