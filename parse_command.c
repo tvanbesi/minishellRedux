@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 15:06:13 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/17 14:29:48 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/22 09:48:18 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ t_list
 	}
 	if (!commandsanity(r))
 	{
+		g_exitstatus = EXIT_STAT_FAIL;
 		puterror(ERROR_PARSE);
 		ft_lstclear(&r, delcommand);
 	}

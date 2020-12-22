@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:35:57 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/21 12:41:39 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/22 09:47:50 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,9 @@ t_list
 	if (addword(&r, &input[i - l], l, env) == -1)
 		return (NULL);
 	if (qt)
+	{
+		g_exitstatus = EXIT_STAT_FAIL;
 		return (error(ERROR_PARSE));
+	}
 	return (r);
 }
