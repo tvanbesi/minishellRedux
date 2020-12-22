@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 16:08:27 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/22 09:24:11 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/22 11:23:55 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void
 	}
 	else
 		write(STDOUT, "\n", 1);
-	g_skipeof = 1;
 }
 
 void
@@ -32,5 +31,4 @@ void
 		write(STDOUT, "\b\b  \b\b", 6);
 	else
 		write(STDOUT, "Quit: 3\n", 8);
-	g_skipeof = 1;
 }
