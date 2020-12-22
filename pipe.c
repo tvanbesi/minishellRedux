@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 18:27:26 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/22 09:15:44 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/22 09:26:27 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ int
 	if (pipe(fd) == -1)
 		return (-1);
 	if ((g_pid = fork()) == -1)
-		return (-1);	//Maybe the fd should be closed if fork fail ? Try
+		return (-1);
 	if (g_pid == 0)
 	{
 		dup2(fd[1], STDOUT);
 		close(fd[0]);
 		close(fd[1]);
 		execute(command, shell);
-		exit(0);	//Should return correct exit status
+		exit(1);
 	}
 	else
 	{

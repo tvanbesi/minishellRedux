@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/22 09:20:19 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/22 09:29:27 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static char
 			if (!g_skipeof)
 			{
 				write(STDOUT, "exit", 4);
-				exit(0);	//Should return correct exit status
+				exit(EXIT_STAT_SUCESS);
 			}
 			else
 				g_skipeof = 0;
@@ -75,7 +75,7 @@ int
 	if (!(shell = initshell(envp)))
 	{
 		puterror(strerror(errno));
-		return (errno);	//Should return correct exit status
+		return (EXIT_STAT_FAIL);
 	}
 	g_skipeof = 0;
 	g_pid = 0;

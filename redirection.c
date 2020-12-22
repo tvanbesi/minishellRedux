@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 11:17:08 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/16 13:55:24 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/22 09:41:49 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,13 @@ static int
 {
 	int		fd;
 
-	if (commandtype == REDIRIN
-	&& (fd = open(filename, O_RDONLY) < 0))
-		return (-1);
-	if (commandtype == REDIRTRUNC
-	&& (fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 000666)) < 0)
-		return (-1);
-	if (commandtype == REDIRAPPEND
-	&& (fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 000666)) < 0)
-		return (-1);
+	fd = -1;
+	if (commandtype == REDIRIN)
+		fd = open(filename, O_RDONLY);
+	else if (commandtype == REDIRTRUNC)
+		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 000666);
+	else if (commandtype == REDIRAPPEND)
+		fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 000666);
 	return (fd);
 }
 
