@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 18:27:26 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/18 08:52:47 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/22 09:15:44 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,10 @@ int
 	{
 		if (waitpid(g_pid, &stat_loc, 0) != g_pid)
 			return (-1);
+		if (WIFEXITED(stat_loc))
+			g_exitstatus = stat_loc;
+		else if (WIFSIGNALED(stat_loc))
+			g_exitstatus = 128 + stat_loc;
 		dup2(fd[0], STDIN);
 		close(fd[1]);
 		close(fd[0]);

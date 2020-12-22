@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 15:46:31 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/21 15:32:18 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/22 09:12:39 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int
 			puterror(ERROR_ISDIR);
 		else
 			puterror(ERROR_ISNEXEC);
-		g_exitstatus = 126;
+		g_exitstatus = EXIT_STAT_NOEXEC;
 		return (0);
 	}
 	if ((g_pid = fork()) == -1)
@@ -45,5 +45,9 @@ int
 	}
 	else if (waitpid(g_pid, &stat_loc, 0) != g_pid)
 		return (-1);
+	if (WIFEXITED(stat_loc))
+		g_exitstatus = stat_loc;
+	else if (WIFSIGNALED(stat_loc))
+		g_exitstatus = 128 + stat_loc;
 	return (0);
 }

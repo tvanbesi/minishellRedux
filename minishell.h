@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2020/12/21 15:51:42 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/22 09:17:58 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@
 # define STDIN						0
 # define STDOUT						1
 # define STDERR						2
+
+# define EXIT_STAT_SUCESS			0
+# define EXIT_STAT_FAIL				1
+# define EXIT_STAT_NOEXEC			126
+# define EXIT_STAT_NOCMD			127
 
 # define ERROR_CMD_NOT_FOUND		"Command not found"
 # define ERROR_PARSE				"Parse error"

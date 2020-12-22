@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/21 12:26:32 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2020/12/22 09:20:19 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int
 	}
 	g_skipeof = 0;
 	g_pid = 0;
-	g_exitstatus = 0;
+	g_exitstatus = EXIT_STAT_SUCESS;
 	while (1)
 	{
 		write(STDOUT, "> ", 2);
