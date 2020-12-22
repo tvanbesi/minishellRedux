@@ -25,7 +25,7 @@
 # define STDOUT						1
 # define STDERR						2
 
-# define EXIT_STAT_SUCESS			0
+# define EXIT_STAT_SUCCESS			0
 # define EXIT_STAT_FAIL				1
 # define EXIT_STAT_NOEXEC			126
 # define EXIT_STAT_NOCMD			127
@@ -44,6 +44,14 @@
 
 //Remove for defense
 #include <stdio.h>
+
+typedef	enum	e_prompt_r
+{
+	OK,
+	ERROR,
+	EXIT,
+	BREAK
+}				t_prompt_r;
 
 typedef	enum	e_tokentype
 {
@@ -88,6 +96,7 @@ typedef	struct	s_shell
 }				t_shell;
 
 //Parsing
+int		prompt(char **line);
 t_list	*tokenize(char *input, t_list *env);
 t_list	*makecommands(t_list *tokens);
 
@@ -128,6 +137,7 @@ void	execute(t_list *command, t_shell *shell);
 int		process(char *path, t_list *command, t_shell *shell);
 int		minipipe(t_list *command, t_shell *shell);
 int		redirect(t_list *command, t_shell *shell);
+void	setexitstatus(int stat_loc);
 
 //Signal
 void	sigint(int n);

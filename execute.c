@@ -49,33 +49,32 @@ static int
 	*executable = NULL;
 	while (*paths)
 	{
-		if (!(stream = opendir(*paths)))
-			return (-1);
-		while ((entry = readdir(stream)))
+		if ((stream = opendir(*paths)))
 		{
-			if (!ft_strncmp(entry->d_name, filename, filenamelen + 1))
+			while ((entry = readdir(stream)))
 			{
-				if (entry->d_type == 8)
+				if (!ft_strncmp(entry->d_name, filename, filenamelen + 1))
 				{
-					fullpathlen = ft_strlen(*paths) + entry->d_namlen + 2;
-					if (!(*executable = malloc(fullpathlen)))
+					if (entry->d_type == 8)
 					{
-						closedir(stream);
-						return (-1);
+						fullpathlen = ft_strlen(*paths) + ft_strlen(entry->d_name) + 2;
+						if (!(*executable = malloc(fullpathlen)))
+						{
+							closedir(stream);
+							return (-1);
+						}
+						ft_strlcpy(*executable, *paths, fullpathlen);
+						ft_strlcat(*executable, "/", fullpathlen);
+						ft_strlcat(*executable, entry->d_name, fullpathlen);
 					}
-					ft_strlcpy(*executable, *paths, fullpathlen);
-					ft_strlcat(*executable, "/", fullpathlen);
-					ft_strlcat(*executable, entry->d_name, fullpathlen);
+					if (closedir(stream) == -1)
+						return (-1);
+					return (entry->d_type == DT_REG);
 				}
-				if (closedir(stream) == -1)
-					return (-1);
-				return (entry->d_type == 8);
 			}
+			if (closedir(stream) == -1)
+				return (-1);
 		}
-		if (errno != 0)
-			return (-1);
-		if (closedir(stream) == -1)
-			return (-1);
 		paths++;
 	}
 	return (0);
@@ -101,22 +100,25 @@ void
 		else if (builtinret == -2)
 		{
 			if (!(pathenv = findenv(shell->env, "PATH")))
-				return ;	//To do
-			if (!(paths = ft_split(getenvval(pathenv), ':')))
-				puterror(strerror(errno));
-			else if ((execfound = findexec(cmd, paths, &executable)) == -1)
-				puterror(strerror(errno));
-			else if (execfound)
-			{
-				if (process(executable, command, shell) == -1)
-					puterror(strerror(errno));
-			}
+				process(cmd, command, shell);
 			else
 			{
-				g_exitstatus = EXIT_STAT_NOCMD;
-				puterror(ERROR_CMD_NOT_FOUND);
+				if (!(paths = ft_split(getenvval(pathenv), ':')))
+					puterror(strerror(errno));
+				else if ((execfound = findexec(cmd, paths, &executable)) == -1)
+					puterror(strerror(errno));
+				else if (execfound)
+				{
+					if (process(executable, command, shell) == -1)
+						puterror(strerror(errno));
+				}
+				else
+				{
+					g_exitstatus = EXIT_STAT_NOCMD;
+					puterror(ERROR_CMD_NOT_FOUND);
+				}
+				free(executable);
 			}
-			free(executable);
 		}
 	}
 	else if (process(cmd, command, shell) == -1)

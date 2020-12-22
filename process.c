@@ -45,9 +45,9 @@ int
 	}
 	else if (waitpid(g_pid, &stat_loc, 0) != g_pid)
 		return (-1);
-	if (WIFEXITED(stat_loc))
-		g_exitstatus = stat_loc;
-	else if (WIFSIGNALED(stat_loc))
-		g_exitstatus = 128 + stat_loc;
+	setexitstatus(stat_loc);
+	g_pid = 0;
+	dup2(shell->stdincpy, STDIN);
+	dup2(shell->stdoutcpy, STDOUT);
 	return (0);
 }

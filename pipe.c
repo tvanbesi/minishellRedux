@@ -34,10 +34,7 @@ int
 	{
 		if (waitpid(g_pid, &stat_loc, 0) != g_pid)
 			return (-1);
-		if (WIFEXITED(stat_loc))
-			g_exitstatus = stat_loc;
-		else if (WIFSIGNALED(stat_loc))
-			g_exitstatus = 128 + stat_loc;
+		setexitstatus(stat_loc);
 		dup2(fd[0], STDIN);
 		close(fd[1]);
 		close(fd[0]);

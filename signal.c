@@ -16,19 +16,22 @@ void
 	sigint(int n)
 {
 	if (g_pid == 0)
-	{
-		write(STDOUT, "\b\b  \n> ", 7);
-		g_exitstatus = 1;
-	}
+		exit(BREAK);
 	else
+	{
+		kill(g_pid, SIGINT);
 		write(STDOUT, "\n", 1);
+	}
 }
 
 void
 	sigquit(int n)
 {
 	if (g_pid == 0)
-		write(STDOUT, "\b\b  \b\b", 6);
+		write(STDOUT, "\b \b", 3);
 	else
-		write(STDOUT, "Quit: 3\n", 8);
+	{
+		kill(g_pid, SIGQUIT);
+		write(STDOUT, "Quit\n", 5);
+	}
 }

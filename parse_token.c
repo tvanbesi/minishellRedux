@@ -34,6 +34,8 @@ t_list
 	i = 0;
 	l = 0;
 	qt = 0;
+	if (!input)
+		return (NULL);
 	while (input[i])
 	{
 		l++;
