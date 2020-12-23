@@ -25,12 +25,12 @@ int
 		if (!(home = findenv(*aenv, "HOME")))
 		{
 			puterror(ERROR_NOHOME);
-			return (1);
+			return (-2);
 		}
-		if ((r = chdir(getenvval(home))) == -1)
+		if (chdir(getenvval(home)) == -1)
 			return (-1);
 	}
-	else if ((r = chdir(argv[0])) == -1)
+	else if (chdir(argv[0]) == -1) 
 		return (-1);
 	if (!(wd = getcwd(NULL, 0)))
 		return (-1);
@@ -46,5 +46,5 @@ int
 		return (-1);
 	}
 	free(addenvinput);
-	return (r);
+	return (0);
 }

@@ -51,14 +51,31 @@ int
 	redirect(t_list *command, t_shell *shell)
 {
 	int		fd;
+	int		cmdsanity;
 
+	
+	if ((cmdsanity = commandsanity(command, shell)) == -1)
+		return (-1);
 	if ((fd = skipfiles(command)) == -1)
 		return (-1);
-	if (getcommandtype(command) == REDIRIN)
-		dup2(fd, STDIN);
+	if (!iserror(cmdsanity))
+	{
+		if (getcommandtype(command) == REDIRIN)
+			dup2(fd, STDIN);
+		else
+			dup2(fd, STDOUT);
+		execute(command, shell, cmdsanity);
+	}
 	else
-		dup2(fd, STDOUT);
-	execute(command, shell);
+	{
+		puterrorcmd(command, cmdsanity);
+		if (cmdsanity == NOCMD)
+			g_exitstatus = EXIT_STAT_NOCMD;
+		else if (cmdsanity == NOEXEC || cmdsanity == ISDIR)
+			g_exitstatus = EXIT_STAT_NOEXEC;
+		else
+			g_exitstatus = EXIT_STAT_FAIL;
+	}
 	if (close(fd) < 0)
 		return (-1);
 	return (0);

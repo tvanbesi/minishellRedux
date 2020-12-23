@@ -13,10 +13,11 @@
 #include "minishell.h"
 
 int
-	pwd(char **argv)
+	pwd(char **argv, t_list **aenv)
 {
 	char		*cwd;
 
+	(void)aenv;
 	if (!(cwd = getcwd(NULL, 0)))
 		return (-1);
 	write(STDOUT, cwd, ft_strlen(cwd));

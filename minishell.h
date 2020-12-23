@@ -30,7 +30,7 @@
 # define EXIT_STAT_NOEXEC			126
 # define EXIT_STAT_NOCMD			127
 
-# define ERROR_CMD_NOT_FOUND		"Command not found"
+# define ERROR_NOCMD				"Command not found"
 # define ERROR_PARSE				"Parse error"
 # define ERROR_TOO_MANY_ARG			"Too many arguments"
 # define ERROR_NOT_ENOUGH_ARG		"Not enough arguments"
@@ -38,12 +38,35 @@
 # define ERROR_INVALID_IDENTIFIER	"Invalid identifier"
 # define ERROR_GNL					"Prompt fail"
 # define ERROR_CYCLING				"Execution cycling error"
-# define ERROR_ISDIR				"Cannot execute directory"
-# define ERROR_ISNEXEC				"Cannot execute"
+# define ERROR_ISDIR				"is a directory"
+# define ERROR_ISNEXEC				"is not executable"
 # define ERROR_NOHOME				"HOME not set"
+# define ERROR_FATAL				"Fatal error"
 
 //Remove for defense
 #include <stdio.h>
+
+typedef	enum	e_command_r
+{
+	ERROR_START,
+	NOCMD,
+	NOEXEC,
+	ISDIR,
+	FATAL,
+	ERROR_END,
+	SUCCESS_START,
+	EXEC,
+	BUILTIN_START,
+	ECHO,
+	CD,
+	PWD,
+	EXPORT,
+	UNSET,
+	ENV,
+	EXITSHELL,
+	BUILTIN_END,
+	SUCCESS_END
+}				t_command_r;
 
 typedef	enum	e_prompt_r
 {
@@ -93,6 +116,7 @@ typedef	struct	s_shell
 	t_list	*env;
 	int		stdincpy;
 	int		stdoutcpy;
+	int		(*b[7])(char **argv, t_list **aenv);
 }				t_shell;
 
 //Parsing
@@ -131,9 +155,15 @@ char	**getenvp(t_list *env);
 int		addenv(t_list **aenv, char *input);
 void	delenv(void *p);
 
+//Sanity
+int		commandsanity(t_list *command, t_shell *shell);
+int		iserror(int n);
+int		isbuiltin(int n);
+
 //Execution
 void	cyclecommand(t_list *command, t_shell *shell);
-void	execute(t_list *command, t_shell *shell);
+void	execute(t_list *command, t_shell *shell, int n);
+void	builtin(t_list *command, t_shell *shell, int n);
 int		process(char *path, t_list *command, t_shell *shell);
 int		minipipe(t_list *command, t_shell *shell);
 int		redirect(t_list *command, t_shell *shell);
@@ -145,14 +175,15 @@ void	sigquit(int n);
 
 //Builtins
 int		cd(char **argv, t_list **aenv);
-int		echo(char **argv);
-int		pwd(char **argv);
-int		env(char **argv, t_list *env);
+int		echo(char **argv, t_list **aenv);
+int		pwd(char **argv, t_list **aenv);
+int		env(char **argv, t_list **aenv);
 int		export(char **argv, t_list **aenv);
 int		unset(char **argv, t_list **aenv);
-int		exitshell(char **argv);
+int		exitshell(char **argv, t_list **aenv);
 
 //Error
+void	puterrorcmd(t_list *commmand, int n);
 void	puterror(char *msg);
 void	*error(char *msg);
 

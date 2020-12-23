@@ -20,34 +20,35 @@ int
 	char			**argv;
 	char			**envp;
 
-	if (stat(path, &buf) == -1)
-		return (-1);
-	if (buf.st_mode & S_IFDIR || !(buf.st_mode & S_IXUSR))
-	{
-		if (buf.st_mode & S_IFDIR)
-			puterror(ERROR_ISDIR);
-		else
-			puterror(ERROR_ISNEXEC);
-		g_exitstatus = EXIT_STAT_NOEXEC;
-		return (0);
-	}
 	if ((g_pid = fork()) == -1)
 		return (-1);
 	if (g_pid == 0)
 	{
 		if (!(argv = getprocessargv(getcommandargv(command), path)))
-			puterror(strerror(errno));
+			exit(errno);
 		else if (!(envp = getenvp(shell->env)))
-			puterror(strerror(errno));
+			exit(errno);
 		else if (execve(path, argv, envp) == -1)
-			puterror(strerror(errno));
-		exit(1);
+			exit(errno);
 	}
 	else if (waitpid(g_pid, &stat_loc, 0) != g_pid)
 		return (-1);
 	setexitstatus(stat_loc);
 	g_pid = 0;
-	dup2(shell->stdincpy, STDIN);
-	dup2(shell->stdoutcpy, STDOUT);
+	if (WIFEXITED(stat_loc))
+	{
+		if (WEXITSTATUS(stat_loc) != 0)
+		{
+			errno = WEXITSTATUS(stat_loc);
+			return (-1);
+		}
+	}
+	else if (WIFSIGNALED(stat_loc))
+	{
+		if (WTERMSIG(stat_loc) == SIGINT)
+			write(STDOUT, "\n", 1);
+		else if (WTERMSIG(stat_loc) == SIGQUIT)
+			write(STDERR, "Quit\n", 5);
+	}
 	return (0);
 }

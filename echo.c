@@ -31,11 +31,12 @@ static int
 }
 
 int
-	echo(char **argv)
+	echo(char **argv, t_list **aenv)
 {
 	int			nl;
 	int			i;
 
+	(void)aenv;
 	nl = optionnl(argv[0]);
 	i = nl ? 0 : 1;
 	while (argv[i])

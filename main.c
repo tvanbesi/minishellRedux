@@ -30,6 +30,13 @@ static t_shell
 	}
 	shell->stdincpy = dup(STDIN);
 	shell->stdoutcpy = dup(STDOUT);
+	shell->b[0] = echo;
+	shell->b[1] = cd;
+	shell->b[2] = pwd;
+	shell->b[3] = export;
+	shell->b[4] = unset;
+	shell->b[5] = env;
+	shell->b[6] = exitshell;
 	return (shell);
 }
 

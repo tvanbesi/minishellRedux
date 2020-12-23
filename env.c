@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 int
-	env(char **argv, t_list *env)
+	env(char **argv, t_list **aenv)
 {
 	t_list		*current;
 	char		*name;
@@ -22,9 +22,9 @@ int
 	if (argv[0])
 	{
 		puterror(ERROR_TOO_MANY_ARG);
-		return (1);
+		return (-2);
 	}
-	current = env;
+	current = *aenv;
 	while (current)
 	{
 		name = getenvname(current);

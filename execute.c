@@ -12,117 +12,21 @@
 
 #include "minishell.h"
 
-static int
-	builtin(t_list *command, t_shell *shell)
-{
-	char	*cmd;
-	char	**argv;
-
-	cmd = getcmd(command);
-	argv = getcommandargv(command);
-	if (!ft_strncmp(cmd, "echo", 5))
-		return ((g_exitstatus = echo(argv)));
-	else if (!ft_strncmp(cmd, "cd", 3))
-		return ((g_exitstatus = cd(argv, &shell->env)));
-	else if (!ft_strncmp(cmd, "pwd", 4))
-		return ((g_exitstatus = pwd(argv)));
-	else if (!ft_strncmp(cmd, "export", 7))
-		return ((g_exitstatus = export(argv, &shell->env)));
-	else if (!ft_strncmp(cmd, "unset", 6))
-		return ((g_exitstatus = unset(argv, &shell->env)));
-	else if (!ft_strncmp(cmd, "env", 4))
-		return ((g_exitstatus = env(argv, shell->env)));
-	else if (!ft_strncmp(cmd, "exit", 5))
-		return ((g_exitstatus = exitshell(argv)));
-	return (-2);
-}
-
-static int
-	findexec(char *filename, char **paths, char **executable)
-{
-	DIR				*stream;
-	struct	dirent	*entry;
-	size_t			filenamelen;
-	size_t			fullpathlen;
-
-	filenamelen = ft_strlen(filename);
-	*executable = NULL;
-	while (*paths)
-	{
-		if ((stream = opendir(*paths)))
-		{
-			while ((entry = readdir(stream)))
-			{
-				if (!ft_strncmp(entry->d_name, filename, filenamelen + 1))
-				{
-					if (entry->d_type == 8)
-					{
-						fullpathlen = ft_strlen(*paths) + ft_strlen(entry->d_name) + 2;
-						if (!(*executable = malloc(fullpathlen)))
-						{
-							closedir(stream);
-							return (-1);
-						}
-						ft_strlcpy(*executable, *paths, fullpathlen);
-						ft_strlcat(*executable, "/", fullpathlen);
-						ft_strlcat(*executable, entry->d_name, fullpathlen);
-					}
-					if (closedir(stream) == -1)
-						return (-1);
-					return (entry->d_type == DT_REG);
-				}
-			}
-			if (closedir(stream) == -1)
-				return (-1);
-		}
-		paths++;
-	}
-	return (0);
-}
-
 void
-	execute(t_list *command, t_shell *shell)
+	execute(t_list *command, t_shell *shell, int n)
 {
 	char	*cmd;
-	int		builtinret;
-	int		execfound;
-	char	*executable;
-	t_list	*pathenv;
-	char	**paths;
 
 	cmd = getcmd(command);
-	if (!(ft_strchr(cmd, '/')))
+	if (n == EXEC)
 	{
-		if ((builtinret = builtin(command, shell)) == -1)
+		if (process(cmd, command, shell) == -1)
 			puterror(strerror(errno));
-		else if (builtinret == 1)
-			g_exitstatus = EXIT_STAT_FAIL;
-		else if (builtinret == -2)
-		{
-			if (!(pathenv = findenv(shell->env, "PATH")))
-				process(cmd, command, shell);
-			else
-			{
-				if (!(paths = ft_split(getenvval(pathenv), ':')))
-					puterror(strerror(errno));
-				else if ((execfound = findexec(cmd, paths, &executable)) == -1)
-					puterror(strerror(errno));
-				else if (execfound)
-				{
-					if (process(executable, command, shell) == -1)
-						puterror(strerror(errno));
-				}
-				else
-				{
-					g_exitstatus = EXIT_STAT_NOCMD;
-					puterror(ERROR_CMD_NOT_FOUND);
-				}
-				free(executable);
-			}
-		}
 	}
-	else if (process(cmd, command, shell) == -1)
-		puterror(strerror(errno));
+	else if (isbuiltin(n))
+		builtin(command, shell, n);
+	dup2(shell->stdincpy, STDIN);
+	dup2(shell->stdoutcpy, STDOUT);
 }
 
 void
@@ -130,6 +34,7 @@ void
 {
 	t_list	*current;
 	int		commandtype;
+	int		cmdsanity;
 
 	if (!command)
 		return ;
@@ -138,7 +43,22 @@ void
 	{
 		commandtype = getcommandtype(current);
 		if (commandtype == SIMPLE)
-			execute(current, shell);
+		{
+			if ((cmdsanity = commandsanity(current, shell)) == -1)
+				puterror(strerror(errno));
+			else if (!iserror(cmdsanity))
+				execute(current, shell, cmdsanity);
+			else
+			{
+				puterrorcmd(current, cmdsanity);
+				if (cmdsanity == NOCMD)
+					g_exitstatus = EXIT_STAT_NOCMD;
+				else if (cmdsanity == NOEXEC || cmdsanity == ISDIR)
+					g_exitstatus = EXIT_STAT_NOEXEC;
+				else
+					g_exitstatus = EXIT_STAT_FAIL;
+			}
+		}
 		else if (commandtype == PIPE)
 		{
 			if (minipipe(current, shell) == -1)
@@ -149,12 +69,13 @@ void
 		else if (commandtype > REDIRECTION)
 		{
 			if (redirect(current, shell) == -1)
+			{
 				puterror(strerror(errno));
+				g_exitstatus = EXIT_STAT_FAIL;
+			}
 			while (getcommandtype(current) > REDIRECTION)
 				current = current->next;
 		}
-		else
-			puterror(ERROR_CYCLING);
 		current = current->next;
 	}
 }

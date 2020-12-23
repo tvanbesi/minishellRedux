@@ -13,10 +13,11 @@
 #include "minishell.h"
 
 int
-	exitshell(char **argv)
+	exitshell(char **argv, t_list **aenv)
 {
 	int	i;
 
+	(void)aenv;
 	if (!argv[0])
 		exit(g_exitstatus);
 	i = 0;
@@ -29,7 +30,7 @@ int
 	if (argv[1])
 	{
 		puterror(ERROR_TOO_MANY_ARG);
-		return (1);
+		return (-2);
 	}
 	exit(ft_atoi(argv[0]));
 }

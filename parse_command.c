@@ -44,7 +44,7 @@ static t_list
 }
 
 static int
-	commandsanity(t_list *command)
+	syntaxsanity(t_list *command)
 {
 	t_list	*current;
 
@@ -86,7 +86,7 @@ t_list
 		ft_lstadd_back(&r, command);
 		current = skipwords(current);
 	}
-	if (!commandsanity(r))
+	if (!syntaxsanity(r))
 	{
 		g_exitstatus = EXIT_STAT_FAIL;
 		puterror(ERROR_PARSE);

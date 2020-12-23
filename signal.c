@@ -18,10 +18,7 @@ void
 	if (g_pid == 0)
 		exit(BREAK);
 	else
-	{
 		kill(g_pid, SIGINT);
-		write(STDOUT, "\n", 1);
-	}
 }
 
 void
@@ -30,8 +27,5 @@ void
 	if (g_pid == 0)
 		write(STDOUT, "\b \b", 3);
 	else
-	{
 		kill(g_pid, SIGQUIT);
-		write(STDOUT, "Quit\n", 5);
-	}
 }

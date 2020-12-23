@@ -41,11 +41,11 @@ int
 		if (!isidentifiervalid(argv[i]))
 		{
 			puterror(ERROR_INVALID_IDENTIFIER);
-			r = 1;
+			r = -2;
 		}
 		else if (addenv(aenv, argv[i]) == -1)
 			return (-1);
 		i++;
 	}
-	return (1);
+	return (r);
 }

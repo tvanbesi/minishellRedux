@@ -82,6 +82,7 @@ int
 			g_exitstatus = 128 + SIGINT;
 			if (!(*line = ft_strdup("")))
 				return (-1);
+			write(STDOUT, "\n", 1);
 		}
 		else if (WEXITSTATUS(stat_loc) == EXIT)
 			exit(EXIT_STAT_SUCCESS);
