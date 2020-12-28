@@ -66,10 +66,12 @@ void
 		}
 		else if (commandtype == PIPE)
 		{
-			if (minipipe(current, shell) == -1)
+			if (minipipe(current, shell, 0) == -1)
 				puterror(strerror(errno));
 			while (getcommandtype(current) >= PIPE)
 				current = current->next;
+			dup2(shell->stdincpy, STDIN);
+			dup2(shell->stdoutcpy, STDOUT);
 		}
 		else if (commandtype > REDIRECTION)
 		{

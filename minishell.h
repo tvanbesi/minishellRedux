@@ -167,7 +167,7 @@ void	cyclecommand(t_list *command, t_shell *shell);
 void	execute(t_list *command, t_shell *shell, int n);
 void	builtin(t_list *command, t_shell *shell, int n);
 int		process(char *path, t_list *command, t_shell *shell);
-int		minipipe(t_list *command, t_shell *shell);
+int		minipipe(t_list *command, t_shell *shell, int pipeend);
 int		redirect(t_list *command, t_shell *shell);
 void	setexitstatus(int stat_loc);
 
