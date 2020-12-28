@@ -46,17 +46,8 @@ static t_list
 static int
 	syntaxsanity(t_list *command)
 {
-	t_list	*current;
-
 	if (!command)
 		return (1);
-	current = command;
-	while (current)
-	{
-		if (!getcmd(current))
-			return (0);
-		current = current->next;
-	}
 	command = ft_lstlast(command);
 	return (getcommandtype(command) == SIMPLE);
 }
@@ -77,11 +68,13 @@ t_list
 		if (!(command = newcommand(commandtype)))
 			return (error(strerror(errno)));
 		if (gettokentype(current) == WORD)
-			assigncmd(current, command);
-		if (assignargv(current->next, command) == -1)
 		{
-			ft_lstdelone(command, delcommand);
-			return (error(strerror(errno)));
+			assigncmd(current, command);
+			if (assignargv(current, command) == -1)
+			{
+				ft_lstdelone(command, delcommand);
+				return (error(strerror(errno)));
+			}
 		}
 		ft_lstadd_back(&r, command);
 		current = skipwords(current);

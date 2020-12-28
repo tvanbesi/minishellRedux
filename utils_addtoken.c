@@ -44,9 +44,9 @@ int
 		if (emptytokenexception(s, env))
 		{
 			free(s);
-			return (0);
+			s = NULL;
 		}
-		if (!(s = unquote(s, env)))
+		else if (!(s = unquote(s, env)))
 		{
 			puterror(strerror(errno));
 			return (-1);

@@ -47,7 +47,7 @@ int
 			commandtype = getcommandtype(command->next);
 			if ((cmdsanity = commandsanity(command->next, shell)) == -1)
 				return (-1);
-			if (!iserror(WEXITSTATUS(stat_loc)) && !iserror(cmdsanity))
+			if (!iserror(WEXITSTATUS(stat_loc)) && (!iserror(cmdsanity) && cmdsanity != EMPTY))
 				dup2(fd[0], STDIN);
 			close(fd[0]);
 			close(fd[1]);

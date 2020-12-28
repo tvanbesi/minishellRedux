@@ -15,12 +15,21 @@
 void
 	assigncmd(t_list *token, t_list *command)
 {
-	t_token		*tokencontent;
+	t_list		*current;
 	t_command	*commandcontent;
 
-	tokencontent = token->content;
 	commandcontent = command->content;
-	commandcontent->cmd = tokencontent->s;
+	current = token;
+	while (current && gettokentype(current) == WORD)
+	{
+		if (gettokenstr(current))
+		{
+			commandcontent->cmd = gettokenstr(current);
+			return ;
+		}
+		current = current->next;
+	}
+	commandcontent->cmd = NULL;
 }
 
 static int
@@ -33,7 +42,7 @@ static int
 	current = token;
 	while (current)
 	{
-		if (gettokentype(current) == WORD)
+		if (gettokentype(current) == WORD && gettokenstr(current))
 			r++;
 		else if (gettokentype(current) == OPERATOR)
 			return (r);
@@ -52,6 +61,9 @@ int
 	t_command	*commandcontent;
 
 	current = token;
+	while (current && gettokentype(current) == WORD && !gettokenstr(current))
+		current = current->next;
+	current = current ? current->next : current;
 	argc = countargv(current);
 	if (!(argv = ft_calloc(argc + 1, sizeof(*argv))))
 		return (-1);
@@ -59,7 +71,7 @@ int
 	i = 0;
 	while (i < argc)
 	{
-		if (gettokentype(current) == WORD)
+		if (gettokentype(current) == WORD && gettokenstr(current))
 			argv[i++] = gettokenstr(current);
 		current = current->next;
 	}

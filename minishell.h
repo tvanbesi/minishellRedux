@@ -55,6 +55,7 @@ typedef	enum	e_command_r
 	FATAL,
 	ERROR_END,
 	SUCCESS_START,
+	EMPTY,
 	EXEC,
 	BUILTIN_START,
 	ECHO,

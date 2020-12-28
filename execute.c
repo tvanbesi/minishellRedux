@@ -18,6 +18,8 @@ void
 	char	*cmd;
 
 	cmd = getcmd(command);
+	if (!cmd)
+		return ;
 	if (n == EXEC)
 	{
 		if (process(cmd, command, shell) == -1)

@@ -101,6 +101,8 @@ int
 	char		**paths;
 
 	content = command->content;
+	if (!content->cmd)
+		return (EMPTY);
 	if (!ft_strchr(content->cmd, '/'))
 	{
 		if ((r = builtinsanity(content->cmd)))
