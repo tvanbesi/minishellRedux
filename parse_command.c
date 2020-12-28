@@ -81,7 +81,7 @@ t_list
 	}
 	if (!syntaxsanity(r))
 	{
-		g_exitstatus = EXIT_STAT_NOCMD;
+		g_exitstatus = EXIT_STAT_ERRORPARSE;
 		puterror(ERROR_PARSE);
 		ft_lstclear(&r, delcommand);
 	}

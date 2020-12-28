@@ -19,7 +19,10 @@ void
 
 	cmd = getcmd(command);
 	if (!cmd)
+	{
+		g_exitstatus = EXIT_STAT_SUCCESS;
 		return ;
+	}
 	if (n == EXEC)
 	{
 		if (process(cmd, command, shell) == -1)

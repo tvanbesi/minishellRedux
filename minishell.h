@@ -27,6 +27,7 @@
 
 # define EXIT_STAT_SUCCESS			0
 # define EXIT_STAT_FAIL				1
+# define EXIT_STAT_ERRORPARSE		2
 # define EXIT_STAT_NOEXEC			126
 # define EXIT_STAT_NOCMD			127
 

@@ -57,7 +57,7 @@ t_list
 		return (NULL);
 	if (qt)
 	{
-		g_exitstatus = EXIT_STAT_NOCMD;
+		g_exitstatus = EXIT_STAT_ERRORPARSE;
 		return (error(ERROR_PARSE));
 	}
 	return (r);
