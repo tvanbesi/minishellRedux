@@ -37,7 +37,7 @@ int
 	g_pid = 0;
 	if (WIFEXITED(stat_loc))
 	{
-		if (WEXITSTATUS(stat_loc) != 0)
+		if (WEXITSTATUS(stat_loc) > 1)
 		{
 			errno = WEXITSTATUS(stat_loc);
 			return (-1);
