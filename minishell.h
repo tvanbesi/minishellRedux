@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2020/12/22 11:24:01 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/01/11 16:49:52 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@
 # define ERROR_FATAL				"Fatal error"
 
 //Remove for defense
-#include <stdio.h>
+# include <stdio.h>
 
 typedef	enum	e_command_r
 {

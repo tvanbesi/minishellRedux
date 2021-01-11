@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 14:35:01 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/21 16:10:29 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/01/11 16:45:31 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int
 		if (!(ft_isdigit(argv[0][i++])))
 		{
 			puterror(ERROR_NAN);
-			exit(1); //Compare with VM (255 on MacOS)
+			exit(1);
 		}
 	if (argv[1])
 	{

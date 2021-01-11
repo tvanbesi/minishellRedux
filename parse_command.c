@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 15:06:13 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/22 09:48:18 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/01/11 16:58:04 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,41 +49,37 @@ static int
 	if (!command)
 		return (1);
 	command = ft_lstlast(command);
-	return (getcommandtype(command) == SIMPLE);
+	if (getcommandtype(command) == SIMPLE)
+		return (1);
+	g_exitstatus = EXIT_STAT_ERRORPARSE;
+	puterror(ERROR_PARSE);
+	return (0);
 }
 
 t_list
 	*makecommands(t_list *token)
 {
 	t_list	*r;
-	t_list	*current;
 	t_list	*command;
-	int		commandtype;
 
 	r = NULL;
-	current = token;
-	while (current)
+	while (token)
 	{
-		commandtype = gettokencommandtype(current);
-		if (!(command = newcommand(commandtype)))
+		if (!(command = newcommand(gettokencommandtype(token))))
 			return (error(strerror(errno)));
-		if (gettokentype(current) == WORD)
+		if (gettokentype(token) == WORD)
 		{
-			assigncmd(current, command);
-			if (assignargv(current, command) == -1)
+			assigncmd(token, command);
+			if (assignargv(token, command) == -1)
 			{
 				ft_lstdelone(command, delcommand);
 				return (error(strerror(errno)));
 			}
 		}
 		ft_lstadd_back(&r, command);
-		current = skipwords(current);
+		token = skipwords(token);
 	}
 	if (!syntaxsanity(r))
-	{
-		g_exitstatus = EXIT_STAT_ERRORPARSE;
-		puterror(ERROR_PARSE);
 		ft_lstclear(&r, delcommand);
-	}
 	return (r);
 }
