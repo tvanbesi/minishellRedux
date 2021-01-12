@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/01/12 12:47:19 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 14:55:10 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,14 @@ typedef	enum	e_command_r
 	SUCCESS_END
 }				t_command_r;
 
+typedef struct	s_readstdindata
+{
+	char	buf[2];
+	char	*tmp;
+	int		lenfactor;
+	size_t	len;
+}				t_readstdindata;
+
 typedef	enum	e_prompt_r
 {
 	OK,
@@ -129,6 +137,7 @@ typedef	struct	s_shell
 }				t_shell;
 
 //Parsing
+char	*readstdin(void);
 int		prompt(char **line);
 t_list	*tokenize(char *input, t_list *env);
 t_list	*makecommands(t_list *tokens);
