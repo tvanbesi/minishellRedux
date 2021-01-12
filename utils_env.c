@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 14:51:30 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/13 19:15:15 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/01/12 15:40:50 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,24 +45,33 @@ static t_list
 	return (env);
 }
 
+static int
+	getenvdata(char *input, char **val, char **name)
+{
+	if (!(*val = ft_strchr(input, '=')))
+		return (-2);
+	if (!(*val = ft_strdup(&(*val)[1])))
+		return (-1);
+	if (!(*name = ft_substr(input, 0,
+	ft_strlen(input) - (ft_strlen(*val) + 1))))
+	{
+		free(*val);
+		return (-1);
+	}
+	return (0);
+}
+
 int
 	addenv(t_list **aenv, char *input)
 {
 	t_list	*env;
-	t_env	*content;
 	char	*name;
 	char	*val;
 	int		replace;
+	int		r;
 
-	if (!(val = ft_strchr(input, '=')))
-		return (-2);
-	if (!(val = ft_strdup(&val[1])))
-		return (-1);
-	if (!(name = ft_substr(input, 0, ft_strlen(input) - (ft_strlen(val) + 1))))
-	{
-		free(val);
-		return (-1);
-	}
+	if ((r = getenvdata(input, &val, &name)) < 0)
+		return (r);
 	replace = 0;
 	if ((env = findenv(*aenv, name)))
 		replace = 1;
@@ -72,9 +81,8 @@ int
 		free(val);
 		return (-1);
 	}
-	content = env->content;
-	content->name = name;
-	content->val = val;
+	((t_env*)(env->content))->name = name;
+	((t_env*)(env->content))->val = val;
 	if (!replace)
 		ft_lstadd_back(aenv, env);
 	return (0);

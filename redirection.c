@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 11:17:08 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/12 14:26:02 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 15:17:57 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,18 @@ static int
 	return (-1);
 }
 
+static void
+	exitstatredirfail(t_list *command, int cmdsanity)
+{
+	puterrorcmd(command, cmdsanity);
+	if (cmdsanity == NOCMD)
+		g_exitstatus = EXIT_STAT_NOCMD;
+	else if (cmdsanity == NOEXEC || cmdsanity == ISDIR)
+		g_exitstatus = EXIT_STAT_NOEXEC;
+	else
+		g_exitstatus = EXIT_STAT_FAIL;
+}
+
 int
 	redirect(t_list *command, t_shell *shell)
 {
@@ -67,15 +79,7 @@ int
 		execute(command, shell, cmdsanity);
 	}
 	else
-	{
-		puterrorcmd(command, cmdsanity);
-		if (cmdsanity == NOCMD)
-			g_exitstatus = EXIT_STAT_NOCMD;
-		else if (cmdsanity == NOEXEC || cmdsanity == ISDIR)
-			g_exitstatus = EXIT_STAT_NOEXEC;
-		else
-			g_exitstatus = EXIT_STAT_FAIL;
-	}
+		exitstatredirfail(command, cmdsanity);
 	if (close(fd) < 0)
 		return (-1);
 	return (0);
