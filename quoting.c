@@ -6,14 +6,14 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 08:39:15 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/12 14:26:26 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 17:04:38 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char
-	*detectidentifier(char *s, t_list *env)
+char
+	*getidentifier(char *s, t_list *env)
 {
 	t_list	*current;
 	size_t	idlen;
@@ -41,102 +41,80 @@ static char
 	return (NULL);
 }
 
-static size_t
-	getlen(char *s, t_list *env)
+static void
+	expansion(char *r, char *s, t_list *env, t_unquotedata *ud)
 {
-	size_t	r;
-	size_t	i;
-	char	*param;
-
-	r = 0;
-	i = 0;
-	while (s[i])
+	if (s[ud->j + 1] == '?')
 	{
-		if (s[i] == '$')
-		{
-			if (s[i + 1] == '?')
-			{
-				r += 3;
-				i += 2;
-			}
-			else
-			{
-				if ((param = detectidentifier(&s[i + 1], env)))
-					r += ft_strlen(param);
-				i++;
-				while (ft_isalnum(s[i]) || s[i] == '_')
-					i++;
-			}
-		}
-		else
-		{
-			r++;
-			i++;
-		}
+		ud->i += ft_strlcpy(&r[ud->i], ft_itoa(g_exitstatus), ud->l + 1);
+		ud->j += 2;
 	}
-	return (r);
+	else
+	{
+		if (!s[ud->j + 1] || ft_isspht(s[ud->j + 1]))
+			r[ud->i++] = s[ud->j++];
+		else if ((ud->param = getidentifier(&s[++(ud->j)], env)))
+			ud->i += ft_strlcpy(&r[ud->i], ud->param, ud->l + 1);
+		while (ft_isalnum(s[ud->j]) || s[ud->j] == '_')
+			ud->j++;
+	}
+}
+
+static void
+	initunquotedata(char *s, t_list *env, t_unquotedata *ud)
+{
+	ud->l = getidlen(s, env);
+	ud->q = 0;
+	ud->i = 0;
+	ud->j = 0;
+}
+
+static void
+	editunquotedata(char *r, char *s, t_unquotedata *ud, char *mode)
+{
+	if (!ft_strncmp(mode, "open", 4))
+	{
+		ud->q = s[ud->j];
+		ud->j++;
+	}
+	else if (!ft_strncmp(mode, "close", 5))
+	{
+		ud->q = 0;
+		ud->j++;
+	}
+	else if (!ft_strncmp(mode, "special", 7))
+	{
+		r[ud->i++] = s[++(ud->j)];
+		ud->j++;
+	}
 }
 
 char
 	*unquote(char *s, t_list *env)
 {
-	char	*r;
-	size_t	l;
-	size_t	i;
-	size_t	j;
-	int		q;
-	char	*param;
+	char			*r;
+	t_unquotedata	ud;
 
-	l = getlen(s, env);
-	if (!(r = malloc(l + 1)))
-	{
+	initunquotedata(s, env, &ud);
+	if (!(r = malloc(ud.l + 1)))
 		free(s);
-		return (NULL);
-	}
-	q = 0;
-	i = 0;
-	j = 0;
-	while (s[j])
+	while (r && s[ud.j])
 	{
-		if (!q && isquote(s[j]))
-		{
-			q = s[j];
-			j++;
-		}
-		else if (q && q == s[j])
-		{
-			q = 0;
-			j++;
-		}
+		if (!ud.q && isquote(s[ud.j]))
+			editunquotedata(r, s, &ud, "open");
+		else if (ud.q && ud.q == s[ud.j])
+			editunquotedata(r, s, &ud, "close");
 		else
 		{
-			if (q != 39 && s[j] == '\\' && isspecialchar(s[j + 1]))
-			{
-				r[i++] = s[++j];
-				j++;
-			}
-			else if (q != 39 && s[j] == '$')
-			{
-				if (s[j + 1] == '?')
-				{
-					i += ft_strlcpy(&r[i], ft_itoa(g_exitstatus), l + 1);
-					j += 2;
-				}
-				else
-				{
-					if (!s[j + 1] || ft_isspht(s[j + 1]))
-						r[i++] = s[j++];
-					else if ((param = detectidentifier(&s[++j], env)))
-						i += ft_strlcpy(&r[i], param, l + 1);
-					while (ft_isalnum(s[j]) || s[j] == '_')
-						j++;
-				}
-			}
+			if (ud.q != 39 && s[ud.j] == '\\' && isspecialchar(s[ud.j + 1]))
+				editunquotedata(r, s, &ud, "special");
+			else if (ud.q != 39 && s[ud.j] == '$')
+				expansion(r, s, env, &ud);
 			else
-				r[i++] = s[j++];
+				r[ud.i++] = s[ud.j++];
 		}
 	}
-	r[i] = '\0';
+	r[ud.i] = '\0';
 	free(s);
 	return (r);
 }

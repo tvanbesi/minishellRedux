@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/01/12 16:14:39 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 16:52:25 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,22 @@ typedef struct	s_readstdindata
 	size_t	len;
 }				t_readstdindata;
 
+typedef struct	s_unquotedata
+{
+	size_t	l;
+	size_t	i;
+	size_t	j;
+	int		q;
+	char	*param;
+}				t_unquotedata;
+
+typedef struct	s_parsedata
+{
+	unsigned int	i;
+	size_t			l;
+	int				qt;
+}				t_parsedata;
+
 typedef	enum	e_prompt_r
 {
 	OK,
@@ -97,13 +113,6 @@ typedef	struct	s_token
 	int		type;
 	char	*s;
 }				t_token;
-
-typedef struct	s_parsedata
-{
-	unsigned int	i;
-	size_t			l;
-	int				qt;
-}				t_parsedata;
 
 typedef	enum	e_commandtype
 {
@@ -145,6 +154,8 @@ t_list	*makecommands(t_list *tokens);
 //Tokens
 int		addword(t_list **atoken, const char *input, size_t l, t_list *env);
 int		addmetachar(t_list **atoken, const char *input);
+char	*getidentifier(char *s, t_list *env);
+size_t	getidlen(char *s, t_list *env);
 char	*unquote(char *s, t_list *env);
 int		gettokentype(t_list *token);
 char	*gettokenstr(t_list *token);
