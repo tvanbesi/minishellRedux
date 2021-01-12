@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 07:27:17 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/16 19:08:32 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/01/12 14:23:40 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int
 	char			*s;
 	unsigned int	i;
 	size_t			l;
-	
+
 	i = 0;
 	l = 0;
 	while (ismetachar(input[i]))

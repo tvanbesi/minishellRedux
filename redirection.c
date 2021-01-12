@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 11:17:08 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/22 09:41:49 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/01/12 14:26:02 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ static int
 	current = command;
 	while (getcommandtype(current) > REDIRECTION)
 	{
-		if ((fd = openmode(getcommandtype(current), getcmd(current->next))) == -1)
+		if ((fd = openmode(getcommandtype(current),
+		getcmd(current->next))) == -1)
 			return (-1);
 		current = current->next;
 		if (getcommandtype(current) < REDIRECTION)
@@ -53,7 +54,6 @@ int
 	int		fd;
 	int		cmdsanity;
 
-	
 	if ((cmdsanity = commandsanity(command, shell)) == -1)
 		return (-1);
 	if ((fd = skipfiles(command)) == -1)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_commandsanity.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/12 14:24:09 by user42            #+#    #+#             */
+/*   Updated: 2021/01/12 14:25:02 by user42           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int
@@ -16,7 +28,7 @@ static int
 	findexec(char *filename, char **paths, char **executable)
 {
 	DIR				*stream;
-	struct	dirent	*entry;
+	struct dirent	*entry;
 	size_t			filenamelen;
 	size_t			fullpathlen;
 
@@ -31,7 +43,8 @@ static int
 				{
 					if (entry->d_type == DT_REG)
 					{
-						fullpathlen = ft_strlen(*paths) + ft_strlen(entry->d_name) + 2;
+						fullpathlen = ft_strlen(*paths)
+						+ ft_strlen(entry->d_name) + 2;
 						if (!(*executable = malloc(fullpathlen)))
 						{
 							closedir(stream);
@@ -78,7 +91,7 @@ static int
 static int
 	filesanity(char *filename)
 {
-	struct	stat	buf;
+	struct stat	buf;
 
 	if (stat(filename, &buf) == -1)
 		return (-1);

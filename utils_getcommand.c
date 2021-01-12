@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 18:15:49 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 19:15:01 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/01/12 14:20:13 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ static int
 		r++;
 	return (r);
 }
-		
 
 char
 	**getprocessargv(char **argv, char *path)

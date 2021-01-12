@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 08:39:15 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/21 14:00:04 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/01/12 14:26:26 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static char
 	t_list	*current;
 	size_t	idlen;
 	size_t	i;
-	
+
 	idlen = 0;
 	i = 0;
 	if (ft_isalpha(s[i]) || s[i] == '_')

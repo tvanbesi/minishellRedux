@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 17:29:01 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 18:12:09 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/01/12 14:21:32 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ char
 	{
 		if (!(envp[i++] = getenvstr(current)))
 		{
-			ft_cafree(envp); //Is this actually safe ? Try
+			ft_cafree(envp);
 			return (NULL);
 		}
 		current = current->next;
