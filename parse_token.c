@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:35:57 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/22 09:47:50 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/01/12 13:20:03 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,43 +22,59 @@ static int
 	return (qt);
 }
 
+static int
+	tokenizeword(char *input, t_list **atoken, t_parsedata *pd, t_list *env)
+{
+	pd->l--;
+	if (addword(atoken, &input[pd->i - pd->l], pd->l, env) == -1)
+		return (-1);
+	if (addmetachar(atoken, &input[pd->i]) == -1)
+		return (-1);
+	while (ismetachar(input[pd->i]))
+		pd->i++;
+	pd->l = 0;
+	return (0);
+}
+
+static void
+	initparsedata(t_parsedata *pd)
+{
+	pd->i = 0;
+	pd->l = 0;
+	pd->qt = 0;
+}
+
+static void
+	*unclosedqt(void)
+{
+	g_exitstatus = EXIT_STAT_ERRORPARSE;
+	return (error(ERROR_PARSE));
+}
+
 t_list
 	*tokenize(char *input, t_list *env)
 {
 	t_list			*r;
-	unsigned int	i;
-	size_t			l;
-	int				qt;
+	t_parsedata		pd;
 
-	r = NULL;
-	i = 0;
-	l = 0;
-	qt = 0;
 	if (!input)
 		return (NULL);
-	while (input[i])
+	r = NULL;
+	initparsedata(&pd);
+	while (input[pd.i])
 	{
-		l++;
-		if (!(qt = quote(qt, input[i])) && ismetachar(input[i]))
+		pd.l++;
+		if (!(pd.qt = quote(pd.qt, input[pd.i])) && ismetachar(input[pd.i]))
 		{
-			l--;
-			if (addword(&r, &input[i - l], l, env) == -1)
+			if (tokenizeword(input, &r, &pd, env) == -1)
 				return (NULL);
-			if (addmetachar(&r, &input[i]) == -1)
-				return (NULL);
-			while (ismetachar(input[i]))
-				i++;
-			l = 0;
 		}
 		else
-			i++;
+			pd.i++;
 	}
-	if (addword(&r, &input[i - l], l, env) == -1)
+	if (addword(&r, &input[pd.i - pd.l], pd.l, env) == -1)
 		return (NULL);
-	if (qt)
-	{
-		g_exitstatus = EXIT_STAT_ERRORPARSE;
-		return (error(ERROR_PARSE));
-	}
+	if (pd.qt)
+		return (unclosedqt());
 	return (r);
 }

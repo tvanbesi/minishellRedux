@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/01/11 16:49:52 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 12:47:19 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,13 @@ typedef	struct	s_token
 	int		type;
 	char	*s;
 }				t_token;
+
+typedef struct	s_parsedata
+{
+	unsigned int	i;
+	size_t			l;
+	int				qt;
+}				t_parsedata;
 
 typedef	enum	e_commandtype
 {
