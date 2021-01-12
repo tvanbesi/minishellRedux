@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/22 11:23:44 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/01/12 12:36:45 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,17 @@ static t_shell
 	shell->b[4] = unset;
 	shell->b[5] = env;
 	shell->b[6] = exitshell;
+	signal(SIGINT, sigint);
+	signal(SIGQUIT, sigquit);
 	return (shell);
+}
+
+void
+	freedata(char *input, t_list *token, t_list *command)
+{
+	free(input);
+	ft_lstclear(&token, deltoken);
+	ft_lstclear(&command, delcommand);
 }
 
 int
@@ -54,8 +64,6 @@ int
 		return (1);
 	}
 	g_pid = 0;
-	signal(SIGINT, sigint);
-	signal(SIGQUIT, sigquit);
 	while (1)
 	{
 		write(STDOUT, "> ", 2);
@@ -66,11 +74,7 @@ int
 		token = tokenize(input, shell->env);
 		command = makecommands(token);
 		cyclecommand(command, shell);
-		free(input);
-		ft_lstclear(&token, deltoken);
-		ft_lstclear(&command, delcommand);
+		freedata(input, token, command);
 	}
-	ft_lstclear(&shell->env, delenv);
-	free(shell);
 	return (0);
 }

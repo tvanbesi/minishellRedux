@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 12:41:35 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/22 09:20:05 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/01/12 12:20:10 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,55 +34,62 @@ void
 	dup2(shell->stdoutcpy, STDOUT);
 }
 
+static void
+	executesimple(t_list *command, t_shell *shell)
+{
+	int		cmdsanity;
+
+	if ((cmdsanity = commandsanity(command, shell)) == -1)
+		puterror(strerror(errno));
+	else if (!iserror(cmdsanity))
+		execute(command, shell, cmdsanity);
+	else
+	{
+		puterrorcmd(command, cmdsanity);
+		if (cmdsanity == NOCMD)
+			g_exitstatus = EXIT_STAT_NOCMD;
+		else if (cmdsanity == NOEXEC || cmdsanity == ISDIR)
+			g_exitstatus = EXIT_STAT_NOEXEC;
+		else
+			g_exitstatus = EXIT_STAT_FAIL;
+	}
+}
+
+static void
+	executeredir(t_list *command, t_shell *shell)
+{
+	if (redirect(command, shell) == -1)
+	{
+		puterror(strerror(errno));
+		g_exitstatus = EXIT_STAT_FAIL;
+	}
+}
+
 void
 	cyclecommand(t_list *command, t_shell *shell)
 {
-	t_list	*current;
 	int		commandtype;
-	int		cmdsanity;
 
-	if (!command)
-		return ;
-	current = command;
-	while (current)
+	while (command)
 	{
-		commandtype = getcommandtype(current);
+		commandtype = getcommandtype(command);
 		if (commandtype == SIMPLE)
-		{
-			if ((cmdsanity = commandsanity(current, shell)) == -1)
-				puterror(strerror(errno));
-			else if (!iserror(cmdsanity))
-				execute(current, shell, cmdsanity);
-			else
-			{
-				puterrorcmd(current, cmdsanity);
-				if (cmdsanity == NOCMD)
-					g_exitstatus = EXIT_STAT_NOCMD;
-				else if (cmdsanity == NOEXEC || cmdsanity == ISDIR)
-					g_exitstatus = EXIT_STAT_NOEXEC;
-				else
-					g_exitstatus = EXIT_STAT_FAIL;
-			}
-		}
+			executesimple(command, shell);
 		else if (commandtype == PIPE)
 		{
-			if (minipipe(current, shell, 0) == -1)
+			if (minipipe(command, shell, 0) == -1)
 				puterror(strerror(errno));
-			while (getcommandtype(current) >= PIPE)
-				current = current->next;
+			while (getcommandtype(command) >= PIPE)
+				command = command->next;
 			dup2(shell->stdincpy, STDIN);
 			dup2(shell->stdoutcpy, STDOUT);
 		}
 		else if (commandtype > REDIRECTION)
 		{
-			if (redirect(current, shell) == -1)
-			{
-				puterror(strerror(errno));
-				g_exitstatus = EXIT_STAT_FAIL;
-			}
-			while (getcommandtype(current) > REDIRECTION)
-				current = current->next;
+			executeredir(command, shell);
+			while (getcommandtype(command) > REDIRECTION)
+				command = command->next;
 		}
-		current = current->next;
+		command = command->next;
 	}
 }
