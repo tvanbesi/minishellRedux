@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 18:27:26 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/12 14:13:31 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 17:38:50 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,6 @@ int
 		}
 		else if (WIFEXITED(stat_loc) && pipeend)
 			exitstatpipeend(stat_loc);
-		else if (WIFSIGNALED(stat_loc))
-			printf("Signal received in pipe\n");
 	}
 	return (0);
 }

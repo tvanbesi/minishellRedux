@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/01/12 17:36:49 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 17:39:53 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,6 @@
 # define ERROR_ISNEXEC				"is not executable"
 # define ERROR_NOHOME				"HOME not set"
 # define ERROR_FATAL				"Fatal error"
-
-//Remove for defense
-# include <stdio.h>
 
 typedef	enum		e_command_r
 {
@@ -244,14 +241,6 @@ int					exitshell(char **argv, t_list **aenv);
 void				puterrorcmd(t_list *commmand, int n);
 void				puterror(char *msg);
 void				*error(char *msg);
-
-/*
-***	DEBUG
-*/
-//Remove for defense
-void				showtoken(void *p);
-void				showcommand(void *p);
-void				showenv(void *p);
 
 extern	int			g_pid;
 extern	int			g_exitstatus;
