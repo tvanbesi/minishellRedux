@@ -3,26 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pow.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thomasvanbesien <thomasvanbesien@studen    +#+  +:+       +#+        */
+/*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/22 14:39:18 by thomasvanbe       #+#    #+#             */
-/*   Updated: 2020/08/22 15:17:29 by thomasvanbe      ###   ########.fr       */
+/*   Created: 2021/01/12 17:11:21 by user42            #+#    #+#             */
+/*   Updated: 2021/01/12 17:13:58 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 double
-    ft_pow(double x, int y)
+	ft_pow(double x, int y)
 {
-    double  r;
+	double	r;
 
-    if (x == 0.0)
-        return (x);
-    r = 1.0;
-    if (y > 0)
-        while (y-- > 0)
-            r *= x;
-    else
-        while (y++ < 0)
-            r /= x;
-    return (r);
+	if (x == 0.0)
+		return (x);
+	r = 1.0;
+	if (y > 0)
+		while (y-- > 0)
+			r *= x;
+	else
+		while (y++ < 0)
+			r /= x;
+	return (r);
 }

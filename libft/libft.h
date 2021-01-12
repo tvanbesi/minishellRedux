@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: thomasvanbesien <thomasvanbesien@studen    +#+  +:+       +#+        */
+/*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/07 16:47:37 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/13 19:15:37 by tvanbesi         ###   ########.fr       */
+/*   Created: 2021/01/12 17:18:05 by user42            #+#    #+#             */
+/*   Updated: 2021/01/12 17:18:52 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,15 @@ char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	**ft_split(char const *s, char c);
 char	**ft_splits(char const *s, char *str);
-double  ft_atof(char *str);
-double  ft_pow(double x, int y);
+double	ft_atof(char *str);
+double	ft_pow(double x, int y);
 int		ft_atoi(const char *str);
 int		ft_isalnum(int c);
 int		ft_isalpha(int c);
 int		ft_isascii(int c);
 int		ft_isdigit(int c);
-int     ft_isspace(int c);
-int     ft_isspht(int c);
+int		ft_isspace(int c);
+int		ft_isspht(int c);
 int		ft_isprint(int c);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
@@ -63,10 +63,8 @@ void	*ft_memset(void *b, int c, size_t len);
 void	ft_putchar(char c);
 void	ft_putstr(char *s);
 void	ft_putnstr(char *s, size_t n);
-
 int		ft_lstsize(t_list *lst);
-t_list	*ft_lstmap(t_list *lst, void *(*f)(void *),
-		void (*del)(void *));
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 t_list	*ft_lstnew(void *content);
 t_list	*ft_lstlast(t_list *lst);
 void	ft_lstadd_back(t_list **alst, t_list *new);
@@ -74,7 +72,6 @@ void	ft_lstadd_front(t_list **alst, t_list *new);
 void	ft_lstclear(t_list **lst, void (*del)(void*));
 void	ft_lstdelone(t_list *lst, void (*del)(void*));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
-
 void	ft_cafree(char **a);
 
 #endif
