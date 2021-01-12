@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/01/12 14:55:10 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 16:14:39 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,7 @@ void	delenv(void *p);
 
 //Sanity
 int		commandsanity(t_list *command, t_shell *shell);
+int		findexec(char *filename, char **paths, char **executable);
 int		iserror(int n);
 int		isbuiltin(int n);
 

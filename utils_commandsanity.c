@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:24:09 by user42            #+#    #+#             */
-/*   Updated: 2021/01/12 14:25:02 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 16:13:36 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,49 +22,6 @@ int
 	isbuiltin(int n)
 {
 	return (n > BUILTIN_START && n < BUILTIN_END);
-}
-
-static int
-	findexec(char *filename, char **paths, char **executable)
-{
-	DIR				*stream;
-	struct dirent	*entry;
-	size_t			filenamelen;
-	size_t			fullpathlen;
-
-	filenamelen = ft_strlen(filename);
-	while (*paths)
-	{
-		if ((stream = opendir(*paths)))
-		{
-			while ((entry = readdir(stream)))
-			{
-				if (!ft_strncmp(entry->d_name, filename, filenamelen + 1))
-				{
-					if (entry->d_type == DT_REG)
-					{
-						fullpathlen = ft_strlen(*paths)
-						+ ft_strlen(entry->d_name) + 2;
-						if (!(*executable = malloc(fullpathlen)))
-						{
-							closedir(stream);
-							return (-1);
-						}
-						ft_strlcpy(*executable, *paths, fullpathlen);
-						ft_strlcat(*executable, "/", fullpathlen);
-						ft_strlcat(*executable, entry->d_name, fullpathlen);
-					}
-					if (closedir(stream) == -1)
-						return (-1);
-					return (entry->d_type == DT_REG);
-				}
-			}
-			if (closedir(stream) == -1)
-				return (-1);
-		}
-		paths++;
-	}
-	return (0);
 }
 
 static int

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 07:27:17 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/12 14:23:40 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 16:09:44 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,24 +37,17 @@ int
 	if (l)
 	{
 		if (!(s = ft_substr(input, 0, l)))
-		{
-			puterror(strerror(errno));
 			return (-1);
-		}
 		if (emptytokenexception(s, env))
 		{
 			free(s);
 			s = NULL;
 		}
 		else if (!(s = unquote(s, env)))
-		{
-			puterror(strerror(errno));
 			return (-1);
-		}
 		if (!(token = newtoken(WORD)))
 		{
 			free(s);
-			puterror(strerror(errno));
 			return (-1);
 		}
 		content = token->content;
@@ -64,42 +57,43 @@ int
 	return (0);
 }
 
+static void
+	initparsedata(t_parsedata *pd)
+{
+	pd->i = 0;
+	pd->l = 0;
+}
+
+static void
+	incrementparsedata(t_parsedata *pd)
+{
+	pd->i++;
+	pd->l++;
+}
+
 int
 	addmetachar(t_list **atoken, const char *input)
 {
 	t_list			*token;
-	t_token			*content;
 	char			*s;
-	unsigned int	i;
-	size_t			l;
+	t_parsedata		pd;
 
-	i = 0;
-	l = 0;
-	while (ismetachar(input[i]))
+	initparsedata(&pd);
+	while (ismetachar(input[pd.i]))
 	{
-		if (ft_isspht(input[i]))
-			i++;
-		else if (isoperator(input[i]))
+		if (ft_isspht(input[pd.i]))
+			pd.i++;
+		else if (isoperator(input[pd.i]))
 		{
 			if (!(token = newtoken(OPERATOR)))
-			{
-				puterror(strerror(errno));
 				return (-1);
-			}
-			while (isoperator(input[i]))
-			{
-				i++;
-				l++;
-			}
-			if (!(s = ft_substr(input, i - l, l)))
-			{
-				puterror(strerror(errno));
+			while (isoperator(input[pd.i]))
+				incrementparsedata(&pd);
+			if (!(s = ft_substr(input, pd.i - pd.l, pd.l)))
 				return (-1);
-			}
-			content = token->content;
-			content->s = s;
+			((t_token*)token->content)->s = s;
 			ft_lstadd_back(atoken, token);
-			l = 0;
+			pd.l = 0;
 		}
 	}
 	return (0);

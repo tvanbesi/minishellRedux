@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:35:57 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/12 13:20:03 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 16:00:08 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,15 @@ static int
 {
 	pd->l--;
 	if (addword(atoken, &input[pd->i - pd->l], pd->l, env) == -1)
+	{
+		puterror(strerror(errno));
 		return (-1);
+	}
 	if (addmetachar(atoken, &input[pd->i]) == -1)
+	{
+		puterror(strerror(errno));
 		return (-1);
+	}
 	while (ismetachar(input[pd->i]))
 		pd->i++;
 	pd->l = 0;
