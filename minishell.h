@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/01/12 16:52:25 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 17:29:55 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@
 //Remove for defense
 # include <stdio.h>
 
-typedef	enum	e_command_r
+typedef	enum		e_command_r
 {
 	ERROR_START,
 	NOCMD,
@@ -68,53 +68,53 @@ typedef	enum	e_command_r
 	EXITSHELL,
 	BUILTIN_END,
 	SUCCESS_END
-}				t_command_r;
+}					t_command_r;
 
-typedef struct	s_readstdindata
+typedef struct		s_readstdindata
 {
-	char	buf[2];
-	char	*tmp;
-	int		lenfactor;
-	size_t	len;
-}				t_readstdindata;
+	char			buf[2];
+	char			*tmp;
+	int				lenfactor;
+	size_t			len;
+}					t_readstdindata;
 
-typedef struct	s_unquotedata
+typedef struct		s_unquotedata
 {
-	size_t	l;
-	size_t	i;
-	size_t	j;
-	int		q;
-	char	*param;
-}				t_unquotedata;
+	size_t			l;
+	size_t			i;
+	size_t			j;
+	int				q;
+	char			*param;
+}					t_unquotedata;
 
-typedef struct	s_parsedata
+typedef struct		s_parsedata
 {
 	unsigned int	i;
 	size_t			l;
 	int				qt;
-}				t_parsedata;
+}					t_parsedata;
 
-typedef	enum	e_prompt_r
+typedef	enum		e_prompt_r
 {
 	OK,
 	ERROR,
 	EXIT,
 	BREAK
-}				t_prompt_r;
+}					t_prompt_r;
 
-typedef	enum	e_tokentype
+typedef	enum		e_tokentype
 {
 	WORD,
 	OPERATOR,
-}				t_tokentype;
+}					t_tokentype;
 
-typedef	struct	s_token
+typedef	struct		s_token
 {
-	int		type;
-	char	*s;
-}				t_token;
+	int				type;
+	char			*s;
+}					t_token;
 
-typedef	enum	e_commandtype
+typedef	enum		e_commandtype
 {
 	SIMPLE,
 	PIPE,
@@ -122,107 +122,98 @@ typedef	enum	e_commandtype
 	REDIRIN,
 	REDIRTRUNC,
 	REDIRAPPEND
-}				t_commandtype;
+}					t_commandtype;
 
-typedef	struct	s_command
+typedef	struct		s_command
 {
-	int		type;
-	char	*cmd;
-	char	**argv;
-}				t_command;
+	int				type;
+	char			*cmd;
+	char			**argv;
+}					t_command;
 
-typedef	struct	s_env
+typedef	struct		s_env
 {
-	char	*name;
-	char	*val;
-}				t_env;
+	char			*name;
+	char			*val;
+}					t_env;
 
-typedef	struct	s_shell
+typedef	struct		s_shell
 {
-	t_list	*env;
-	int		stdincpy;
-	int		stdoutcpy;
-	int		(*b[7])(char **argv, t_list **aenv);
-}				t_shell;
+	t_list			*env;
+	int				stdincpy;
+	int				stdoutcpy;
+	int				(*b[7])(char **argv, t_list **aenv);
+}					t_shell;
 
-//Parsing
-char	*readstdin(void);
-int		prompt(char **line);
-t_list	*tokenize(char *input, t_list *env);
-t_list	*makecommands(t_list *tokens);
+char				*readstdin(void);
+int					prompt(char **line);
+t_list				*tokenize(char *input, t_list *env);
+t_list				*makecommands(t_list *tokens);
 
-//Tokens
-int		addword(t_list **atoken, const char *input, size_t l, t_list *env);
-int		addmetachar(t_list **atoken, const char *input);
-char	*getidentifier(char *s, t_list *env);
-size_t	getidlen(char *s, t_list *env);
-char	*unquote(char *s, t_list *env);
-int		gettokentype(t_list *token);
-char	*gettokenstr(t_list *token);
-int		gettokencommandtype(t_list *token);
-int		emptytokenexception(char *word, t_list *env);
-int		isquote(int c);
-int		ismetachar(int c);
-int		isoperator(int c);
-int		isspecialchar(int c);
-void	deltoken(void *p);
+int					addword(t_list **atoken, const char *input,
+					size_t l, t_list *env);
+int					addmetachar(t_list **atoken, const char *input);
+char				*getidentifier(char *s, t_list *env);
+size_t				getidlen(char *s, t_list *env);
+char				*unquote(char *s, t_list *env);
+int					gettokentype(t_list *token);
+char				*gettokenstr(t_list *token);
+int					gettokencommandtype(t_list *token);
+int					emptytokenexception(char *word, t_list *env);
+int					isquote(int c);
+int					ismetachar(int c);
+int					isoperator(int c);
+int					isspecialchar(int c);
+void				deltoken(void *p);
 
-//Commands
-void	assigncmd(t_list *token, t_list *command);
-int		assignargv(t_list *token, t_list *command);
-int		getcommandtype(t_list *command);
-char	*getcmd(t_list *command);
-char	**getcommandargv(t_list *command);
-char	**getprocessargv(char **argv, char *path);
-void	delcommand(void *p);
+void				assigncmd(t_list *token, t_list *command);
+int					assignargv(t_list *token, t_list *command);
+int					getcommandtype(t_list *command);
+char				*getcmd(t_list *command);
+char				**getcommandargv(t_list *command);
+char				**getprocessargv(char **argv, char *path);
+void				delcommand(void *p);
 
-//Environment
-t_list	*findenv(t_list *env, const char *name);
-char	*getenvname(t_list *env);
-char	*getenvval(t_list *env);
-char	**getenvp(t_list *env);
-int		addenv(t_list **aenv, char *input);
-void	delenv(void *p);
+t_list				*findenv(t_list *env, const char *name);
+char				*getenvname(t_list *env);
+char				*getenvval(t_list *env);
+char				**getenvp(t_list *env);
+int					addenv(t_list **aenv, char *input);
+void				delenv(void *p);
 
-//Sanity
-int		commandsanity(t_list *command, t_shell *shell);
-int		findexec(char *filename, char **paths, char **executable);
-int		iserror(int n);
-int		isbuiltin(int n);
+int					commandsanity(t_list *command, t_shell *shell);
+int					findexec(char *filename, char **paths, char **executable);
+int					iserror(int n);
+int					isbuiltin(int n);
 
-//Execution
-void	cyclecommand(t_list *command, t_shell *shell);
-void	execute(t_list *command, t_shell *shell, int n);
-void	builtin(t_list *command, t_shell *shell, int n);
-int		process(char *path, t_list *command, t_shell *shell);
-int		minipipe(t_list *command, t_shell *shell, int pipeend);
-int		redirect(t_list *command, t_shell *shell);
-void	setexitstatus(int stat_loc);
+void				cyclecommand(t_list *command, t_shell *shell);
+void				execute(t_list *command, t_shell *shell, int n);
+void				builtin(t_list *command, t_shell *shell, int n);
+int					process(char *path, t_list *command, t_shell *shell);
+int					minipipe(t_list *command, t_shell *shell, int pipeend);
+int					redirect(t_list *command, t_shell *shell);
+void				setexitstatus(int stat_loc);
 
-//Signal
-void	sigint(int n);
-void	sigquit(int n);
+void				sigint(int n);
+void				sigquit(int n);
 
-//Builtins
-int		cd(char **argv, t_list **aenv);
-int		echo(char **argv, t_list **aenv);
-int		pwd(char **argv, t_list **aenv);
-int		env(char **argv, t_list **aenv);
-int		export(char **argv, t_list **aenv);
-int		unset(char **argv, t_list **aenv);
-int		exitshell(char **argv, t_list **aenv);
+int					cd(char **argv, t_list **aenv);
+int					echo(char **argv, t_list **aenv);
+int					pwd(char **argv, t_list **aenv);
+int					env(char **argv, t_list **aenv);
+int					export(char **argv, t_list **aenv);
+int					unset(char **argv, t_list **aenv);
+int					exitshell(char **argv, t_list **aenv);
 
-//Error
-void	puterrorcmd(t_list *commmand, int n);
-void	puterror(char *msg);
-void	*error(char *msg);
+void				puterrorcmd(t_list *commmand, int n);
+void				puterror(char *msg);
+void				*error(char *msg);
 
-//Debug functions, remove for defense or remove printf
-void	showtoken(void *p);
-void	showcommand(void *p);
-void	showenv(void *p);
+void				showtoken(void *p);
+void				showcommand(void *p);
+void				showenv(void *p);
 
-extern	int		g_pid;
-extern	int		g_exitstatus;
+extern	int			g_pid;
+extern	int			g_exitstatus;
 
 #endif
