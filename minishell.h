@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/01/12 17:29:55 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 17:36:49 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,10 +145,18 @@ typedef	struct		s_shell
 	int				(*b[7])(char **argv, t_list **aenv);
 }					t_shell;
 
+/*
+***	PARSING
+*/
+
 char				*readstdin(void);
 int					prompt(char **line);
 t_list				*tokenize(char *input, t_list *env);
 t_list				*makecommands(t_list *tokens);
+
+/*
+***	TOKENS
+*/
 
 int					addword(t_list **atoken, const char *input,
 					size_t l, t_list *env);
@@ -166,6 +174,10 @@ int					isoperator(int c);
 int					isspecialchar(int c);
 void				deltoken(void *p);
 
+/*
+***	COMMANDS
+*/
+
 void				assigncmd(t_list *token, t_list *command);
 int					assignargv(t_list *token, t_list *command);
 int					getcommandtype(t_list *command);
@@ -174,6 +186,10 @@ char				**getcommandargv(t_list *command);
 char				**getprocessargv(char **argv, char *path);
 void				delcommand(void *p);
 
+/*
+***	ENVIRONMENT
+*/
+
 t_list				*findenv(t_list *env, const char *name);
 char				*getenvname(t_list *env);
 char				*getenvval(t_list *env);
@@ -181,10 +197,18 @@ char				**getenvp(t_list *env);
 int					addenv(t_list **aenv, char *input);
 void				delenv(void *p);
 
+/*
+***	COMMAND SANITY
+*/
+
 int					commandsanity(t_list *command, t_shell *shell);
 int					findexec(char *filename, char **paths, char **executable);
 int					iserror(int n);
 int					isbuiltin(int n);
+
+/*
+***	EXECUTION
+*/
 
 void				cyclecommand(t_list *command, t_shell *shell);
 void				execute(t_list *command, t_shell *shell, int n);
@@ -194,8 +218,16 @@ int					minipipe(t_list *command, t_shell *shell, int pipeend);
 int					redirect(t_list *command, t_shell *shell);
 void				setexitstatus(int stat_loc);
 
+/*
+***	SIGNALS
+*/
+
 void				sigint(int n);
 void				sigquit(int n);
+
+/*
+***	BUILTINS
+*/
 
 int					cd(char **argv, t_list **aenv);
 int					echo(char **argv, t_list **aenv);
@@ -205,10 +237,18 @@ int					export(char **argv, t_list **aenv);
 int					unset(char **argv, t_list **aenv);
 int					exitshell(char **argv, t_list **aenv);
 
+/*
+***	ERROR
+*/
+
 void				puterrorcmd(t_list *commmand, int n);
 void				puterror(char *msg);
 void				*error(char *msg);
 
+/*
+***	DEBUG
+*/
+//Remove for defense
 void				showtoken(void *p);
 void				showcommand(void *p);
 void				showenv(void *p);
