@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 08:39:15 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/08 12:38:56 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 14:34:54 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,6 @@ char
 
 	initunquotedata(s, env, &ud);
 	r = malloc(ud.l + 1);
-	if (!r)
-		free(s);
 	while (r && s[ud.j])
 	{
 		if (!ud.q && isquote(s[ud.j]))
@@ -119,7 +117,8 @@ char
 				r[ud.i++] = s[ud.j++];
 		}
 	}
-	r[ud.i] = '\0';
+	if (r)
+		r[ud.i] = '\0';
 	free(s);
 	return (r);
 }

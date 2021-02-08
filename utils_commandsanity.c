@@ -6,23 +6,11 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:24:09 by user42            #+#    #+#             */
-/*   Updated: 2021/02/08 12:21:45 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 15:23:01 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int
-	iserror(int n)
-{
-	return (n > ERROR_START && n < ERROR_END);
-}
-
-int
-	isbuiltin(int n)
-{
-	return (n > BUILTIN_START && n < BUILTIN_END);
-}
 
 static int
 	builtinsanity(char *cmd)
@@ -62,6 +50,17 @@ static int
 	return (EXEC);
 }
 
+static int
+	commandsanityret(int r, char *cmd)
+{
+	if (r == -1)
+		return (-1);
+	else if (r)
+		return (filesanity(cmd));
+	else
+		return (NOCMD);
+}
+
 int
 	commandsanity(t_list *command, t_shell *shell)
 {
@@ -85,12 +84,7 @@ int
 		if (!paths)
 			return (-1);
 		r = findexec(content->cmd, paths, &content->cmd);
-		if (r == -1)
-			return (-1);
-		else if (r)
-			return (filesanity(content->cmd));
-		else
-			return (NOCMD);
+		return (commandsanityret(r, content->cmd));
 	}
 	else
 		return (filesanity(content->cmd));

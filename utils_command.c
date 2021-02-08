@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 10:34:27 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/08 12:23:10 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 15:15:13 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,16 @@ static int
 	return (r);
 }
 
+static t_list
+	*skiptoargv(t_list *token)
+{
+	while (token && gettokentype(token) == WORD && !gettokenstr(token))
+		token = token->next;
+	if (token)
+		return (token->next);
+	return (token);
+}
+
 int
 	assignargv(t_list *token, t_list *command)
 {
@@ -60,11 +70,7 @@ int
 	t_list		*current;
 	t_command	*commandcontent;
 
-	current = token;
-	while (current && gettokentype(current) == WORD && !gettokenstr(current))
-		current = current->next;
-	if (current)
-		current = current->next;
+	current = skiptoargv(token);
 	argc = countargv(current);
 	argv = ft_calloc(argc + 1, sizeof(*argv));
 	if (!argv)

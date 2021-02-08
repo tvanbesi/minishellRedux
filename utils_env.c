@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 14:51:30 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/08 12:18:36 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 15:34:50 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,21 @@ static int
 	return (0);
 }
 
+static t_list
+	*sanenewenv(char *name, char *val)
+{
+	t_list	*env;
+
+	env = newenv();
+	if (!env)
+	{
+		free(name);
+		free(val);
+		return (NULL);
+	}
+	return (env);
+}
+
 int
 	addenv(t_list **aenv, char *input)
 {
@@ -83,13 +98,9 @@ int
 		replace = 1;
 	else
 	{
-		env = newenv();
+		env = sanenewenv(name, val);
 		if (!env)
-		{
-			free(name);
-			free(val);
 			return (-1);
-		}
 	}
 	((t_env*)(env->content))->name = name;
 	((t_env*)(env->content))->val = val;

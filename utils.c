@@ -1,30 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.c                                          :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/11 16:29:47 by user42            #+#    #+#             */
-/*   Updated: 2021/02/08 13:45:54 by user42           ###   ########.fr       */
+/*   Created: 2021/02/08 15:20:39 by user42            #+#    #+#             */
+/*   Updated: 2021/02/08 15:22:59 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void
-	builtin(t_list *command, t_shell *shell, int n)
+int
+	iserror(int n)
 {
-	char	**argv;
-	int		r;
+	return (n > ERROR_START && n < ERROR_END);
+}
 
-	argv = getcommandargv(command);
-	n -= BUILTIN_START + 1;
-	r = (*(shell->b)[n])(argv, &shell->env);
-	if (r == -1)
-		puterror(strerror(errno));
-	if (r)
-		g_exitstatus = EXIT_STAT_FAIL;
-	else
-		g_exitstatus = EXIT_STAT_SUCCESS;
+int
+	isbuiltin(int n)
+{
+	return (n > BUILTIN_START && n < BUILTIN_END);
 }

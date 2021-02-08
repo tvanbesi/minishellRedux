@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 07:27:17 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/08 12:29:20 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 14:53:40 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,23 @@ static t_list
 	return (token);
 }
 
+static int
+	emptytokensanity(char **s, t_list *env)
+{
+	if (emptytokenexception(*s, env))
+	{
+		free(*s);
+		*s = NULL;
+	}
+	else
+	{
+		*s = unquote(*s, env);
+		if (!*s)
+			return (-1);
+	}
+	return (0);
+}
+
 int
 	addword(t_list **atoken, const char *input, size_t l, t_list *env)
 {
@@ -41,17 +58,8 @@ int
 		s = ft_substr(input, 0, l);
 		if (!s)
 			return (-1);
-		if (emptytokenexception(s, env))
-		{
-			free(s);
-			s = NULL;
-		}
-		else
-		{
-			s = unquote(s, env);
-			if (!s)
-				return (-1);
-		}
+		if (emptytokensanity(&s, env) == -1)
+			return (-1);
 		token = newtoken(WORD);
 		if (!token)
 		{
@@ -63,20 +71,6 @@ int
 		ft_lstadd_back(atoken, token);
 	}
 	return (0);
-}
-
-static void
-	initparsedata(t_parsedata *pd)
-{
-	pd->i = 0;
-	pd->l = 0;
-}
-
-static void
-	incrementparsedata(t_parsedata *pd)
-{
-	pd->i++;
-	pd->l++;
 }
 
 int

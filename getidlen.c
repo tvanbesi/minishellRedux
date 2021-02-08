@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:49:33 by user42            #+#    #+#             */
-/*   Updated: 2021/02/08 13:13:06 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 13:58:51 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,8 @@ size_t
 				increment(&r, &i, "exitstatus");
 			else
 			{
-				param = getidentifier(&s[i + 1], env);
-				if (param)
-					r += ft_strlen(param);
+				if (getidentifier(&s[i + 1], env))
+					r += ft_strlen(getidentifier(&s[i + 1], env));
 				i++;
 				while (ft_isalnum(s[i]) || s[i] == '_')
 					i++;

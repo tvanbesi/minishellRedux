@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:13:39 by user42            #+#    #+#             */
-/*   Updated: 2021/02/08 13:12:24 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 13:55:51 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,15 @@ static int
 	return (0);
 }
 
+static int
+	execfound(char *path, DIR *stream, char **executable, struct dirent *entry)
+{
+	getexecdata(path, stream, executable, entry);
+	if (closedir(stream) == -1)
+		return (-1);
+	return (entry->d_type == DT_REG);
+}
+
 int
 	findexec(char *filename, char **paths, char **executable)
 {
@@ -50,12 +59,7 @@ int
 			while (entry)
 			{
 				if (!ft_strncmp(entry->d_name, filename, filenamelen + 1))
-				{
-					getexecdata(*paths, stream, executable, entry);
-					if (closedir(stream) == -1)
-						return (-1);
-					return (entry->d_type == DT_REG);
-				}
+					return (execfound(*paths, stream, executable, entry));
 				entry = readdir(stream);
 			}
 			if (closedir(stream) == -1)

@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:54:19 by user42            #+#    #+#             */
-/*   Updated: 2021/02/08 12:34:49 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 14:23:42 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,13 @@ static void
 	rd->buf[1] = '\0';
 }
 
+static void
+	exitEOF(void)
+{
+	write(STDOUT, "exit", 4);
+	exit(EXIT);
+}
+
 char
 	*readstdin(void)
 {
@@ -63,10 +70,6 @@ char
 		b = read(STDIN, rd.buf, 1);
 	}
 	if (b == 0)
-	{
-		write(STDOUT, "exit", 4);
-		exit(EXIT);
-	}
-	else
-		return (NULL);
+		exitEOF();
+	return (NULL);
 }

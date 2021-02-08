@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 15:46:31 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/08 13:05:44 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 14:07:26 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int
 		envp = getenvp(shell->env);
 		if (!envp)
 			exit(errno);
-		if (execve(path, argv, envp) == -1)
+		else if (execve(path, argv, envp) == -1)
 			exit(errno);
 	}
 	else if (waitpid(g_pid, &stat_loc, 0) != g_pid)

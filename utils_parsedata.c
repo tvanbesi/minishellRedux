@@ -1,30 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.c                                          :+:      :+:    :+:   */
+/*   utils_parsedata.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/11 16:29:47 by user42            #+#    #+#             */
-/*   Updated: 2021/02/08 13:45:54 by user42           ###   ########.fr       */
+/*   Created: 2021/02/08 14:48:23 by user42            #+#    #+#             */
+/*   Updated: 2021/02/08 15:06:52 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 void
-	builtin(t_list *command, t_shell *shell, int n)
+	initparsedata(t_parsedata *pd)
 {
-	char	**argv;
-	int		r;
+	pd->i = 0;
+	pd->l = 0;
+}
 
-	argv = getcommandargv(command);
-	n -= BUILTIN_START + 1;
-	r = (*(shell->b)[n])(argv, &shell->env);
-	if (r == -1)
-		puterror(strerror(errno));
-	if (r)
-		g_exitstatus = EXIT_STAT_FAIL;
-	else
-		g_exitstatus = EXIT_STAT_SUCCESS;
+void
+	incrementparsedata(t_parsedata *pd)
+{
+	pd->i++;
+	pd->l++;
 }
