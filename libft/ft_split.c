@@ -6,7 +6,7 @@
 /*   By: tvanbesi <tvanbesi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/06 14:25:11 by tvanbesi          #+#    #+#             */
-/*   Updated: 2019/11/13 18:06:58 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/02/08 17:17:31 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ char
 	size_t		end;
 
 	cnt = ft_wn(s, c);
-	if (!(r = (char**)ft_calloc(cnt + 1, sizeof(*r))))
+	r = (char**)ft_calloc(cnt + 1, sizeof(*r));
+	if (!r)
 		return (NULL);
 	ps = s;
 	start = 0;
@@ -67,7 +68,8 @@ char
 		end = start + 1;
 		while (*ps && *ps++ != c)
 			end++;
-		if (!(*r = ft_substr(s, start, end - start)))
+		*r = ft_substr(s, start, end - start);
+		if (!*r)
 			return (ft_fr(r - (ft_wn(s, c) - (cnt + 1)), (ft_wn(s, c) - cnt)));
 		r++;
 		start = end + 1;

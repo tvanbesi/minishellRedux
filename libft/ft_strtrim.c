@@ -6,7 +6,7 @@
 /*   By: tvanbesi <tvanbesi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/06 12:56:58 by tvanbesi          #+#    #+#             */
-/*   Updated: 2019/11/12 22:47:40 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/02/08 17:24:27 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ char
 		end--;
 	if (end)
 		s1 -= end - 1;
-	end = (end < start) ? start : end;
+	if (end < start)
+		end = start;
 	return (ft_substr(s1, start, end - start));
 }

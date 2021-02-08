@@ -6,7 +6,7 @@
 /*   By: tvanbesi <tvanbesi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/05 15:53:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2019/11/13 23:20:16 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/02/08 17:27:25 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,12 @@ char
 	if (c == '\0')
 		return (ft_strchr(s, c));
 	ps = NULL;
-	while ((tmp = ft_strchr(s, c)))
+	tmp = ft_strchr(s, c);
+	while (tmp)
 	{
 		ps = tmp;
 		s = ps + 1;
+		tmp = ft_strchr(s, c);
 	}
 	return ((char*)ps);
 }

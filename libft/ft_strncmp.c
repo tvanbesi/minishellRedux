@@ -6,7 +6,7 @@
 /*   By: tvanbesi <tvanbesi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/05 16:18:50 by tvanbesi          #+#    #+#             */
-/*   Updated: 2019/11/13 19:21:27 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/02/08 17:22:32 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,11 @@ int
 	size_t			tmp;
 
 	tmp = n;
-	n = (n > ft_strlen(s1)) ? ft_strlen(s1) : n;
-	n = (n > ft_strlen(s2)) ? ft_strlen(s2) : n;
-	n = (n == tmp) ? n : n + 1;
+	if (n > ft_strlen(s1))
+		n = ft_strlen(s1);
+	if (n > ft_strlen(s2))
+		n = ft_strlen(s2);
+	if (n != tmp)
+		n++;
 	return (ft_memcmp(s1, s2, n));
 }

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/05 11:30:55 by tvanbesi          #+#    #+#             */
-/*   Updated: 2019/11/07 16:53:34 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/02/08 17:09:14 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void
 	while (n-- > 0)
 	{
 		if (*cs == uc)
-			return (void*)cs;
+			return ((void*)cs);
 		cs++;
 	}
 	return (NULL);

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <tvanbesi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/06 11:06:58 by tvanbesi          #+#    #+#             */
-/*   Updated: 2019/11/13 23:23:55 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/02/08 17:25:32 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,14 @@ char
 	char	*r;
 	size_t	tmp;
 
-	if (!(r = (char*)malloc(len + 1)))
+	r = (char*)malloc(len + 1);
+	if (!r)
 		return (NULL);
 	if (ft_strlen(s) > start)
 	{
 		tmp = ft_strlen(s + start);
-		len = (len > tmp) ? tmp : len;
+		if (len > tmp)
+			len = tmp;
 		ft_memcpy(r, s + start, len);
 		r[len] = '\0';
 	}

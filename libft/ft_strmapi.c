@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/06 19:43:41 by tvanbesi          #+#    #+#             */
-/*   Updated: 2019/11/07 18:04:21 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/02/08 17:23:01 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ char
 	char			*r;
 
 	l = ft_strlen(s);
-	if (!(r = (char*)malloc(l + 1)))
+	r = (char*)malloc(l + 1);
+	if (!r)
 		return (NULL);
 	i = 0;
 	while (i < l)
