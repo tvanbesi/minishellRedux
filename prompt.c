@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:15:05 by user42            #+#    #+#             */
-/*   Updated: 2021/02/08 13:00:47 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 15:13:50 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void
 static int
 	catchprompt(int stat_loc, int fd[2], char **line)
 {
-	int	gnl;
+	int gnl;
 
 	if (WEXITSTATUS(stat_loc) == ERROR)
 	{
@@ -32,8 +32,7 @@ static int
 	else if (WEXITSTATUS(stat_loc) == BREAK)
 	{
 		g_exitstatus = 128 + SIGINT;
-		*line = ft_strdup("");
-		if (!*line)
+		if (!(*line = ft_strdup("")))
 			return (-1);
 		write(STDOUT, "\n", 1);
 	}
@@ -41,13 +40,9 @@ static int
 		exit(EXIT_STAT_SUCCESS);
 	else if (WEXITSTATUS(stat_loc) == OK)
 	{
-		gnl = get_next_line(fd[0], line);
-		while (gnl != 1)
-		{
+		while ((gnl = get_next_line(fd[0], line)) != 1)
 			if (gnl == -1)
 				return (-1);
-			gnl = get_next_line(fd[0], line);
-		}
 	}
 	return (0);
 }
@@ -73,8 +68,7 @@ int
 
 	if (pipe(fd) == -1)
 		return (-1);
-	g_pid = fork();
-	if (g_pid == -1)
+	if ((g_pid = fork()) == -1)
 		return (-1);
 	if (g_pid == 0)
 	{
