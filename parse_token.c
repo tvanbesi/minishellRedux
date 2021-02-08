@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:35:57 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/08 14:02:41 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 16:42:34 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,6 @@ static int
 		pd->i++;
 	pd->l = 0;
 	return (0);
-}
-
-static void
-	initparsedata(t_parsedata *pd)
-{
-	pd->i = 0;
-	pd->l = 0;
-	pd->qt = 0;
 }
 
 static void
