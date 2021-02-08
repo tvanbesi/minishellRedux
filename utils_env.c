@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 14:51:30 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/12 15:40:50 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 12:18:36 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,13 @@ static t_list
 	t_list	*env;
 	t_env	*content;
 
-	if (!(content = malloc(sizeof(*content))))
+	content = malloc(sizeof(*content));
+	if (!content)
 		return (NULL);
 	content->name = NULL;
 	content->val = NULL;
-	if (!(env = ft_lstnew(content)))
+	env = ft_lstnew(content);
+	if (!env)
 	{
 		ft_lstdelone(env, delenv);
 		return (NULL);
@@ -48,12 +50,14 @@ static t_list
 static int
 	getenvdata(char *input, char **val, char **name)
 {
-	if (!(*val = ft_strchr(input, '=')))
+	*val = ft_strchr(input, '=');
+	if (!*val)
 		return (-2);
-	if (!(*val = ft_strdup(&(*val)[1])))
+	*val = ft_strdup(&(*val)[1]);
+	if (!*val)
 		return (-1);
-	if (!(*name = ft_substr(input, 0,
-	ft_strlen(input) - (ft_strlen(*val) + 1))))
+	*name = ft_substr(input, 0, ft_strlen(input) - (ft_strlen(*val) + 1));
+	if (!*name)
 	{
 		free(*val);
 		return (-1);
@@ -70,16 +74,22 @@ int
 	int		replace;
 	int		r;
 
-	if ((r = getenvdata(input, &val, &name)) < 0)
+	r = getenvdata(input, &val, &name);
+	if (r < 0)
 		return (r);
 	replace = 0;
-	if ((env = findenv(*aenv, name)))
+	env = findenv(*aenv, name);
+	if (env)
 		replace = 1;
-	else if (!(env = newenv()))
+	else
 	{
-		free(name);
-		free(val);
-		return (-1);
+		env = newenv();
+		if (!env)
+		{
+			free(name);
+			free(val);
+			return (-1);
+		}
 	}
 	((t_env*)(env->content))->name = name;
 	((t_env*)(env->content))->val = val;

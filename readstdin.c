@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:54:19 by user42            #+#    #+#             */
-/*   Updated: 2021/01/12 14:56:19 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 12:34:49 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ static int
 	rd->lenfactor++;
 	rd->len = BUFFER_SIZE * rd->lenfactor;
 	rd->tmp = *line;
-	if (!(*line = malloc(rd->len)))
+	*line = malloc(rd->len);
+	if (!*line)
 	{
 		free(rd->tmp);
 		return (-1);
@@ -44,11 +45,13 @@ char
 	t_readstdindata	rd;
 	size_t			b;
 
-	if (!(line = malloc(BUFFER_SIZE)))
+	line = malloc(BUFFER_SIZE);
+	if (!line)
 		return (NULL);
 	initrd(&rd);
 	ft_bzero(line, rd.len);
-	while ((b = read(STDIN, rd.buf, 1)) > 0)
+	b = read(STDIN, rd.buf, 1);
+	while (b > 0)
 	{
 		if (rd.buf[0] == '\n')
 			return (line);
@@ -57,6 +60,7 @@ char
 			if (extendline(&line, &rd) == -1)
 				return (NULL);
 		}
+		b = read(STDIN, rd.buf, 1);
 	}
 	if (b == 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:07:04 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/11 16:35:56 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 11:56:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,11 @@ static int
 	char		*wd;
 	char		*addenvinput;
 
-	if (!(wd = getcwd(NULL, 0)))
+	wd = getcwd(NULL, 0);
+	if (!wd)
 		return (-1);
-	if (!(addenvinput = ft_strjoin("PWD=", wd)))
+	addenvinput = ft_strjoin("PWD=", wd);
+	if (!addenvinput)
 	{
 		free(wd);
 		return (-1);
@@ -44,7 +46,8 @@ int
 
 	if (!argv[0])
 	{
-		if (!(home = findenv(*aenv, "HOME")))
+		home = findenv(*aenv, "HOME");
+		if (!home)
 		{
 			puterror(ERROR_NOHOME);
 			return (-2);

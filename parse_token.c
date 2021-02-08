@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:35:57 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/12 16:00:08 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 13:16:31 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ t_list
 	while (input[pd.i])
 	{
 		pd.l++;
-		if (!(pd.qt = quote(pd.qt, input[pd.i])) && ismetachar(input[pd.i]))
+		pd.qt = quote(pd.qt, input[pd.i]);
+		if (!(pd.qt && ismetachar(input[pd.i])))
 		{
 			if (tokenizeword(input, &r, &pd, env) == -1)
 				return (NULL);

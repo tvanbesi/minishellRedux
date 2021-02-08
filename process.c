@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 15:46:31 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/11 19:44:51 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 13:05:44 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,18 @@ int
 	char		**argv;
 	char		**envp;
 
-	if ((g_pid = fork()) == -1)
+	g_pid = fork();
+	if (g_pid == -1)
 		return (-1);
 	if (g_pid == 0)
 	{
-		if (!(argv = getprocessargv(getcommandargv(command), path)))
+		argv = getprocessargv(getcommandargv(command), path);
+		if (!argv)
 			exit(errno);
-		else if (!(envp = getenvp(shell->env)))
+		envp = getenvp(shell->env);
+		if (!envp)
 			exit(errno);
-		else if (execve(path, argv, envp) == -1)
+		if (execve(path, argv, envp) == -1)
 			exit(errno);
 	}
 	else if (waitpid(g_pid, &stat_loc, 0) != g_pid)

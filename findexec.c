@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:13:39 by user42            #+#    #+#             */
-/*   Updated: 2021/01/12 16:25:21 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 13:12:24 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ static int
 	if (entry->d_type != DT_REG)
 		return (0);
 	fullpathlen = ft_strlen(path) + ft_strlen(entry->d_name) + 2;
-	if (!(*executable = malloc(fullpathlen)))
+	*executable = malloc(fullpathlen);
+	if (!*executable)
 	{
 		closedir(stream);
 		return (-1);
@@ -42,9 +43,11 @@ int
 	filenamelen = ft_strlen(filename);
 	while (*paths)
 	{
-		if ((stream = opendir(*paths)))
+		stream = opendir(*paths);
+		if (stream)
 		{
-			while ((entry = readdir(stream)))
+			entry = readdir(stream);
+			while (entry)
 			{
 				if (!ft_strncmp(entry->d_name, filename, filenamelen + 1))
 				{
@@ -53,6 +56,7 @@ int
 						return (-1);
 					return (entry->d_type == DT_REG);
 				}
+				entry = readdir(stream);
 			}
 			if (closedir(stream) == -1)
 				return (-1);

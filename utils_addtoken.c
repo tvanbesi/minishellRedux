@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 07:27:17 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/12 16:09:44 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 12:29:20 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,13 @@ static t_list
 	t_list	*token;
 	t_token	*content;
 
-	if (!(content = malloc(sizeof(*content))))
+	content = malloc(sizeof(*content));
+	if (!content)
 		return (NULL);
 	content->type = type;
 	content->s = NULL;
-	if (!(token = ft_lstnew(content)))
+	token = ft_lstnew(content);
+	if (!token)
 		free(content);
 	return (token);
 }
@@ -36,16 +38,22 @@ int
 
 	if (l)
 	{
-		if (!(s = ft_substr(input, 0, l)))
+		s = ft_substr(input, 0, l);
+		if (!s)
 			return (-1);
 		if (emptytokenexception(s, env))
 		{
 			free(s);
 			s = NULL;
 		}
-		else if (!(s = unquote(s, env)))
-			return (-1);
-		if (!(token = newtoken(WORD)))
+		else
+		{
+			s = unquote(s, env);
+			if (!s)
+				return (-1);
+		}
+		token = newtoken(WORD);
+		if (!token)
 		{
 			free(s);
 			return (-1);
@@ -85,11 +93,13 @@ int
 			pd.i++;
 		else if (isoperator(input[pd.i]))
 		{
-			if (!(token = newtoken(OPERATOR)))
+			token = newtoken(OPERATOR);
+			if (!token)
 				return (-1);
 			while (isoperator(input[pd.i]))
 				incrementparsedata(&pd);
-			if (!(s = ft_substr(input, pd.i - pd.l, pd.l)))
+			s = ft_substr(input, pd.i - pd.l, pd.l);
+			if (!s)
 				return (-1);
 			((t_token*)token->content)->s = s;
 			ft_lstadd_back(atoken, token);

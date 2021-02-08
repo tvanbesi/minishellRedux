@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 15:06:13 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/11 16:58:04 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 13:15:47 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,14 @@ static t_list
 	t_list		*command;
 	t_command	*content;
 
-	if (!(content = malloc(sizeof(*content))))
+	content = malloc(sizeof(*content));
+	if (!content)
 		return (NULL);
 	content->type = type;
 	content->cmd = NULL;
 	content->argv = NULL;
-	if (!(command = ft_lstnew(content)))
+	command = ft_lstnew(content);
+	if (!command)
 		free(content);
 	return (command);
 }
@@ -65,7 +67,8 @@ t_list
 	r = NULL;
 	while (token)
 	{
-		if (!(command = newcommand(gettokencommandtype(token))))
+		command = newcommand(gettokencommandtype(token));
+		if (!command)
 			return (error(strerror(errno)));
 		if (gettokentype(token) == WORD)
 		{

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/12 15:55:34 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 13:13:52 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static t_shell
 {
 	t_shell	*shell;
 
-	if (!(shell = malloc(sizeof(*shell))))
+	shell = malloc(sizeof(*shell));
+	if (!shell)
 		return (NULL);
 	if (envp)
 	{
@@ -58,7 +59,8 @@ int
 	t_list	*token;
 	t_list	*command;
 
-	if (!(shell = initshell(envp)))
+	shell = initshell(envp);
+	if (!shell)
 	{
 		puterror(strerror(errno));
 		return (1);

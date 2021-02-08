@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:24:09 by user42            #+#    #+#             */
-/*   Updated: 2021/01/12 16:13:36 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 12:21:45 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,17 @@ int
 		return (EMPTY);
 	if (!ft_strchr(content->cmd, '/'))
 	{
-		if ((r = builtinsanity(content->cmd)))
+		r = builtinsanity(content->cmd);
+		if (r)
 			return (r);
-		if (!(pathenv = findenv(shell->env, "PATH")))
+		pathenv = findenv(shell->env, "PATH");
+		if (!pathenv)
 			return (filesanity(content->cmd));
-		if (!(paths = ft_split(getenvval(pathenv), ':')))
+		paths = ft_split(getenvval(pathenv), ':');
+		if (!paths)
 			return (-1);
-		if ((r = findexec(content->cmd, paths, &content->cmd)) == -1)
+		r = findexec(content->cmd, paths, &content->cmd);
+		if (r == -1)
 			return (-1);
 		else if (r)
 			return (filesanity(content->cmd));

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 18:27:26 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/12 17:38:50 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/08 13:08:56 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ static void
 	int		cmdsanity;
 	int		commandtype;
 
-	if ((cmdsanity = commandsanity(command, shell)) == -1)
+	cmdsanity = commandsanity(command, shell);
+	if (cmdsanity == -1)
 		exit(FATAL);
 	if (!iserror(cmdsanity) && !pipeend)
 		dup2(fd[1], STDOUT);
@@ -63,10 +64,11 @@ static int
 	int		commandtype;
 
 	commandtype = getcommandtype(command->next);
-	if ((cmdsanity = commandsanity(command->next, shell)) == -1)
+	cmdsanity = commandsanity(command->next, shell);
+	if (cmdsanity == -1)
 		return (-1);
 	if (!iserror(WEXITSTATUS(stat_loc))
-	&& (!iserror(cmdsanity) && cmdsanity != EMPTY))
+		&& (!iserror(cmdsanity) && cmdsanity != EMPTY))
 		dup2(fd[0], STDIN);
 	close(fd[0]);
 	close(fd[1]);
@@ -97,7 +99,8 @@ int
 
 	if (pipe(fd) == -1)
 		return (-1);
-	if ((g_pid = fork()) == -1)
+	g_pid = fork();
+	if (g_pid == -1)
 		return (-1);
 	if (g_pid == 0)
 		minipipechild(pipeend, fd, command, shell);

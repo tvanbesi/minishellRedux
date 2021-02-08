@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 10:34:27 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 17:42:50 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/02/08 12:23:10 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,11 @@ int
 	current = token;
 	while (current && gettokentype(current) == WORD && !gettokenstr(current))
 		current = current->next;
-	current = current ? current->next : current;
+	if (current)
+		current = current->next;
 	argc = countargv(current);
-	if (!(argv = ft_calloc(argc + 1, sizeof(*argv))))
+	argv = ft_calloc(argc + 1, sizeof(*argv));
+	if (!argv)
 		return (-1);
 	argv[argc] = NULL;
 	i = 0;
