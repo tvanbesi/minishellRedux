@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 08:39:15 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/12 17:04:38 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/09 16:06:11 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,12 @@ char
 static void
 	expansion(char *r, char *s, t_list *env, t_unquotedata *ud)
 {
+	char	*strexitstatus;
 	if (s[ud->j + 1] == '?')
 	{
-		ud->i += ft_strlcpy(&r[ud->i], ft_itoa(g_exitstatus), ud->l + 1);
+		strexitstatus = ft_itoa(g_exitstatus);
+		ud->i += ft_strlcpy(&r[ud->i], strexitstatus, ud->l + 1);
+		free(strexitstatus);
 		ud->j += 2;
 	}
 	else
