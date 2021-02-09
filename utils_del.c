@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 14:12:51 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/13 14:50:56 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/02/09 13:40:39 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void
 
 	token = p;
 	free(token->s);
+	free(token);
 }
 
 void
@@ -28,6 +29,7 @@ void
 
 	command = p;
 	free(command->argv);
+	free(command);
 }
 
 void
@@ -38,4 +40,5 @@ void
 	env = p;
 	free(env->name);
 	free(env->val);
+	free(env);
 }

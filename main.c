@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/09 12:32:23 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/09 12:39:56 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static t_shell
 	return (shell);
 }
 
-void
+static void
 	freedata(char *input, t_list *token, t_list *command)
 {
 	free(input);
@@ -64,7 +64,6 @@ int
 		return (1);
 	}
 	g_pid = 0;
-	input = NULL;
 	while (1)
 	{
 		write(STDOUT, "> ", 2);
