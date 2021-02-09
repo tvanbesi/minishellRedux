@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/02/08 15:40:06 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 17:39:53 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@
 # define ERROR_NOHOME				"HOME not set"
 # define ERROR_FATAL				"Fatal error"
 
-typedef enum e_command_r
+typedef	enum		e_command_r
 {
 	ERROR_START,
 	NOCMD,
@@ -67,7 +67,7 @@ typedef enum e_command_r
 	SUCCESS_END
 }					t_command_r;
 
-typedef struct s_readstdindata
+typedef struct		s_readstdindata
 {
 	char			buf[2];
 	char			*tmp;
@@ -75,7 +75,7 @@ typedef struct s_readstdindata
 	size_t			len;
 }					t_readstdindata;
 
-typedef struct s_unquotedata
+typedef struct		s_unquotedata
 {
 	size_t			l;
 	size_t			i;
@@ -84,14 +84,14 @@ typedef struct s_unquotedata
 	char			*param;
 }					t_unquotedata;
 
-typedef struct s_parsedata
+typedef struct		s_parsedata
 {
 	unsigned int	i;
 	size_t			l;
 	int				qt;
 }					t_parsedata;
 
-typedef enum e_prompt_r
+typedef	enum		e_prompt_r
 {
 	OK,
 	ERROR,
@@ -99,19 +99,19 @@ typedef enum e_prompt_r
 	BREAK
 }					t_prompt_r;
 
-typedef enum e_tokentype
+typedef	enum		e_tokentype
 {
 	WORD,
 	OPERATOR,
 }					t_tokentype;
 
-typedef struct s_token
+typedef	struct		s_token
 {
 	int				type;
 	char			*s;
 }					t_token;
 
-typedef enum e_commandtype
+typedef	enum		e_commandtype
 {
 	SIMPLE,
 	PIPE,
@@ -121,25 +121,25 @@ typedef enum e_commandtype
 	REDIRAPPEND
 }					t_commandtype;
 
-typedef struct s_command
+typedef	struct		s_command
 {
 	int				type;
 	char			*cmd;
 	char			**argv;
 }					t_command;
 
-typedef struct s_env
+typedef	struct		s_env
 {
 	char			*name;
 	char			*val;
 }					t_env;
 
-typedef struct s_shell
+typedef	struct		s_shell
 {
 	t_list			*env;
 	int				stdincpy;
 	int				stdoutcpy;
-	int				((*b[7])(char **argv, t_list **aenv));
+	int				(*b[7])(char **argv, t_list **aenv);
 }					t_shell;
 
 /*
@@ -150,15 +150,13 @@ char				*readstdin(void);
 int					prompt(char **line);
 t_list				*tokenize(char *input, t_list *env);
 t_list				*makecommands(t_list *tokens);
-void				initparsedata(t_parsedata *pd);
-void				incrementparsedata(t_parsedata *pd);
 
 /*
 ***	TOKENS
 */
 
 int					addword(t_list **atoken, const char *input,
-						size_t l, t_list *env);
+					size_t l, t_list *env);
 int					addmetachar(t_list **atoken, const char *input);
 char				*getidentifier(char *s, t_list *env);
 size_t				getidlen(char *s, t_list *env);
@@ -244,7 +242,7 @@ void				puterrorcmd(t_list *commmand, int n);
 void				puterror(char *msg);
 void				*error(char *msg);
 
-extern int			g_pid;
-extern int			g_exitstatus;
+extern	int			g_pid;
+extern	int			g_exitstatus;
 
 #endif

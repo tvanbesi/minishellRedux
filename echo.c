@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:13:32 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/08 13:48:32 by user42           ###   ########.fr       */
+/*   Updated: 2020/12/21 14:50:00 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,7 @@ int
 
 	(void)aenv;
 	nl = optionnl(argv[0]);
-	if (nl)
-		i = 0;
-	else
-		i = 1;
+	i = nl ? 0 : 1;
 	while (argv[i])
 	{
 		write(STDOUT, argv[i], ft_strlen(argv[i]));

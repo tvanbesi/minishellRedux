@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:54:38 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/08 14:08:20 by user42           ###   ########.fr       */
+/*   Updated: 2020/12/21 16:01:28 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ int
 	char		*cwd;
 
 	(void)aenv;
-	cwd = getcwd(NULL, 0);
-	if (!cwd)
+	if (!(cwd = getcwd(NULL, 0)))
 		return (-1);
 	write(STDOUT, cwd, ft_strlen(cwd));
 	free(cwd);

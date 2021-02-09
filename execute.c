@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 12:41:35 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/08 13:49:30 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 12:20:10 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,7 @@ static void
 {
 	int		cmdsanity;
 
-	cmdsanity = commandsanity(command, shell);
-	if (cmdsanity == -1)
+	if ((cmdsanity = commandsanity(command, shell)) == -1)
 		puterror(strerror(errno));
 	else if (!iserror(cmdsanity))
 		execute(command, shell, cmdsanity);

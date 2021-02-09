@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstmap.c                                        :+:      :+:    :+:   */
+/*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tvanbesi <tvanbesi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 20:51:52 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/08 17:08:25 by user42           ###   ########.fr       */
+/*   Updated: 2019/11/14 17:14:55 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,13 @@ t_list
 
 	if (!lst)
 		return (NULL);
-	r = (t_list**)malloc(ft_lstsize(lst) * sizeof(*r));
-	if (!r)
+	if (!(r = (t_list**)malloc(ft_lstsize(lst) * sizeof(*r))))
 		return (NULL);
 	*r = NULL;
 	current = lst;
 	while (current)
 	{
-		new = ft_lstnew(f(current->content));
-		if (!new)
+		if (!(new = ft_lstnew(f(current->content))))
 		{
 			ft_lstclear(r, del);
 			free(r);

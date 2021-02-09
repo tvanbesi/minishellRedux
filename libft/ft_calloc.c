@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/06 09:32:18 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/08 17:00:34 by user42           ###   ########.fr       */
+/*   Updated: 2019/11/12 20:06:19 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,8 @@ void
 	size_t	b;
 
 	b = count * size;
-	if (!b)
-		b = 1;
-	p = malloc(b);
-	if (!p)
+	b = b ? b : 1;
+	if (!(p = malloc(b)))
 		return (NULL);
 	ft_bzero(p, b);
 	return (p);

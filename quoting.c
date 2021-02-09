@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 08:39:15 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/08 14:34:54 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 17:04:38 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,8 @@ static void
 	{
 		if (!s[ud->j + 1] || ft_isspht(s[ud->j + 1]))
 			r[ud->i++] = s[ud->j++];
-		else
-		{
-			ud->param = getidentifier(&s[++(ud->j)], env);
-			if (ud->param)
-				ud->i += ft_strlcpy(&r[ud->i], ud->param, ud->l + 1);
-		}
+		else if ((ud->param = getidentifier(&s[++(ud->j)], env)))
+			ud->i += ft_strlcpy(&r[ud->i], ud->param, ud->l + 1);
 		while (ft_isalnum(s[ud->j]) || s[ud->j] == '_')
 			ud->j++;
 	}
@@ -100,7 +96,8 @@ char
 	t_unquotedata	ud;
 
 	initunquotedata(s, env, &ud);
-	r = malloc(ud.l + 1);
+	if (!(r = malloc(ud.l + 1)))
+		free(s);
 	while (r && s[ud.j])
 	{
 		if (!ud.q && isquote(s[ud.j]))
@@ -117,8 +114,7 @@ char
 				r[ud.i++] = s[ud.j++];
 		}
 	}
-	if (r)
-		r[ud.i] = '\0';
+	r[ud.i] = '\0';
 	free(s);
 	return (r);
 }

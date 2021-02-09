@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 07:27:17 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/08 14:53:40 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 16:09:44 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,32 +18,13 @@ static t_list
 	t_list	*token;
 	t_token	*content;
 
-	content = malloc(sizeof(*content));
-	if (!content)
+	if (!(content = malloc(sizeof(*content))))
 		return (NULL);
 	content->type = type;
 	content->s = NULL;
-	token = ft_lstnew(content);
-	if (!token)
+	if (!(token = ft_lstnew(content)))
 		free(content);
 	return (token);
-}
-
-static int
-	emptytokensanity(char **s, t_list *env)
-{
-	if (emptytokenexception(*s, env))
-	{
-		free(*s);
-		*s = NULL;
-	}
-	else
-	{
-		*s = unquote(*s, env);
-		if (!*s)
-			return (-1);
-	}
-	return (0);
 }
 
 int
@@ -55,13 +36,16 @@ int
 
 	if (l)
 	{
-		s = ft_substr(input, 0, l);
-		if (!s)
+		if (!(s = ft_substr(input, 0, l)))
 			return (-1);
-		if (emptytokensanity(&s, env) == -1)
+		if (emptytokenexception(s, env))
+		{
+			free(s);
+			s = NULL;
+		}
+		else if (!(s = unquote(s, env)))
 			return (-1);
-		token = newtoken(WORD);
-		if (!token)
+		if (!(token = newtoken(WORD)))
 		{
 			free(s);
 			return (-1);
@@ -71,6 +55,20 @@ int
 		ft_lstadd_back(atoken, token);
 	}
 	return (0);
+}
+
+static void
+	initparsedata(t_parsedata *pd)
+{
+	pd->i = 0;
+	pd->l = 0;
+}
+
+static void
+	incrementparsedata(t_parsedata *pd)
+{
+	pd->i++;
+	pd->l++;
 }
 
 int
@@ -87,13 +85,11 @@ int
 			pd.i++;
 		else if (isoperator(input[pd.i]))
 		{
-			token = newtoken(OPERATOR);
-			if (!token)
+			if (!(token = newtoken(OPERATOR)))
 				return (-1);
 			while (isoperator(input[pd.i]))
 				incrementparsedata(&pd);
-			s = ft_substr(input, pd.i - pd.l, pd.l);
-			if (!s)
+			if (!(s = ft_substr(input, pd.i - pd.l, pd.l)))
 				return (-1);
 			((t_token*)token->content)->s = s;
 			ft_lstadd_back(atoken, token);

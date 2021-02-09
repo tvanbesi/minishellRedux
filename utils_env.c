@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 14:51:30 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/08 15:34:50 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 15:40:50 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,11 @@ static t_list
 	t_list	*env;
 	t_env	*content;
 
-	content = malloc(sizeof(*content));
-	if (!content)
+	if (!(content = malloc(sizeof(*content))))
 		return (NULL);
 	content->name = NULL;
 	content->val = NULL;
-	env = ft_lstnew(content);
-	if (!env)
+	if (!(env = ft_lstnew(content)))
 	{
 		ft_lstdelone(env, delenv);
 		return (NULL);
@@ -50,34 +48,17 @@ static t_list
 static int
 	getenvdata(char *input, char **val, char **name)
 {
-	*val = ft_strchr(input, '=');
-	if (!*val)
+	if (!(*val = ft_strchr(input, '=')))
 		return (-2);
-	*val = ft_strdup(&(*val)[1]);
-	if (!*val)
+	if (!(*val = ft_strdup(&(*val)[1])))
 		return (-1);
-	*name = ft_substr(input, 0, ft_strlen(input) - (ft_strlen(*val) + 1));
-	if (!*name)
+	if (!(*name = ft_substr(input, 0,
+	ft_strlen(input) - (ft_strlen(*val) + 1))))
 	{
 		free(*val);
 		return (-1);
 	}
 	return (0);
-}
-
-static t_list
-	*sanenewenv(char *name, char *val)
-{
-	t_list	*env;
-
-	env = newenv();
-	if (!env)
-	{
-		free(name);
-		free(val);
-		return (NULL);
-	}
-	return (env);
 }
 
 int
@@ -89,18 +70,16 @@ int
 	int		replace;
 	int		r;
 
-	r = getenvdata(input, &val, &name);
-	if (r < 0)
+	if ((r = getenvdata(input, &val, &name)) < 0)
 		return (r);
 	replace = 0;
-	env = findenv(*aenv, name);
-	if (env)
+	if ((env = findenv(*aenv, name)))
 		replace = 1;
-	else
+	else if (!(env = newenv()))
 	{
-		env = sanenewenv(name, val);
-		if (!env)
-			return (-1);
+		free(name);
+		free(val);
+		return (-1);
 	}
 	((t_env*)(env->content))->name = name;
 	((t_env*)(env->content))->val = val;

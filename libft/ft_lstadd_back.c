@@ -6,7 +6,7 @@
 /*   By: tvanbesi <tvanbesi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 19:20:48 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/08 17:07:10 by user42           ###   ########.fr       */
+/*   Updated: 2019/11/15 13:29:08 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@ void
 {
 	t_list	*last;
 
-	last = ft_lstlast(*alst);
-	if (!last)
+	if (!(last = ft_lstlast(*alst)))
 		*alst = new;
 	else
 		last->next = new;

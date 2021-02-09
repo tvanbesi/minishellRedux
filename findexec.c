@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:13:39 by user42            #+#    #+#             */
-/*   Updated: 2021/02/08 13:55:51 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 16:25:21 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ static int
 	if (entry->d_type != DT_REG)
 		return (0);
 	fullpathlen = ft_strlen(path) + ft_strlen(entry->d_name) + 2;
-	*executable = malloc(fullpathlen);
-	if (!*executable)
+	if (!(*executable = malloc(fullpathlen)))
 	{
 		closedir(stream);
 		return (-1);
@@ -31,15 +30,6 @@ static int
 	ft_strlcat(*executable, "/", fullpathlen);
 	ft_strlcat(*executable, entry->d_name, fullpathlen);
 	return (0);
-}
-
-static int
-	execfound(char *path, DIR *stream, char **executable, struct dirent *entry)
-{
-	getexecdata(path, stream, executable, entry);
-	if (closedir(stream) == -1)
-		return (-1);
-	return (entry->d_type == DT_REG);
 }
 
 int
@@ -52,15 +42,17 @@ int
 	filenamelen = ft_strlen(filename);
 	while (*paths)
 	{
-		stream = opendir(*paths);
-		if (stream)
+		if ((stream = opendir(*paths)))
 		{
-			entry = readdir(stream);
-			while (entry)
+			while ((entry = readdir(stream)))
 			{
 				if (!ft_strncmp(entry->d_name, filename, filenamelen + 1))
-					return (execfound(*paths, stream, executable, entry));
-				entry = readdir(stream);
+				{
+					getexecdata(*paths, stream, executable, entry);
+					if (closedir(stream) == -1)
+						return (-1);
+					return (entry->d_type == DT_REG);
+				}
 			}
 			if (closedir(stream) == -1)
 				return (-1);

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <tvanbesi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/05 17:57:01 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/08 17:21:13 by user42           ###   ########.fr       */
+/*   Updated: 2019/11/12 21:13:13 by tvanbesi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ size_t
 
 	lsrc = ft_strlen(src);
 	ldst = ft_strlen(dst);
-	if (ldst > dstsize)
-		ldst = dstsize;
+	ldst = ldst > dstsize ? dstsize : ldst;
 	if (ldst + 1 >= dstsize)
 		return (ldst + lsrc);
 	if (ldst + lsrc + 1 < dstsize)

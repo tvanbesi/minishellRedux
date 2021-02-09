@@ -6,11 +6,23 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:24:09 by user42            #+#    #+#             */
-/*   Updated: 2021/02/08 15:23:01 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 16:13:36 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int
+	iserror(int n)
+{
+	return (n > ERROR_START && n < ERROR_END);
+}
+
+int
+	isbuiltin(int n)
+{
+	return (n > BUILTIN_START && n < BUILTIN_END);
+}
 
 static int
 	builtinsanity(char *cmd)
@@ -50,17 +62,6 @@ static int
 	return (EXEC);
 }
 
-static int
-	commandsanityret(int r, char *cmd)
-{
-	if (r == -1)
-		return (-1);
-	else if (r)
-		return (filesanity(cmd));
-	else
-		return (NOCMD);
-}
-
 int
 	commandsanity(t_list *command, t_shell *shell)
 {
@@ -74,17 +75,18 @@ int
 		return (EMPTY);
 	if (!ft_strchr(content->cmd, '/'))
 	{
-		r = builtinsanity(content->cmd);
-		if (r)
+		if ((r = builtinsanity(content->cmd)))
 			return (r);
-		pathenv = findenv(shell->env, "PATH");
-		if (!pathenv)
+		if (!(pathenv = findenv(shell->env, "PATH")))
 			return (filesanity(content->cmd));
-		paths = ft_split(getenvval(pathenv), ':');
-		if (!paths)
+		if (!(paths = ft_split(getenvval(pathenv), ':')))
 			return (-1);
-		r = findexec(content->cmd, paths, &content->cmd);
-		return (commandsanityret(r, content->cmd));
+		if ((r = findexec(content->cmd, paths, &content->cmd)) == -1)
+			return (-1);
+		else if (r)
+			return (filesanity(content->cmd));
+		else
+			return (NOCMD);
 	}
 	else
 		return (filesanity(content->cmd));

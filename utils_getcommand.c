@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 18:15:49 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/08 14:32:48 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 14:20:13 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,7 @@ char
 	int		i;
 
 	l = getargc(argv);
-	r = ft_calloc(l + 2, sizeof(*r));
-	if (!r)
+	if (!(r = ft_calloc(l + 2, sizeof(*r))))
 		return (NULL);
 	r[0] = ft_strrchr(path, '/');
 	r[l + 1] = NULL;

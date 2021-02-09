@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:35:57 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/08 16:42:34 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 16:00:08 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,14 @@ static int
 }
 
 static void
+	initparsedata(t_parsedata *pd)
+{
+	pd->i = 0;
+	pd->l = 0;
+	pd->qt = 0;
+}
+
+static void
 	*unclosedqt(void)
 {
 	g_exitstatus = EXIT_STAT_ERRORPARSE;
@@ -62,8 +70,7 @@ t_list
 	while (input[pd.i])
 	{
 		pd.l++;
-		pd.qt = quote(pd.qt, input[pd.i]);
-		if (!pd.qt && ismetachar(input[pd.i]))
+		if (!(pd.qt = quote(pd.qt, input[pd.i])) && ismetachar(input[pd.i]))
 		{
 			if (tokenizeword(input, &r, &pd, env) == -1)
 				return (NULL);

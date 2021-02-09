@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:54:19 by user42            #+#    #+#             */
-/*   Updated: 2021/02/08 14:23:42 by user42           ###   ########.fr       */
+/*   Updated: 2021/01/12 14:56:19 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ static int
 	rd->lenfactor++;
 	rd->len = BUFFER_SIZE * rd->lenfactor;
 	rd->tmp = *line;
-	*line = malloc(rd->len);
-	if (!*line)
+	if (!(*line = malloc(rd->len)))
 	{
 		free(rd->tmp);
 		return (-1);
@@ -38,13 +37,6 @@ static void
 	rd->buf[1] = '\0';
 }
 
-static void
-	exitEOF(void)
-{
-	write(STDOUT, "exit", 4);
-	exit(EXIT);
-}
-
 char
 	*readstdin(void)
 {
@@ -52,13 +44,11 @@ char
 	t_readstdindata	rd;
 	size_t			b;
 
-	line = malloc(BUFFER_SIZE);
-	if (!line)
+	if (!(line = malloc(BUFFER_SIZE)))
 		return (NULL);
 	initrd(&rd);
 	ft_bzero(line, rd.len);
-	b = read(STDIN, rd.buf, 1);
-	while (b > 0)
+	while ((b = read(STDIN, rd.buf, 1)) > 0)
 	{
 		if (rd.buf[0] == '\n')
 			return (line);
@@ -67,9 +57,12 @@ char
 			if (extendline(&line, &rd) == -1)
 				return (NULL);
 		}
-		b = read(STDIN, rd.buf, 1);
 	}
 	if (b == 0)
-		exitEOF();
-	return (NULL);
+	{
+		write(STDOUT, "exit", 4);
+		exit(EXIT);
+	}
+	else
+		return (NULL);
 }
