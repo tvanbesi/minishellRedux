@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 14:12:51 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/09 13:40:39 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/09 14:04:59 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ void
 	t_command	*command;
 
 	command = p;
-	free(command->argv);
+	free(command->cmd);
+	ft_cafree(command->argv);
 	free(command);
 }
 

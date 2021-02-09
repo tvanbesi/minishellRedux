@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:13:39 by user42            #+#    #+#             */
-/*   Updated: 2021/01/12 16:25:21 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/09 14:37:20 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int
 			{
 				if (!ft_strncmp(entry->d_name, filename, filenamelen + 1))
 				{
+					free(*executable);
 					getexecdata(*paths, stream, executable, entry);
 					if (closedir(stream) == -1)
 						return (-1);

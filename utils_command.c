@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 10:34:27 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/14 17:42:50 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/02/09 14:30:52 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void
 	{
 		if (gettokenstr(current))
 		{
-			commandcontent->cmd = gettokenstr(current);
+			commandcontent->cmd = ft_strdup(gettokenstr(current));
 			return ;
 		}
 		current = current->next;
@@ -72,7 +72,12 @@ int
 	while (i < argc)
 	{
 		if (gettokentype(current) == WORD && gettokenstr(current))
-			argv[i++] = gettokenstr(current);
+			argv[i] = ft_strdup(gettokenstr(current));
+		if (argv[i++] == NULL)
+		{
+			ft_cafree(argv);
+			return (-1);
+		}
 		current = current->next;
 	}
 	commandcontent = command->content;
