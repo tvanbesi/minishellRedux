@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 14:51:30 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/12 15:40:50 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/09 12:16:39 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,11 @@ int
 		free(name);
 		free(val);
 		return (-1);
+	}
+	if (replace)
+	{
+		free(((t_env*)(env->content))->name);
+		free(((t_env*)(env->content))->val);
 	}
 	((t_env*)(env->content))->name = name;
 	((t_env*)(env->content))->val = val;
