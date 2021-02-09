@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:15:05 by user42            #+#    #+#             */
-/*   Updated: 2021/01/12 15:13:50 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/09 12:37:52 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,11 @@ static int
 	else if (WEXITSTATUS(stat_loc) == OK)
 	{
 		while ((gnl = get_next_line(fd[0], line)) != 1)
+		{
+			free(*line);
 			if (gnl == -1)
 				return (-1);
+		}
 	}
 	return (0);
 }

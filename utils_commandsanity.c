@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:24:09 by user42            #+#    #+#             */
-/*   Updated: 2021/01/12 16:13:36 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/09 12:32:18 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,9 @@ int
 			return (filesanity(content->cmd));
 		if (!(paths = ft_split(getenvval(pathenv), ':')))
 			return (-1);
-		if ((r = findexec(content->cmd, paths, &content->cmd)) == -1)
+		r = findexec(content->cmd, paths, &content->cmd);
+		ft_cafree(paths);
+		if (r == -1)
 			return (-1);
 		else if (r)
 			return (filesanity(content->cmd));
