@@ -4,7 +4,8 @@ SRCS_LFT	= ${widlcard libft/*.c}
 OBJS_LFT	= ${SRCS_LFT:.c=.o}
 LFT			= libft/libft.a
 CC			= clang
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		=
+#CFLAGS		= -Wall -Wextra -Werror
 NAME		= minishell
 RM			= rm -f
 

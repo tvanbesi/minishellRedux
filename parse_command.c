@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 15:06:13 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/09 14:04:23 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/09 19:29:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ t_list
 		if (gettokentype(token) == WORD)
 		{
 			assigncmd(token, command);
-			if (!getcmd(command) || assignargv(token, command) == -1)
+			if ((!getcmd(command) && gettokenstr(token))
+				|| assignargv(token, command) == -1)
 			{
 				ft_lstdelone(command, delcommand);
 				free(command);
