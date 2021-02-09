@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/09 12:39:56 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/09 16:11:24 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ int
 	t_list	*token;
 	t_list	*command;
 
+	(void)argc;
+	(void)argv;
 	if (!(shell = initshell(envp)))
 	{
 		puterror(strerror(errno));

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 17:52:33 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/21 16:15:39 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/02/09 16:12:54 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ static int
 int
 	export(char **argv, t_list **aenv)
 {
-	t_list	*env;
 	int		i;
 	int		r;
 

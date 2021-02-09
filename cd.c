@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:07:04 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/11 16:35:56 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/09 16:13:16 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ int
 	cd(char **argv, t_list **aenv)
 {
 	t_list		*home;
-	char		*wd;
-	char		*addenvinput;
 
 	if (!argv[0])
 	{

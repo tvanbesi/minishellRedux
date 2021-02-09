@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 15:46:31 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/11 19:44:51 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/09 16:12:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ int
 	process(char *path, t_list *command, t_shell *shell)
 {
 	int			stat_loc;
-	struct stat	buf;
 	char		**argv;
 	char		**envp;
 
+	stat_loc = 0;
 	if ((g_pid = fork()) == -1)
 		return (-1);
 	if (g_pid == 0)

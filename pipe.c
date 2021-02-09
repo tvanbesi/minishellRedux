@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 18:27:26 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/12 17:38:50 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/09 16:09:58 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ static void
 	minipipechild(int pipeend, int fd[2], t_list *command, t_shell *shell)
 {
 	int		cmdsanity;
-	int		commandtype;
 
 	if ((cmdsanity = commandsanity(command, shell)) == -1)
 		exit(FATAL);
