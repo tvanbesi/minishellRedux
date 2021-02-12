@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 11:17:08 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/12 15:17:57 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/12 19:36:31 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,39 +48,17 @@ static int
 	return (-1);
 }
 
-static void
-	exitstatredirfail(t_list *command, int cmdsanity)
-{
-	puterrorcmd(command, cmdsanity);
-	if (cmdsanity == NOCMD)
-		g_exitstatus = EXIT_STAT_NOCMD;
-	else if (cmdsanity == NOEXEC || cmdsanity == ISDIR)
-		g_exitstatus = EXIT_STAT_NOEXEC;
-	else
-		g_exitstatus = EXIT_STAT_FAIL;
-}
-
 int
 	redirect(t_list *command, t_shell *shell)
 {
 	int		fd;
-	int		cmdsanity;
 
-	if ((cmdsanity = commandsanity(command, shell)) == -1)
-		return (-1);
 	if ((fd = skipfiles(command)) == -1)
 		return (-1);
-	if (!iserror(cmdsanity))
-	{
-		if (getcommandtype(command) == REDIRIN)
-			dup2(fd, STDIN);
-		else
-			dup2(fd, STDOUT);
-		execute(command, shell, cmdsanity);
-	}
+	if (getcommandtype(command) == REDIRIN)
+		dup2(fd, STDIN);
 	else
-		exitstatredirfail(command, cmdsanity);
-	if (close(fd) < 0)
-		return (-1);
+		dup2(fd, STDOUT);
+	close(fd);
 	return (0);
 }

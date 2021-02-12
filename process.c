@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 15:46:31 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/09 16:12:30 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/12 18:49:15 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@ static int
 {
 	if (WIFEXITED(stat_loc))
 	{
-		if (WEXITSTATUS(stat_loc) > 1)
-		{
-			errno = WEXITSTATUS(stat_loc);
-			return (-1);
-		}
+		if (WEXITSTATUS(stat_loc) == -1)
+			g_exitstatus = EXIT_STAT_FAIL;
+		else
+			g_exitstatus = WEXITSTATUS(stat_loc);
 	}
 	else if (WIFSIGNALED(stat_loc))
 	{
+		g_exitstatus = 128 + WTERMSIG(stat_loc);
 		if (WTERMSIG(stat_loc) == SIGINT)
 			write(STDOUT, "\n", 1);
 		else if (WTERMSIG(stat_loc) == SIGQUIT)
@@ -34,9 +34,10 @@ static int
 }
 
 int
-	process(char *path, t_list *command, t_shell *shell)
+	process(t_list *command, t_shell *shell)
 {
 	int			stat_loc;
+	char		*path;
 	char		**argv;
 	char		**envp;
 
@@ -45,16 +46,17 @@ int
 		return (-1);
 	if (g_pid == 0)
 	{
+		path = getcmd(command);
 		if (!(argv = getprocessargv(getcommandargv(command), path)))
-			exit(errno);
+			puterror(strerror(errno));
 		else if (!(envp = getenvp(shell->env)))
-			exit(errno);
+			puterror(strerror(errno));
 		else if (execve(path, argv, envp) == -1)
-			exit(errno);
+			puterror(strerror(errno));
+		exit(-1);
 	}
-	else if (waitpid(g_pid, &stat_loc, 0) != g_pid)
+	if (wait(&stat_loc) == -1)
 		return (-1);
-	setexitstatus(stat_loc);
 	g_pid = 0;
 	return (handleexit(stat_loc));
 }

@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/01/12 17:39:53 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/12 18:57:28 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <dirent.h>
+# include <stdio.h>
 # include "libft.h"
 # include "get_next_line.h"
 
@@ -208,10 +209,10 @@ int					isbuiltin(int n);
 */
 
 void				cyclecommand(t_list *command, t_shell *shell);
-void				execute(t_list *command, t_shell *shell, int n);
-void				builtin(t_list *command, t_shell *shell, int n);
-int					process(char *path, t_list *command, t_shell *shell);
-int					minipipe(t_list *command, t_shell *shell, int pipeend);
+void				execute(t_list *command, t_shell *shell);
+void				builtin(t_list *command, t_shell *shell);
+int					process(t_list *command, t_shell *shell);
+int					minipipe(t_list *command, t_shell *shell);
 int					redirect(t_list *command, t_shell *shell);
 void				setexitstatus(int stat_loc);
 
@@ -238,7 +239,7 @@ int					exitshell(char **argv, t_list **aenv);
 ***	ERROR
 */
 
-void				puterrorcmd(t_list *commmand, int n);
+void				puterrorcmd(t_list *commmand, t_shell *shell);
 void				puterror(char *msg);
 void				*error(char *msg);
 

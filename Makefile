@@ -1,20 +1,48 @@
-SRCS		= ${wildcard *.c}
+SRCS		=	builtin.c \
+				cd.c \
+				echo.c \
+				env.c \
+				error.c \
+				errorcmd.c \
+				execute.c \
+				exit.c \
+				export.c \
+				findexec.c \
+				getidlen.c \
+				main.c \
+				parse_command.c \
+				parse_token.c \
+				pipe.c \
+				process.c \
+				prompt.c \
+				pwd.c \
+				quoting.c \
+				readstdin.c \
+				redirection.c \
+				signal.c \
+				unset.c \
+				utils_addtoken.c \
+				utils_command.c \
+				utils_commandsanity.c \
+				utils_del.c \
+				utils_env.c \
+				utils_getcommand.c \
+				utils_getenv.c \
+				utils_gettoken.c \
+				utils_token.c \
+				utils_wait.c
 OBJS		= ${SRCS:.c=.o}
-SRCS_LFT	= ${widlcard libft/*.c}
-OBJS_LFT	= ${SRCS_LFT:.c=.o}
-LFT			= libft/libft.a
 CC			= clang
-CFLAGS		=
 #CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		=
 NAME		= minishell
 RM			= rm -f
 
 %.o :		%.c
 			${CC} ${CFLAGS} -Ilibft -c $<
-all :		${LFT} ${NAME}
-${LFT} :	${OBJS_LFT}
+all :		${NAME}
+${NAME} :	${OBJS}
 			cd libft && make
-${NAME} :	${OBJS} ${LFT}
 			clang -o ${NAME} ${OBJS} libft/libft.a
 clean :
 			${RM} ${OBJS}
@@ -24,4 +52,4 @@ fclean :	clean
 			cd libft && make fclean
 re :		fclean all
 .PHONY :
-			all ${NAME} ${LFT} clean fclean re
+			all ${NAME} clean fclean re

@@ -3,90 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/13 12:41:35 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/09 19:14:45 by user42           ###   ########.fr       */
+/*   Created: 2021/02/12 18:06:35 by user42            #+#    #+#             */
+/*   Updated: 2021/02/12 19:33:36 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 void
-	execute(t_list *command, t_shell *shell, int n)
+	execute(t_list *command, t_shell *shell)
 {
-	char	*cmd;
+	int		csanity;
 
-	cmd = getcmd(command);
-	if (!cmd)
-	{
-		g_exitstatus = EXIT_STAT_SUCCESS;
-		return ;
-	}
-	if (n == EXEC)
-	{
-		if (process(cmd, command, shell) == -1)
-			puterror(strerror(errno));
-	}
-	else if (isbuiltin(n))
-		builtin(command, shell, n);
+	csanity = commandsanity(command, shell);
+	if (isbuiltin(csanity))
+		builtin(command, shell);
+	else if (csanity == EXEC)
+		process(command, shell);
+	else if (iserror(csanity))
+		puterrorcmd(command, shell);
 	dup2(shell->stdincpy, STDIN);
 	dup2(shell->stdoutcpy, STDOUT);
-}
-
-static void
-	executesimple(t_list *command, t_shell *shell)
-{
-	int		cmdsanity;
-
-	if ((cmdsanity = commandsanity(command, shell)) == -1)
-		puterror(strerror(errno));
-	else if (!iserror(cmdsanity))
-		execute(command, shell, cmdsanity);
-	else
-	{
-		puterrorcmd(command, cmdsanity);
-		if (cmdsanity == NOCMD)
-			g_exitstatus = EXIT_STAT_NOCMD;
-		else if (cmdsanity == NOEXEC || cmdsanity == ISDIR)
-			g_exitstatus = EXIT_STAT_NOEXEC;
-		else
-			g_exitstatus = EXIT_STAT_FAIL;
-	}
-}
-
-static void
-	executeredir(t_list *command, t_shell *shell)
-{
-	if (redirect(command, shell) == -1)
-	{
-		puterror(strerror(errno));
-		g_exitstatus = EXIT_STAT_FAIL;
-	}
 }
 
 void
 	cyclecommand(t_list *command, t_shell *shell)
 {
-	int		commandtype;
+	int		ctype;
 
 	while (command)
 	{
-		commandtype = getcommandtype(command);
-		if (commandtype == SIMPLE)
-			executesimple(command, shell);
-		else if (commandtype == PIPE)
+		ctype = getcommandtype(command);
+		if (ctype == SIMPLE)
+			execute(command, shell);
+		else if (ctype == PIPE)
 		{
-			if (minipipe(command, shell, 0) == -1)
+			if (minipipe(command, shell) == -1)
 				puterror(strerror(errno));
 			while (getcommandtype(command) >= PIPE)
 				command = command->next;
-			dup2(shell->stdincpy, STDIN);
-			dup2(shell->stdoutcpy, STDOUT);
 		}
-		else if (commandtype > REDIRECTION)
+		else if (ctype > REDIRECTION)
 		{
-			executeredir(command, shell);
+			if (redirect(command, shell) == -1)
+				puterror(strerror(errno));
+			execute(command, shell);
 			while (getcommandtype(command) > REDIRECTION)
 				command = command->next;
 		}

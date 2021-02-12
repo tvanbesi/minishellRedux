@@ -3,80 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/14 18:27:26 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/09 19:24:15 by user42           ###   ########.fr       */
+/*   Created: 2021/02/11 12:09:27 by user42            #+#    #+#             */
+/*   Updated: 2021/02/12 19:34:26 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void
-	minipipechild(int pipeend, int fd[2], t_list *command, t_shell *shell)
-{
-	int		cmdsanity;
-
-	if ((cmdsanity = commandsanity(command, shell)) == -1)
-		exit(FATAL);
-	if (!iserror(cmdsanity) && !pipeend)
-		dup2(fd[1], STDOUT);
-	close(fd[0]);
-	close(fd[1]);
-	if (iserror(cmdsanity) && pipeend)
-		puterrorcmd(command, cmdsanity);
-	if (!iserror(cmdsanity))
-		execute(command, shell, cmdsanity);
-	else
-		exit(cmdsanity);
-	exit(g_exitstatus);
-}
-
-static void
-	minipipeflowbytype(int commandtype, t_list *command, t_shell *shell)
-{
-	if (commandtype == PIPE)
-	{
-		if (minipipe(command->next, shell, 0) == -1)
-			puterror(strerror(errno));
-	}
-	else if (commandtype > REDIRECTION)
-	{
-		if (redirect(command->next, shell) == -1)
-		{
-			puterror(strerror(errno));
-			g_exitstatus = EXIT_STAT_FAIL;
-		}
-	}
-	else if (commandtype == SIMPLE)
-	{
-		if (minipipe(command->next, shell, 1) == -1)
-			puterror(strerror(errno));
-	}
-}
-
 static int
-	minipipeflow(int stat_loc, int fd[2], t_list *command, t_shell *shell)
+	getnpipe(t_list *command)
 {
-	int		cmdsanity;
-	int		commandtype;
+	int	r;
 
-	commandtype = getcommandtype(command->next);
-	if ((cmdsanity = commandsanity(command->next, shell)) == -1)
-		return (-1);
-	if (!iserror(WEXITSTATUS(stat_loc))
-	&& (!iserror(cmdsanity) && cmdsanity != EMPTY))
-		dup2(fd[0], STDIN);
-	close(fd[0]);
-	close(fd[1]);
-	minipipeflowbytype(commandtype, command, shell);
-	if (iserror(WEXITSTATUS(stat_loc)))
-		puterrorcmd(command, WEXITSTATUS(stat_loc));
-	return (0);
+	r = 1;
+	command = command->next;
+	while (getcommandtype(command) == PIPE)
+	{
+		command = command->next;
+		r++;
+	}
+	return (r);
 }
 
 static void
-	exitstatpipeend(int stat_loc)
+	exitstatpipe(int stat_loc)
 {
 	if (WEXITSTATUS(stat_loc) == NOCMD)
 		g_exitstatus = EXIT_STAT_NOCMD;
@@ -88,29 +40,78 @@ static void
 		g_exitstatus = EXIT_STAT_FAIL;
 }
 
-int
-	minipipe(t_list *command, t_shell *shell, int pipeend)
+static int
+	minipiperecursion(t_list *command, t_shell *shell, int *fd, int npipe)
 {
-	int		fd[2];
-	int		stat_loc;
+	static int	rlayer = 0;
+	int			n;
+	int			stat_loc;
 
-	if (pipe(fd) == -1)
-		return (-1);
-	if ((g_pid = fork()) == -1)
-		return (-1);
-	if (g_pid == 0)
-		minipipechild(pipeend, fd, command, shell);
+	rlayer++;
+	if (fork() == 0)
+	{
+		if (rlayer < npipe)
+			minipiperecursion(command, shell, fd, npipe);
+		if (rlayer == npipe)
+		{
+			dup2(fd[(rlayer - 1) * 2], STDIN);
+			n = npipe;
+			while (n-- > 0)
+			{
+				close(fd[(n * 2)]);
+				close(fd[(n * 2) + 1]);
+			}
+			n = rlayer + 1;
+			while (--n > 0)
+				command = command->next;
+			if (getcommandtype(command) > REDIRECTION)
+				redirect(command, shell);
+			execute(command, shell);
+			exit(0);
+		}
+	}
 	else
 	{
-		if (waitpid(g_pid, &stat_loc, 0) != g_pid)
-			return (-1);
-		if (WIFEXITED(stat_loc) && !pipeend)
+		if (rlayer > 1)
+			dup2(fd[(rlayer - 2) * 2], STDIN);
+		dup2(fd[(rlayer - 1) * 2 + 1], STDOUT);
+		n = npipe;
+		while (n-- > 0)
 		{
-			if (minipipeflow(stat_loc, fd, command, shell) == -1)
-				return (-1);
+			close(fd[(n * 2)]);
+			close(fd[(n * 2) + 1]);
 		}
-		else if (WIFEXITED(stat_loc) && pipeend)
-			exitstatpipeend(stat_loc);
+		n = rlayer;
+		while (--n > 0)
+			command = command->next;
+		execute(command, shell);
+		wait(&stat_loc);
+		if (rlayer > 1)
+			exit(0);
+		//else
+		//	exitstatpipe(stat_loc);
 	}
+	rlayer = 0;
+	return (0);
+}
+
+int
+	minipipe(t_list *command, t_shell *shell)
+{
+	int		*fd;
+	int		stat_loc;
+	int		npipe;
+	int		n;
+
+	npipe = getnpipe(command);
+	if (!(fd = (int*)malloc(sizeof(int) * npipe * 2)))
+		return (-1);
+	n = 0;
+	while (n++ < npipe)
+		if (pipe(&fd[(n - 1) * 2]) == -1)
+			return (-1);
+	minipiperecursion(command, shell, fd, npipe);
+	free(fd);
+	fd = NULL;
 	return (0);
 }

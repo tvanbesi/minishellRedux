@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 16:37:25 by user42            #+#    #+#             */
-/*   Updated: 2021/01/11 16:41:09 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/12 18:57:15 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,18 @@ static void
 	write(STDERR, "\n", 1);
 }
 
-static void
-	errorfatal(void)
-{
-	write(STDERR, ERROR_FATAL, ft_strlen(ERROR_FATAL));
-	write(STDERR, "\n", 1);
-}
-
 void
-	puterrorcmd(t_list *command, int n)
+	puterrorcmd(t_list *command, t_shell *shell)
 {
+	int		n;
 	char	*cmd;
 
 	cmd = getcmd(command);
+	n = commandsanity(command, shell);
 	if (n == NOCMD)
 		errornocmd(cmd);
 	else if (n == NOEXEC)
 		errornoexec(cmd);
 	else if (n == ISDIR)
 		errorisdir(cmd);
-	else if (n == FATAL)
-		errorfatal();
 }
