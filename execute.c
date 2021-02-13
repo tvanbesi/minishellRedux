@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 18:06:35 by user42            #+#    #+#             */
-/*   Updated: 2021/02/13 14:48:43 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/13 15:48:41 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,13 @@ void
 {
 	int		csanity;
 
-	csanity = commandsanity(command, shell);
+	if ((csanity = commandsanity(command, shell)) == -1)
+	{
+		puterror(strerror(errno));
+		return ;
+	}
 	if (isbuiltin(csanity))
-		builtin(command, shell);
+		builtin(command, shell, csanity);
 	else if (csanity == EXEC)
 		process(command, shell);
 	else if (iserror(csanity))
@@ -42,35 +46,37 @@ void
 	dup2(shell->stdoutcpy, STDOUT);
 }
 
+static void
+	skipcommands(t_list **command, int ctype)
+{
+	while (getcommandtype(*command) >= ctype)
+		*command = (*command)->next;
+}
+
 void
 	cyclecommand(t_list *command, t_shell *shell)
 {
-	int		ctype;
-
 	while (command)
 	{
-		ctype = getcommandtype(command);
-		if (ctype == SIMPLE)
+		if (getcommandtype(command) == SIMPLE)
 		{
 			if (expand(command, shell->env) == -1)
 				puterror(strerror(errno));
 			execute(command, shell);
 		}
-		else if (ctype == PIPE)
+		else if (getcommandtype(command) == PIPE)
 		{
 			if (minipipe(command, shell) == -1)
 				puterror(strerror(errno));
-			while (getcommandtype(command) >= PIPE)
-				command = command->next;
+			skipcommands(&command, PIPE);
 		}
-		else if (ctype > REDIRECTION)
+		else if (getcommandtype(command) > REDIRECTION)
 		{
 			if (redirect(command, shell) == -1)
 				puterror(strerror(errno));
 			else
 				execute(command, shell);
-			while (getcommandtype(command) > REDIRECTION)
-				command = command->next;
+			skipcommands(&command, REDIRECTION);
 		}
 		command = command->next;
 	}

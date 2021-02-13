@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 07:27:17 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/13 13:38:39 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/13 15:40:52 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static t_list
 }
 
 int
-	addword(t_list **atoken, const char *input, size_t l, t_list *env)
+	addword(t_list **atoken, const char *input, size_t l)
 {
 	t_list	*token;
 	t_token	*content;

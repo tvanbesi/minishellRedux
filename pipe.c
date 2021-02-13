@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 12:09:27 by user42            #+#    #+#             */
-/*   Updated: 2021/02/13 14:50:33 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/13 15:53:11 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,30 @@ static int
 }
 
 static void
-	exitstatpipe(int stat_loc)
+	pipeend(t_list *command, t_shell *shell, int *fd, int rlayer, int npipe)
 {
-	if (WEXITSTATUS(stat_loc) == NOCMD)
-		g_exitstatus = EXIT_STAT_NOCMD;
-	else if (WEXITSTATUS(stat_loc) == NOEXEC || WEXITSTATUS(stat_loc) == ISDIR)
-		g_exitstatus = EXIT_STAT_NOEXEC;
-	else if (!iserror(WEXITSTATUS(stat_loc)))
-		g_exitstatus = EXIT_STAT_SUCCESS;
-	else
-		g_exitstatus = EXIT_STAT_FAIL;
+	int		n;
+
+	dup2(fd[(rlayer - 1) * 2], STDIN);
+	n = npipe;
+	while (n-- > 0)
+	{
+		close(fd[(n * 2)]);
+		close(fd[(n * 2) + 1]);
+	}
+	n = rlayer + 1;
+	while (--n > 0)
+		command = command->next;
+	if (expand(command, shell->env) == -1)
+		puterror(strerror(errno));
+	if (getcommandtype(command) > REDIRECTION
+	&& redirect(command, shell) == -1)
+	{
+		puterror(strerror(errno));
+		exit(1);
+	}
+	execute(command, shell);
+	exit(g_exitstatus);
 }
 
 static int
@@ -53,28 +67,7 @@ static int
 		if (rlayer < npipe)
 			minipiperecursion(command, shell, fd, npipe);
 		if (rlayer == npipe)
-		{
-			dup2(fd[(rlayer - 1) * 2], STDIN);
-			n = npipe;
-			while (n-- > 0)
-			{
-				close(fd[(n * 2)]);
-				close(fd[(n * 2) + 1]);
-			}
-			n = rlayer + 1;
-			while (--n > 0)
-				command = command->next;
-			if (expand(command, shell->env) == -1)
-				puterror(strerror(errno));
-			if (getcommandtype(command) > REDIRECTION)
-			{
-				if (redirect(command, shell) == -1)
-					puterror(strerror(errno));
-				else
-					execute(command, shell);
-			}
-			exit(0);
-		}
+			pipeend(command, shell, fd, rlayer, npipe);
 	}
 	else
 	{
@@ -95,9 +88,8 @@ static int
 		execute(command, shell);
 		wait(&stat_loc);
 		if (rlayer > 1)
-			exit(0);
-		//else
-		//	exitstatpipe(stat_loc);
+			exit(stat_loc);
+		g_exitstatus = WEXITSTATUS(stat_loc);
 	}
 	rlayer = 0;
 	return (0);
@@ -107,7 +99,6 @@ int
 	minipipe(t_list *command, t_shell *shell)
 {
 	int		*fd;
-	int		stat_loc;
 	int		npipe;
 	int		n;
 

@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/02/13 13:54:51 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/13 15:43:26 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,15 +151,14 @@ typedef	struct		s_shell
 char				*readstdin(void);
 int					prompt(char **line);
 int					expand(t_list *command, t_list *env);
-t_list				*tokenize(char *input, t_list *env);
+t_list				*tokenize(char *input);
 t_list				*makecommands(t_list *tokens);
 
 /*
 ***	TOKENS
 */
 
-int					addword(t_list **atoken, const char *input,
-					size_t l, t_list *env);
+int					addword(t_list **atoken, const char *input, size_t l);
 int					addmetachar(t_list **atoken, const char *input);
 char				*getidentifier(char *s, t_list *env);
 size_t				getidlen(char *s, t_list *env);
@@ -212,7 +211,7 @@ int					isbuiltin(int n);
 
 void				cyclecommand(t_list *command, t_shell *shell);
 void				execute(t_list *command, t_shell *shell);
-void				builtin(t_list *command, t_shell *shell);
+void				builtin(t_list *command, t_shell *shell, int csanity);
 int					process(t_list *command, t_shell *shell);
 int					minipipe(t_list *command, t_shell *shell);
 int					redirect(t_list *command, t_shell *shell);

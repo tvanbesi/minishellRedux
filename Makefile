@@ -34,8 +34,7 @@ SRCS		=	builtin.c \
 				utils_token.c
 OBJS		= ${SRCS:.c=.o}
 CC			= clang
-#CFLAGS		= -Wall -Wextra -Werror
-CFLAGS		=
+CFLAGS		= -Wall -Wextra -Werror
 NAME		= minishell
 RM			= rm -f
 

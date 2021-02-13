@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:35:57 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/13 12:07:06 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/13 15:43:13 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ static int
 }
 
 static int
-	tokenizeword(char *input, t_list **atoken, t_parsedata *pd, t_list *env)
+	tokenizeword(char *input, t_list **atoken, t_parsedata *pd)
 {
 	pd->l--;
-	if (addword(atoken, &input[pd->i - pd->l], pd->l, env) == -1)
+	if (addword(atoken, &input[pd->i - pd->l], pd->l) == -1)
 	{
 		puterror(strerror(errno));
 		return (-1);
@@ -51,7 +51,7 @@ static void
 }
 
 t_list
-	*tokenize(char *input, t_list *env)
+	*tokenize(char *input)
 {
 	t_list			*r;
 	t_parsedata		pd;
@@ -65,13 +65,13 @@ t_list
 		pd.l++;
 		if (!(pd.qt = quote(pd.qt, input[pd.i])) && ismetachar(input[pd.i]))
 		{
-			if (tokenizeword(input, &r, &pd, env) == -1)
+			if (tokenizeword(input, &r, &pd) == -1)
 				return (NULL);
 		}
 		else
 			pd.i++;
 	}
-	if (addword(&r, &input[pd.i - pd.l], pd.l, env) == -1)
+	if (addword(&r, &input[pd.i - pd.l], pd.l) == -1)
 		return (NULL);
 	return (r);
 }
