@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 18:06:35 by user42            #+#    #+#             */
-/*   Updated: 2021/02/13 14:35:19 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/13 14:48:43 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ void
 {
 	int		csanity;
 
-	if (expand(command, shell->env) == -1)
-		puterror(strerror(errno));
 	csanity = commandsanity(command, shell);
 	if (isbuiltin(csanity))
 		builtin(command, shell);
@@ -53,7 +51,11 @@ void
 	{
 		ctype = getcommandtype(command);
 		if (ctype == SIMPLE)
+		{
+			if (expand(command, shell->env) == -1)
+				puterror(strerror(errno));
 			execute(command, shell);
+		}
 		else if (ctype == PIPE)
 		{
 			if (minipipe(command, shell) == -1)
@@ -65,7 +67,8 @@ void
 		{
 			if (redirect(command, shell) == -1)
 				puterror(strerror(errno));
-			execute(command, shell);
+			else
+				execute(command, shell);
 			while (getcommandtype(command) > REDIRECTION)
 				command = command->next;
 		}

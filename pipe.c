@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 12:09:27 by user42            #+#    #+#             */
-/*   Updated: 2021/02/12 19:34:26 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/13 14:50:33 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,15 @@ static int
 			n = rlayer + 1;
 			while (--n > 0)
 				command = command->next;
+			if (expand(command, shell->env) == -1)
+				puterror(strerror(errno));
 			if (getcommandtype(command) > REDIRECTION)
-				redirect(command, shell);
-			execute(command, shell);
+			{
+				if (redirect(command, shell) == -1)
+					puterror(strerror(errno));
+				else
+					execute(command, shell);
+			}
 			exit(0);
 		}
 	}
@@ -84,6 +90,8 @@ static int
 		n = rlayer;
 		while (--n > 0)
 			command = command->next;
+		if (expand(command, shell->env) == -1)
+			puterror(strerror(errno));
 		execute(command, shell);
 		wait(&stat_loc);
 		if (rlayer > 1)

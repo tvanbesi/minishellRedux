@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 11:17:08 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/12 19:36:31 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/13 14:42:29 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ int
 {
 	int		fd;
 
+	if (expand(command, shell->env) == -1)
+		return (-1);
 	if ((fd = skipfiles(command)) == -1)
 		return (-1);
 	if (getcommandtype(command) == REDIRIN)
