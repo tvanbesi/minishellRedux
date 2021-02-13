@@ -6,18 +6,11 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:15:05 by user42            #+#    #+#             */
-/*   Updated: 2021/02/13 12:15:34 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/13 16:09:28 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void
-	closefd(int fd[2])
-{
-	close(fd[0]);
-	close(fd[1]);
-}
 
 static void
 	setpromptexitstatus(int stat_loc)
@@ -62,7 +55,7 @@ static void
 	if (line)
 		write(fd[1], line, ft_strlen(line));
 	write(fd[1], "\n", 1);
-	closefd(fd);
+	closefd(fd, 1);
 	if (line == NULL)
 		exit(ERROR);
 	else
@@ -91,10 +84,10 @@ int
 	if (WIFEXITED(stat_loc))
 	{
 		if (WEXITSTATUS(stat_loc) != OK)
-			closefd(fd);
+			closefd(fd, 1);
 		if (catchprompt(stat_loc, fd, line) == -1)
 			return (-1);
 	}
-	closefd(fd);
+	closefd(fd, 1);
 	return (0);
 }

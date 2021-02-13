@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/02/13 15:43:26 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/13 16:07:16 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,7 @@ void				execute(t_list *command, t_shell *shell);
 void				builtin(t_list *command, t_shell *shell, int csanity);
 int					process(t_list *command, t_shell *shell);
 int					minipipe(t_list *command, t_shell *shell);
+void				closefd(int *fd, int n);
 int					redirect(t_list *command, t_shell *shell);
 
 /*

@@ -28,6 +28,7 @@ SRCS		=	builtin.c \
 				utils_commandsanity2.c \
 				utils_del.c \
 				utils_env.c \
+				utils_fd.c \
 				utils_getcommand.c \
 				utils_getenv.c \
 				utils_gettoken.c \

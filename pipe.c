@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 12:09:27 by user42            #+#    #+#             */
-/*   Updated: 2021/02/13 15:53:11 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/13 16:21:32 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,10 @@ static int
 }
 
 static void
-	pipeend(t_list *command, t_shell *shell, int *fd, int rlayer, int npipe)
+	pipeend(t_list *command, t_shell *shell, int rlayer)
 {
-	int		n;
-
-	dup2(fd[(rlayer - 1) * 2], STDIN);
-	n = npipe;
-	while (n-- > 0)
-	{
-		close(fd[(n * 2)]);
-		close(fd[(n * 2) + 1]);
-	}
-	n = rlayer + 1;
-	while (--n > 0)
+	rlayer++;
+	while (--rlayer > 0)
 		command = command->next;
 	if (expand(command, shell->env) == -1)
 		puterror(strerror(errno));
@@ -54,11 +45,27 @@ static void
 	exit(g_exitstatus);
 }
 
+static void
+	pipeflow(t_list *command, t_shell *shell, int rlayer, int *stat_loc)
+{
+	int		n;
+
+	n = rlayer;
+	while (--n > 0)
+		command = command->next;
+	if (expand(command, shell->env) == -1)
+		puterror(strerror(errno));
+	execute(command, shell);
+	wait(stat_loc);
+	if (rlayer > 1)
+		exit(*stat_loc);
+	g_exitstatus = WEXITSTATUS(*stat_loc);
+}
+
 static int
 	minipiperecursion(t_list *command, t_shell *shell, int *fd, int npipe)
 {
 	static int	rlayer = 0;
-	int			n;
 	int			stat_loc;
 
 	rlayer++;
@@ -67,29 +74,19 @@ static int
 		if (rlayer < npipe)
 			minipiperecursion(command, shell, fd, npipe);
 		if (rlayer == npipe)
-			pipeend(command, shell, fd, rlayer, npipe);
+		{
+			dup2(fd[(rlayer - 1) * 2], STDIN);
+			closefd(fd, npipe);
+			pipeend(command, shell, rlayer);
+		}
 	}
 	else
 	{
 		if (rlayer > 1)
 			dup2(fd[(rlayer - 2) * 2], STDIN);
 		dup2(fd[(rlayer - 1) * 2 + 1], STDOUT);
-		n = npipe;
-		while (n-- > 0)
-		{
-			close(fd[(n * 2)]);
-			close(fd[(n * 2) + 1]);
-		}
-		n = rlayer;
-		while (--n > 0)
-			command = command->next;
-		if (expand(command, shell->env) == -1)
-			puterror(strerror(errno));
-		execute(command, shell);
-		wait(&stat_loc);
-		if (rlayer > 1)
-			exit(stat_loc);
-		g_exitstatus = WEXITSTATUS(stat_loc);
+		closefd(fd, npipe);
+		pipeflow(command, shell, rlayer, &stat_loc);
 	}
 	rlayer = 0;
 	return (0);
