@@ -6,23 +6,11 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:24:09 by user42            #+#    #+#             */
-/*   Updated: 2021/02/09 12:32:18 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/13 12:57:35 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int
-	iserror(int n)
-{
-	return (n > ERROR_START && n < ERROR_END);
-}
-
-int
-	isbuiltin(int n)
-{
-	return (n > BUILTIN_START && n < BUILTIN_END);
-}
 
 static int
 	builtinsanity(char *cmd)
@@ -51,7 +39,7 @@ static int
 	struct stat	buf;
 
 	if (stat(filename, &buf) == -1)
-		return (-1);
+		return (NOFILE);
 	if (buf.st_mode & S_IFDIR || !(buf.st_mode & S_IXUSR))
 	{
 		if (buf.st_mode & S_IFDIR)
@@ -60,6 +48,17 @@ static int
 			return (NOEXEC);
 	}
 	return (EXEC);
+}
+
+static int
+	ret(int r, char *cmd)
+{
+	if (r == -1)
+		return (-1);
+	else if (r)
+		return (filesanity(cmd));
+	else
+		return (NOCMD);
 }
 
 int
@@ -83,12 +82,7 @@ int
 			return (-1);
 		r = findexec(content->cmd, paths, &content->cmd);
 		ft_cafree(paths);
-		if (r == -1)
-			return (-1);
-		else if (r)
-			return (filesanity(content->cmd));
-		else
-			return (NOCMD);
+		return (ret(r, content->cmd));
 	}
 	else
 		return (filesanity(content->cmd));

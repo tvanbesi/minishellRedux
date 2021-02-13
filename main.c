@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/10 16:46:46 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/13 12:08:33 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static t_shell
 {
 	t_shell	*shell;
 
+	g_pid = 0;
 	if (!(shell = malloc(sizeof(*shell))))
 		return (NULL);
 	if (envp)
@@ -65,7 +66,6 @@ int
 		puterror(strerror(errno));
 		return (1);
 	}
-	g_pid = 0;
 	while (1)
 	{
 		write(STDOUT, "> ", 2);

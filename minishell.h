@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/02/12 18:57:28 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/13 13:54:51 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@
 # define ERROR_ISDIR				"is a directory"
 # define ERROR_ISNEXEC				"is not executable"
 # define ERROR_NOHOME				"HOME not set"
+# define ERROR_NOFILE				"no such file or directory"
 # define ERROR_FATAL				"Fatal error"
 
 typedef	enum		e_command_r
@@ -51,7 +52,7 @@ typedef	enum		e_command_r
 	NOCMD,
 	NOEXEC,
 	ISDIR,
-	FATAL,
+	NOFILE,
 	ERROR_END,
 	SUCCESS_START,
 	EMPTY,
@@ -149,6 +150,7 @@ typedef	struct		s_shell
 
 char				*readstdin(void);
 int					prompt(char **line);
+int					expand(t_list *command, t_list *env);
 t_list				*tokenize(char *input, t_list *env);
 t_list				*makecommands(t_list *tokens);
 
@@ -214,7 +216,6 @@ void				builtin(t_list *command, t_shell *shell);
 int					process(t_list *command, t_shell *shell);
 int					minipipe(t_list *command, t_shell *shell);
 int					redirect(t_list *command, t_shell *shell);
-void				setexitstatus(int stat_loc);
 
 /*
 ***	SIGNALS
@@ -239,7 +240,7 @@ int					exitshell(char **argv, t_list **aenv);
 ***	ERROR
 */
 
-void				puterrorcmd(t_list *commmand, t_shell *shell);
+void				puterrorcmd(char *cmd, int csanity);
 void				puterror(char *msg);
 void				*error(char *msg);
 

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:35:57 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/09 13:18:01 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/13 12:07:06 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,6 @@ static void
 	pd->qt = 0;
 }
 
-static void
-	*unclosedqt(void)
-{
-	g_exitstatus = EXIT_STAT_ERRORPARSE;
-	return (error(ERROR_PARSE));
-}
-
 t_list
 	*tokenize(char *input, t_list *env)
 {
@@ -80,7 +73,5 @@ t_list
 	}
 	if (addword(&r, &input[pd.i - pd.l], pd.l, env) == -1)
 		return (NULL);
-	if (pd.qt)
-		return (unclosedqt());
 	return (r);
 }

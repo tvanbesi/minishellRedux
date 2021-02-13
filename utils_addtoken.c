@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/16 07:27:17 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/09 13:30:09 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/13 13:38:39 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,6 @@ int
 	if (l)
 	{
 		if (!(s = ft_substr(input, 0, l)))
-			return (-1);
-		if (emptytokenexception(s, env))
-		{
-			free(s);
-			s = NULL;
-		}
-		else if (!(s = unquote(s, env)))
 			return (-1);
 		if (!(token = newtoken(WORD)))
 		{

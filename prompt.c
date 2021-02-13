@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:15:05 by user42            #+#    #+#             */
-/*   Updated: 2021/02/09 16:13:37 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/13 12:15:34 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,25 @@ static void
 	close(fd[1]);
 }
 
+static void
+	setpromptexitstatus(int stat_loc)
+{
+	if (WEXITSTATUS(stat_loc) == ERROR)
+		g_exitstatus = EXIT_STAT_FAIL;
+	else if (WEXITSTATUS(stat_loc) == BREAK)
+		g_exitstatus = 128 + SIGINT;
+}
+
 static int
 	catchprompt(int stat_loc, int fd[2], char **line)
 {
 	int gnl;
 
+	setpromptexitstatus(stat_loc);
 	if (WEXITSTATUS(stat_loc) == ERROR)
-	{
-		g_exitstatus = EXIT_STAT_FAIL;
 		return (-1);
-	}
 	else if (WEXITSTATUS(stat_loc) == BREAK)
 	{
-		g_exitstatus = 128 + SIGINT;
 		if (!(*line = ft_strdup("")))
 			return (-1);
 		write(STDOUT, "\n", 1);

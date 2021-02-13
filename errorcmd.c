@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 16:37:25 by user42            #+#    #+#             */
-/*   Updated: 2021/02/12 18:57:15 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/13 13:20:27 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,15 @@ static void
 }
 
 static void
+	errornofile(char *cmd)
+{
+	write(STDERR, cmd, ft_strlen(cmd));
+	write(STDERR, " : ", 3);
+	write(STDERR, ERROR_NOFILE, ft_strlen(ERROR_NOFILE));
+	write(STDERR, "\n", 1);
+}
+
+static void
 	errorisdir(char *cmd)
 {
 	write(STDERR, cmd, ft_strlen(cmd));
@@ -40,17 +49,14 @@ static void
 }
 
 void
-	puterrorcmd(t_list *command, t_shell *shell)
+	puterrorcmd(char *cmd, int n)
 {
-	int		n;
-	char	*cmd;
-
-	cmd = getcmd(command);
-	n = commandsanity(command, shell);
 	if (n == NOCMD)
 		errornocmd(cmd);
 	else if (n == NOEXEC)
 		errornoexec(cmd);
 	else if (n == ISDIR)
 		errorisdir(cmd);
+	else if (n == NOFILE)
+		errornofile(cmd);
 }

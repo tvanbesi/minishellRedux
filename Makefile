@@ -6,6 +6,7 @@ SRCS		=	builtin.c \
 				errorcmd.c \
 				execute.c \
 				exit.c \
+				expand.c \
 				export.c \
 				findexec.c \
 				getidlen.c \
@@ -24,13 +25,13 @@ SRCS		=	builtin.c \
 				utils_addtoken.c \
 				utils_command.c \
 				utils_commandsanity.c \
+				utils_commandsanity2.c \
 				utils_del.c \
 				utils_env.c \
 				utils_getcommand.c \
 				utils_getenv.c \
 				utils_gettoken.c \
-				utils_token.c \
-				utils_wait.c
+				utils_token.c
 OBJS		= ${SRCS:.c=.o}
 CC			= clang
 #CFLAGS		= -Wall -Wextra -Werror
