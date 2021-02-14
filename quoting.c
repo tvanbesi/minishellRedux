@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 08:39:15 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/13 13:46:45 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/14 18:08:47 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,8 @@ static void
 	}
 	else if (!ft_strncmp(mode, "special", 7))
 	{
-		r[ud->i++] = s[++(ud->j)];
+		if (isspecialchar(s[ud->j + 1]))
+			r[ud->i++] = s[++(ud->j)];
 		ud->j++;
 	}
 }
@@ -110,7 +111,7 @@ char
 			editunquotedata(r, s, &ud, "close");
 		else
 		{
-			if (ud.q != 39 && s[ud.j] == '\\' && isspecialchar(s[ud.j + 1]))
+			if (ud.q != 39 && s[ud.j] == '\\')
 				editunquotedata(r, s, &ud, "special");
 			else if (ud.q != 39 && s[ud.j] == '$')
 				expansion(r, s, env, &ud);
