@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 12:09:27 by user42            #+#    #+#             */
-/*   Updated: 2021/02/13 16:21:32 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/14 18:26:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,7 @@ static void
 		puterror(strerror(errno));
 	execute(command, shell);
 	wait(stat_loc);
-	if (rlayer > 1)
-		exit(*stat_loc);
-	g_exitstatus = WEXITSTATUS(*stat_loc);
+	exit(*stat_loc);
 }
 
 static int
@@ -69,7 +67,9 @@ static int
 	int			stat_loc;
 
 	rlayer++;
-	if (fork() == 0)
+	if ((g_pid = fork()) == -1)
+		return (-1);
+	if (g_pid == 0)
 	{
 		if (rlayer < npipe)
 			minipiperecursion(command, shell, fd, npipe);
@@ -96,9 +96,11 @@ int
 	minipipe(t_list *command, t_shell *shell)
 {
 	int		*fd;
+	int		stat_loc;
 	int		npipe;
 	int		n;
 
+	stat_loc = 0;
 	npipe = getnpipe(command);
 	if (!(fd = (int*)malloc(sizeof(int) * npipe * 2)))
 		return (-1);
@@ -106,7 +108,18 @@ int
 	while (n++ < npipe)
 		if (pipe(&fd[(n - 1) * 2]) == -1)
 			return (-1);
-	minipiperecursion(command, shell, fd, npipe);
+	if (fork() == 0)
+	{
+		if (minipiperecursion(command, shell, fd, npipe) == -1)
+			puterror(strerror(errno));
+	}
+	else
+	{
+		closefd(fd, npipe);
+		wait(&stat_loc);
+	}
+	g_exitstatus = WEXITSTATUS(stat_loc);
+	g_pid = 0;
 	free(fd);
 	fd = NULL;
 	return (0);
