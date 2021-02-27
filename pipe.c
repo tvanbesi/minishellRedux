@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 12:09:27 by user42            #+#    #+#             */
-/*   Updated: 2021/02/14 18:26:30 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/27 14:26:36 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,68 +28,64 @@ static int
 }
 
 static void
-	pipeend(t_list *command, t_shell *shell, int rlayer)
+	pipecommand(t_list *command, t_shell *shell, int n)
 {
-	rlayer++;
-	while (--rlayer > 0)
-		command = command->next;
-	if (expand(command, shell->env) == -1)
-		puterror(strerror(errno));
-	if (getcommandtype(command) > REDIRECTION
-	&& redirect(command, shell) == -1)
-	{
-		puterror(strerror(errno));
-		exit(1);
-	}
-	execute(command, shell);
-	exit(g_exitstatus);
-}
-
-static void
-	pipeflow(t_list *command, t_shell *shell, int rlayer, int *stat_loc)
-{
-	int		n;
-
-	n = rlayer;
 	while (--n > 0)
 		command = command->next;
 	if (expand(command, shell->env) == -1)
 		puterror(strerror(errno));
 	execute(command, shell);
-	wait(stat_loc);
-	exit(*stat_loc);
 }
 
 static int
-	minipiperecursion(t_list *command, t_shell *shell, int *fd, int npipe)
+	getpipeexitstatus(void)
 {
-	static int	rlayer = 0;
-	int			stat_loc;
+	int	pid;
+	int	stat_loc;
+	int pidtmp;
+	int	r;
 
-	rlayer++;
-	if ((g_pid = fork()) == -1)
-		return (-1);
-	if (g_pid == 0)
+	pidtmp = 0;
+	while ((pid = wait(&stat_loc)) != -1)
 	{
-		if (rlayer < npipe)
-			minipiperecursion(command, shell, fd, npipe);
-		if (rlayer == npipe)
+		if (pid > pidtmp)
+			r = stat_loc;
+		pidtmp = pid;
+	}
+	if (WIFEXITED(r))
+		return (WEXITSTATUS(r));
+	else if (WIFSIGNALED(r))
+		return (WTERMSIG(r));
+	else
+		return (0);
+}
+
+static int
+	minipipechildren(t_list *command, t_shell *shell, int *fd, int npipe)
+{
+	int	nchildren;
+	int	n;
+	int pid;
+
+	nchildren = npipe + 1;
+	n = 0;
+	while (n++ < nchildren)
+	{
+		if ((pid = fork()) == -1)
+			return (-1);
+		if (pid == 0)
 		{
-			dup2(fd[(rlayer - 1) * 2], STDIN);
+			if (n != 1)
+				dup2(fd[(n - 2) * 2], STDIN);
+			if (n != nchildren)
+				dup2(fd[(n - 1) * 2 + 1], STDOUT);
 			closefd(fd, npipe);
-			pipeend(command, shell, rlayer);
+			pipecommand(command, shell, n);
+			exit(g_exitstatus);
 		}
 	}
-	else
-	{
-		if (rlayer > 1)
-			dup2(fd[(rlayer - 2) * 2], STDIN);
-		dup2(fd[(rlayer - 1) * 2 + 1], STDOUT);
-		closefd(fd, npipe);
-		pipeflow(command, shell, rlayer, &stat_loc);
-	}
-	rlayer = 0;
-	return (0);
+	closefd(fd, npipe);
+	return (getpipeexitstatus());
 }
 
 int
@@ -108,17 +104,8 @@ int
 	while (n++ < npipe)
 		if (pipe(&fd[(n - 1) * 2]) == -1)
 			return (-1);
-	if (fork() == 0)
-	{
-		if (minipiperecursion(command, shell, fd, npipe) == -1)
-			puterror(strerror(errno));
-	}
-	else
-	{
-		closefd(fd, npipe);
-		wait(&stat_loc);
-	}
-	g_exitstatus = WEXITSTATUS(stat_loc);
+	if ((g_exitstatus = minipipechildren(command, shell, fd, npipe)) == -1)
+		puterror(strerror(errno));
 	g_pid = 0;
 	free(fd);
 	fd = NULL;

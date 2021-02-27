@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 16:37:25 by user42            #+#    #+#             */
-/*   Updated: 2021/02/13 13:20:27 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/27 14:27:24 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,37 +15,25 @@
 static void
 	errornocmd(char *cmd)
 {
-	write(STDERR, ERROR_NOCMD, ft_strlen(ERROR_NOCMD));
-	write(STDERR, " : ", 3);
-	write(STDERR, cmd, ft_strlen(cmd));
-	write(STDERR, "\n", 1);
+	printf("%s : %s\n", ERROR_NOCMD, cmd);
 }
 
 static void
 	errornoexec(char *cmd)
 {
-	write(STDERR, cmd, ft_strlen(cmd));
-	write(STDERR, " : ", 3);
-	write(STDERR, ERROR_ISNEXEC, ft_strlen(ERROR_ISNEXEC));
-	write(STDERR, "\n", 1);
+	printf("%s : %s\n", cmd, ERROR_ISNEXEC);
 }
 
 static void
 	errornofile(char *cmd)
 {
-	write(STDERR, cmd, ft_strlen(cmd));
-	write(STDERR, " : ", 3);
-	write(STDERR, ERROR_NOFILE, ft_strlen(ERROR_NOFILE));
-	write(STDERR, "\n", 1);
+	printf("%s : %s\n", cmd, ERROR_NOFILE);
 }
 
 static void
 	errorisdir(char *cmd)
 {
-	write(STDERR, cmd, ft_strlen(cmd));
-	write(STDERR, " : ", 3);
-	write(STDERR, ERROR_ISDIR, ft_strlen(ERROR_ISDIR));
-	write(STDERR, "\n", 1);
+	printf("%s : %s\n", cmd, ERROR_ISDIR);
 }
 
 void

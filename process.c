@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 15:46:31 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/12 18:49:15 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/16 12:17:49 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int
 			puterror(strerror(errno));
 		exit(-1);
 	}
-	if (wait(&stat_loc) == -1)
+	else if (waitpid(g_pid, &stat_loc, 0) == -1)
 		return (-1);
 	g_pid = 0;
 	return (handleexit(stat_loc));
