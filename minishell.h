@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/02/13 16:07:16 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/27 15:18:25 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@
 # define ERROR_NOHOME				"HOME not set"
 # define ERROR_NOFILE				"no such file or directory"
 # define ERROR_FATAL				"Fatal error"
+
+# define BUFFER_SIZE_ERRORMSG		4096
 
 typedef	enum		e_command_r
 {
