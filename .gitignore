@@ -8,5 +8,6 @@
 **/**.swp
 **/**.old
 **/**.txt
+tester
 debug.c
 minishell
