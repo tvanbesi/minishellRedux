@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 18:15:49 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/28 16:30:20 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 07:56:06 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,15 @@ char
 
 	content = command->content;
 	return (content->argv);
+}
+
+t_list
+	*getcommandredir(t_list *command)
+{
+	t_command	*content;
+
+	content = command->content;
+	return (content->redirections);
 }
 
 int

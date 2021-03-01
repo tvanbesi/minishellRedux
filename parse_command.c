@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 15:06:13 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/01 01:58:24 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 10:11:52 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,89 +23,112 @@ static t_list
 	content->type = type;
 	content->cmd = NULL;
 	content->argv = NULL;
+	content->redirections = NULL;
 	if (!(command = ft_lstnew(content)))
 		free(content);
 	return (command);
 }
 
 static t_list
-	*skipwords(t_list *token)
+	*newredir(char *s)
 {
-	t_list	*current;
+	t_list		*redir;
+	t_redir		*content;
+	int			type;
 
-	current = token;
-	while (current)
-	{
-		if (gettokentype(current) != WORD)
-			return (current->next);
-		current = current->next;
-	}
-	return (current);
+	type = -1;
+	if (!ft_strncmp(s, "<", 2))
+		type = REDIRIN;
+	else if (!ft_strncmp(s, ">", 2))
+		type = REDIRTRUNC;
+	else if (!ft_strncmp(s, ">>", 3))
+		type = REDIRAPPEND;
+	if (!(content = malloc(sizeof(*content))))
+		return (NULL);
+	content->type = type;
+	content->fd_str = NULL;
+	if (!(redir = ft_lstnew(content)))
+		free(content);
+	return (redir);
 }
 
-static int
-	syntaxsanity(t_list *command)
+static void
+	*clear(t_list **acommand, int parserror)
 {
-	t_list	*current;
-
-	current = command;
-	while (current)
+	ft_lstclear(acommand, delcommand);
+	if (parserror)
 	{
-		if (getcommandtype(current) == PIPE)
-		{
-			while (getcommandtype(current) == PIPE)
-			{
-				if (!getcmd(current) || !command->next || !getcmd(command->next))
-					return (0);
-				current = current->next;
-			}
-		}
-		else if (getcommandtype(current) > REDIRECTION)
-		{
-			while (getcommandtype(current) > REDIRECTION)
-			{
-				current = current->next;
-				if (!current || !getcmd(current))
-					return (0);
-			}
-		}
-		current = current->next;
+		g_exitstatus = EXIT_STAT_ERRORPARSE;
+		puterror(ERROR_PARSE);
 	}
-	if (!current || getcommandtype(current) == SIMPLE)
-		return (1);
-	return (0);
+	else
+		puterror(strerror(errno));
+	return (NULL);
 }
 
 t_list
 	*makecommands(t_list *token)
 {
-	t_list	*r;
-	t_list	*command;
+	t_list		*r;
+	t_list		*command;
+	t_command	*content;
+	t_list		*redir;
+	t_list		*current;
+	t_list		*currentcpy;
 
 	r = NULL;
-	while (token)
+	current = token;
+	while (current)
 	{
-		if (!(command = newcommand(gettokencommandtype(token))))
+		if (!(command = newcommand(gettokencommandtype(current))))
 			return (error(strerror(errno)));
-		if (gettokentype(token) == WORD)
+		content = command->content;
+		currentcpy = current;
+		if (gettokentype(current) == OPERATOR && ispipeorsemicolon(current))
+			return (clear(&command, 1));
+		while (current && !(gettokentype(current) == OPERATOR && ispipeorsemicolon(current)))
 		{
-			assigncmd(token, command);
-			if ((!getcmd(command) && gettokenstr(token))
-				|| assignargv(token, command) == -1)
+			if (gettokentype(current) == OPERATOR && isrediroperator(current))
 			{
-				ft_lstdelone(command, delcommand);
-				free(command);
-				return (error(strerror(errno)));
+				if (!(redir = newredir(gettokenstr(current))))
+					return (clear(&command, 0));
+				if (getredirtype(redir) == -1)
+					return (clear(&command, 1));
+				current = current->next;
+				if (!current || gettokentype(current) == OPERATOR)
+					return (clear(&command, 1));
+				if (!(((t_redir*)redir->content)->fd_str = ft_strdup(gettokenstr(current))))
+					return (clear(&command, 0));
+				ft_lstadd_back(&content->redirections, redir);
 			}
+			current = current->next;
+		}
+		current = currentcpy;
+		while (current && !(gettokentype(current) == OPERATOR && ispipeorsemicolon(current)))
+		{
+			if (gettokentype(current) == WORD)
+			{
+				if (!getcmd(command))
+				{
+					if (!(content->cmd = ft_strdup(gettokenstr(current))))
+						return (clear(&command, 0));
+				}
+				else
+				{
+					if (assignargv(current, command) == -1)
+						return (clear(&command, 0));
+					else
+						break ;
+				}
+			}
+			else if (gettokentype(current) == OPERATOR && isrediroperator(current))
+				current = current->next;
+			current = current->next;
 		}
 		ft_lstadd_back(&r, command);
-		token = skipwords(token);
-	}
-	if (!syntaxsanity(r))
-	{
-		ft_lstclear(&r, delcommand);
-		g_exitstatus = EXIT_STAT_ERRORPARSE;
-		puterror(ERROR_PARSE);
+		while (current && !(gettokentype(current) == OPERATOR && ispipeorsemicolon(current)))
+			current = current->next;
+		current = current ? current->next : current;
 	}
 	return (r);
 }

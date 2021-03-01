@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 14:12:51 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/09 14:04:59 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 10:06:45 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void
 	command = p;
 	free(command->cmd);
 	ft_cafree(command->argv);
+	ft_lstclear(&command->redirections, delredir);
 	free(command);
 }
 
@@ -42,4 +43,14 @@ void
 	free(env->name);
 	free(env->val);
 	free(env);
+}
+
+void
+	delredir(void *p)
+{
+	t_redir	*redir;
+
+	redir = p;
+	free(redir->fd_str);
+	free(redir);
 }

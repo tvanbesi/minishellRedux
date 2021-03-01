@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 13:53:37 by user42            #+#    #+#             */
-/*   Updated: 2021/03/01 02:08:54 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 14:44:05 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,25 @@ static int
 	}
 	else if (!(*s = unquote(*s, env)))
 		return (-1);
+	return (0);
+}
+
+int
+	expandredir(t_list *command, t_list *env)
+{
+	t_command	*commandcontent;
+	t_list		*current;
+	t_redir		*redircontent;
+
+	commandcontent = command->content;
+	current = commandcontent->redirections;
+	while (current)
+	{
+		redircontent = current->content;
+		if (expandone(&redircontent->fd_str, env) == -1)
+			return (-1);
+		current = current->next;
+	}
 	return (0);
 }
 
@@ -55,5 +74,7 @@ int
 	argv = ((t_command*)command->content)->argv;
 	ft_cafree(argv);
 	((t_command*)command->content)->argv = expandedargv;
+	if (expandredir(command, env) == -1)
+		return (-1);
 	return (0);
 }

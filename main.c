@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/01 07:44:07 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 16:08:32 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,9 @@ int
 		dup2(shell->stdincpy, STDIN);
 		dup2(shell->stdoutcpy, STDOUT);
 		token = tokenize(input);
+		//ft_lstiter(token, showtoken);
 		command = makecommands(token);
+		//ft_lstiter(command, showcommand);
 		cyclecommand(command, shell);
 		freedata(input, token, command);
 	}

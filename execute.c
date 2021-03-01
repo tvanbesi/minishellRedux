@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 18:06:35 by user42            #+#    #+#             */
-/*   Updated: 2021/02/28 16:14:11 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 16:07:54 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void
 {
 	int		csanity;
 
+	if (getcommandredir(command))
+		redirect(command, shell);
 	if ((csanity = commandsanity(command, shell)) == -1)
 	{
 		puterror(strerror(errno));
@@ -60,21 +62,14 @@ void
 		{
 			if (expand(command, shell->env) == -1)
 				puterror(strerror(errno));
-			execute(command, shell);
+			else
+				execute(command, shell);
 		}
 		else if (getcommandtype(command) == PIPE)
 		{
 			if (minipipe(command, shell) == -1)
 				puterror(strerror(errno));
 			skipcommands(&command, PIPE);
-		}
-		else if (getcommandtype(command) > REDIRECTION)
-		{
-			if (redirect(command, shell) == -1)
-				puterror(strerror(errno));
-			else
-				execute(command, shell);
-			skipcommands(&command, REDIRECTION);
 		}
 		command = command->next;
 		dup2(shell->stdincpy, STDIN);

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 10:29:31 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/12 14:22:20 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 09:55:01 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,19 +51,17 @@ int
 	t_token	*content;
 
 	token = nextoperator(token);
+	while (token)
+	{
+		content = token->content;
+		if (!ft_strncmp(content->s, ";", 2))
+			return (SIMPLE);
+		else if (!ft_strncmp(content->s, "|", 2))
+			return (PIPE);
+		token = token->next;
+		token = nextoperator(token);
+	}
 	if (!token)
 		return (SIMPLE);
-	content = token->content;
-	if (!ft_strncmp(content->s, ";", 2))
-		return (SIMPLE);
-	else if (!ft_strncmp(content->s, "|", 2))
-		return (PIPE);
-	else if (!ft_strncmp(content->s, ">", 2))
-		return (REDIRTRUNC);
-	else if (!ft_strncmp(content->s, "<", 2))
-		return (REDIRIN);
-	else if (!ft_strncmp(content->s, ">>", 3))
-		return (REDIRAPPEND);
-	else
-		return (-1);
+	return (-1);
 }

@@ -33,10 +33,12 @@ SRCS		=	debug.c \
 				utils_getcommand.c \
 				utils_getenv.c \
 				utils_gettoken.c \
-				utils_token.c
+				utils_token.c \
+				utils_redir.c
 OBJS		= ${SRCS:.c=.o}
 CC			= clang
-CFLAGS		= -Wall -Wextra -Werror
+#CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		=
 NAME		= minishell
 RM			= rm -f
 

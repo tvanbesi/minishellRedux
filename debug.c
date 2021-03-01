@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/01 02:16:17 by user42            #+#    #+#             */
-/*   Updated: 2021/03/01 02:25:04 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 10:11:33 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,20 @@ void
 {
 	t_command	*content;
 	char		**argv;
+	t_list		*current;
 
 	content = p;
-	printf("%d\t%s\n", content->type, content->cmd);
+	printf("COMMAND\n%d\t%s\n", content->type, content->cmd);
 	argv = content->argv;
-	while (*argv)
-		printf("%s\t", *argv++);
+	if (argv)
+		while (*argv)
+			printf("%s\t", *argv++);
 	printf("\n");
+	current = content->redirections;
+	while (current)
+	{
+		printf("%d\t%s\n", getredirtype(current), getredirstr(current));
+		current = current->next;
+	}
+	printf("\n\n");
 }

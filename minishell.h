@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/01 02:23:53 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 08:46:53 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ typedef	enum		e_prompt_r
 typedef	enum		e_tokentype
 {
 	WORD,
-	OPERATOR,
+	OPERATOR
 }					t_tokentype;
 
 typedef	struct		s_token
@@ -115,14 +115,23 @@ typedef	struct		s_token
 	char			*s;
 }					t_token;
 
-typedef	enum		e_commandtype
+typedef enum		e_redirtype
 {
-	SIMPLE,
-	PIPE,
-	REDIRECTION,
 	REDIRIN,
 	REDIRTRUNC,
 	REDIRAPPEND
+}					t_redirtype;
+
+typedef struct		e_redir
+{
+	int				type;
+	char			*fd_str;
+}					t_redir;
+
+typedef	enum		e_commandtype
+{
+	SIMPLE,
+	PIPE
 }					t_commandtype;
 
 typedef	struct		s_command
@@ -130,6 +139,7 @@ typedef	struct		s_command
 	int				type;
 	char			*cmd;
 	char			**argv;
+	t_list			*redirections;
 }					t_command;
 
 typedef	struct		s_env
@@ -180,6 +190,8 @@ int					isquote(int c);
 int					ismetachar(int c);
 int					isoperator(int c);
 int					isspecialchar(int c);
+int					isrediroperator(t_list *token);
+int					ispipeorsemicolon(t_list *token);
 void				deltoken(void *p);
 
 /*
@@ -190,10 +202,14 @@ void				assigncmd(t_list *token, t_list *command);
 int					assignargv(t_list *token, t_list *command);
 int					getcommandtype(t_list *command);
 int					getargc(char **argv);
+t_list				*getredir(t_list *command);
+int					getredirtype(t_list *redir);
+char				*getredirstr(t_list *redir);
 char				*getcmd(t_list *command);
 char				**getcommandargv(t_list *command);
 char				**getprocessargv(char **argv, char *path);
 void				delcommand(void *p);
+void				delredir(void *p);
 
 /*
 ***	ENVIRONMENT

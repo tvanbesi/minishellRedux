@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 10:34:27 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/01 02:37:23 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 09:17:10 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,11 @@ static int
 	current = token;
 	while (current)
 	{
-		if (gettokentype(current) == WORD && gettokenstr(current))
+		if (gettokentype(current) == OPERATOR && isrediroperator(current))
+			current = current->next;
+		else if (gettokentype(current) == WORD && gettokenstr(current))
 			r++;
-		else if (gettokentype(current) == OPERATOR)
+		else if (gettokentype(current) == OPERATOR && ispipeorsemicolon(current))
 			return (r);
 		current = current->next;
 	}
@@ -52,16 +54,24 @@ static int
 }
 
 static int
-	tokentoargv(int i, int argc, t_list *current, char **argv)
+	tokentoargv(int argc, t_list *current, char **argv)
 {
+	int	i;
+
+	i = 0;
 	while (i < argc)
 	{
-		if (gettokentype(current) == WORD && gettokenstr(current))
-			argv[i] = ft_strdup(gettokenstr(current));
-		if (argv[i++] == NULL)
+		if (gettokentype(current) == OPERATOR && isrediroperator(current))
+			current = current->next;
+		else
 		{
-			ft_cafree(argv);
-			return (-1);
+			if (gettokentype(current) == WORD && gettokenstr(current))
+				argv[i] = ft_strdup(gettokenstr(current));
+			if (argv[i++] == NULL)
+			{
+				ft_cafree(argv);
+				return (-1);
+			}
 		}
 		current = current->next;
 	}
@@ -73,21 +83,16 @@ int
 {
 	char		**argv;
 	int			argc;
-	int			i;
 	t_list		*current;
 	t_command	*commandcontent;
 
 	commandcontent = command->content;
 	current = token;
-	while (current && gettokentype(current) == WORD && !gettokenstr(current))
-		current = current->next;
-	current = current ? current->next : current;
 	argc = countargv(current);
 	if (!(argv = ft_calloc(argc + 1, sizeof(*argv))))
 		return (-1);
 	argv[argc] = NULL;
-	i = 0;
-	if (tokentoargv(i, argc, current, argv) == -1)
+	if (tokentoargv(argc, current, argv) == -1)
 		return (-1);
 	commandcontent->argv = argv;
 	return (0);
