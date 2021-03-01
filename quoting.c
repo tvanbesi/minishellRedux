@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 08:39:15 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/01 02:40:03 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 17:23:01 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char
 	current = env;
 	while (current)
 	{
-		if (!ft_strncmp(getenvname(current), s, idlen))
+		if (!ft_strncmp(getenvname(current), s, idlen + 1))
 			return (getenvval(current));
 		current = current->next;
 	}
