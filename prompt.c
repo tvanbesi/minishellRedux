@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:15:05 by user42            #+#    #+#             */
-/*   Updated: 2021/02/13 16:09:28 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 01:29:19 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ static int
 	{
 		if (!(*line = ft_strdup("")))
 			return (-1);
-		write(STDOUT, "\n", 1);
+		write(STDERR, "\n", 1);
 	}
 	else if (WEXITSTATUS(stat_loc) == EXIT)
-		exit(EXIT_STAT_SUCCESS);
+		exit(g_exitstatus);
 	else if (WEXITSTATUS(stat_loc) == OK)
 	{
 		while ((gnl = get_next_line(fd[0], line)) != 1)

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 16:25:49 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/12 14:22:06 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 00:45:50 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,23 +38,48 @@ int
 }
 
 int
+	isemptytoken(char *s, t_list *env)
+{
+	int i;
+
+	if (!s[1])
+		return (0);
+	i = 1;
+	if (ft_isdigit(s[i]))
+		return (1);
+	if (!(ft_isalpha(s[i]) || s[i] == '_'))
+		return (0);
+	while (s[++i])
+	{
+		if (!(ft_isalnum(s[i]) || s[i] == '_'))
+			return (0);
+	}
+	if (findenv(env, &s[1]))
+		return (0);
+	return (1);
+}
+
+int
 	emptytokenexception(char *word, t_list *env)
 {
 	int	i;
 
 	i = 0;
-	if (word[i++] != '$')
+	if (word[i] != '$')
 		return (0);
-	if (!word[i])
-		return (0);
-	if (!(ft_isalpha(word[i]) || word[i] == '_'))
-		return (0);
-	while (word[++i])
+	while (word[i] == '$')
 	{
-		if (!(ft_isalnum(word[i]) || word[i] == '_'))
+		if (!isemptytoken(&word[i], env))
 			return (0);
+		if (ft_isdigit(word[++i]))
+			i++;
+		else
+		{
+			while (ft_isalnum(word[i]) || word[i] == '_')
+				i++;
+		}
 	}
-	if (findenv(env, &word[1]))
+	if (word[i])
 		return (0);
 	return (1);
 }

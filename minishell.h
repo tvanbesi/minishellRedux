@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/02/27 15:18:25 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 02:23:53 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,13 @@ typedef	struct		s_shell
 }					t_shell;
 
 /*
+***	DEBUG
+*/
+
+void				showtoken(void *p);
+void				showcommand(void *p);
+
+/*
 ***	PARSING
 */
 
@@ -182,6 +189,7 @@ void				deltoken(void *p);
 void				assigncmd(t_list *token, t_list *command);
 int					assignargv(t_list *token, t_list *command);
 int					getcommandtype(t_list *command);
+int					getargc(char **argv);
 char				*getcmd(t_list *command);
 char				**getcommandargv(t_list *command);
 char				**getprocessargv(char **argv, char *path);

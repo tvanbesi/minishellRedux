@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 08:39:15 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/14 18:08:47 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 02:40:03 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,15 @@ static void
 	}
 	else
 	{
-		if (!s[ud->j + 1] || ft_isspht(s[ud->j + 1]))
+		if (!ft_isdigit(s[ud->j + 1]) && !(ft_isalpha(s[ud->j + 1]) || s[ud->j + 1] == '_'))
 			r[ud->i++] = s[ud->j++];
 		else if ((ud->param = getidentifier(&s[++(ud->j)], env)))
 			ud->i += ft_strlcpy(&r[ud->i], ud->param, ud->l + 1);
-		while (ft_isalnum(s[ud->j]) || s[ud->j] == '_')
+		if (ft_isdigit(s[ud->j]))
 			ud->j++;
+		else
+			while (ft_isalnum(s[ud->j]) || s[ud->j] == '_')
+				ud->j++;
 	}
 }
 
@@ -103,7 +106,7 @@ char
 	initunquotedata(s, env, &ud);
 	if (!(r = malloc(ud.l + 1)))
 		free(s);
-	while (r && s[ud.j])
+	while (s[ud.j])
 	{
 		if (!ud.q && isquote(s[ud.j]))
 			editunquotedata(r, s, &ud, "open");

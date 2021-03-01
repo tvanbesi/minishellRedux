@@ -1,4 +1,5 @@
-SRCS		=	builtin.c \
+SRCS		=	debug.c \
+				builtin.c \
 				cd.c \
 				echo.c \
 				env.c \

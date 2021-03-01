@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 10:34:27 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/13 12:20:39 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 02:37:23 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int
 	t_list		*current;
 	t_command	*commandcontent;
 
+	commandcontent = command->content;
 	current = token;
 	while (current && gettokentype(current) == WORD && !gettokenstr(current))
 		current = current->next;
@@ -88,7 +89,6 @@ int
 	i = 0;
 	if (tokentoargv(i, argc, current, argv) == -1)
 		return (-1);
-	commandcontent = command->content;
 	commandcontent->argv = argv;
 	return (0);
 }

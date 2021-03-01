@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 18:15:49 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/12 14:20:13 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/28 16:30:20 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char
 	return (content->argv);
 }
 
-static int
+int
 	getargc(char **argv)
 {
 	int	r;

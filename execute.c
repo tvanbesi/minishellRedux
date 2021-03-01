@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 18:06:35 by user42            #+#    #+#             */
-/*   Updated: 2021/02/13 15:48:41 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/28 16:14:11 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ void
 		puterrorcmd(getcmd(command), csanity);
 		setexitstatus(csanity);
 	}
-	dup2(shell->stdincpy, STDIN);
-	dup2(shell->stdoutcpy, STDOUT);
 }
 
 static void
@@ -79,5 +77,7 @@ void
 			skipcommands(&command, REDIRECTION);
 		}
 		command = command->next;
+		dup2(shell->stdincpy, STDIN);
+		dup2(shell->stdoutcpy, STDOUT);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 15:06:13 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/09 19:29:30 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 01:58:24 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,33 @@ static t_list
 static int
 	syntaxsanity(t_list *command)
 {
-	if (!command)
+	t_list	*current;
+
+	current = command;
+	while (current)
+	{
+		if (getcommandtype(current) == PIPE)
+		{
+			while (getcommandtype(current) == PIPE)
+			{
+				if (!getcmd(current) || !command->next || !getcmd(command->next))
+					return (0);
+				current = current->next;
+			}
+		}
+		else if (getcommandtype(current) > REDIRECTION)
+		{
+			while (getcommandtype(current) > REDIRECTION)
+			{
+				current = current->next;
+				if (!current || !getcmd(current))
+					return (0);
+			}
+		}
+		current = current->next;
+	}
+	if (!current || getcommandtype(current) == SIMPLE)
 		return (1);
-	command = ft_lstlast(command);
-	if (getcommandtype(command) == SIMPLE)
-		return (1);
-	g_exitstatus = EXIT_STAT_ERRORPARSE;
-	puterror(ERROR_PARSE);
 	return (0);
 }
 
@@ -82,6 +102,10 @@ t_list
 		token = skipwords(token);
 	}
 	if (!syntaxsanity(r))
+	{
 		ft_lstclear(&r, delcommand);
+		g_exitstatus = EXIT_STAT_ERRORPARSE;
+		puterror(ERROR_PARSE);
+	}
 	return (r);
 }

@@ -6,28 +6,30 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:13:32 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/21 14:50:00 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/02/28 14:38:42 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static int
-	optionnl(char *arg)
+	optionnl(char **argv)
 {
-	size_t	i;
+	int		i;
 
-	if (!arg)
-		return (1);
-	if (arg[0] != '-')
-		return (1);
-	if (!arg[1])
-		return (1);
-	i = 1;
-	while (arg[i])
-		if (arg[i++] != 'n')
+	i = 0;
+	while (argv[i])
+	{
+		if (argv[i][0] == '-')
+		{
+			if (argv[i][1] == 'n')
+				return (0);
+		}
+		else
 			return (1);
-	return (0);
+		i++;
+	}
+	return (1);
 }
 
 int
@@ -37,8 +39,10 @@ int
 	int			i;
 
 	(void)aenv;
-	nl = optionnl(argv[0]);
-	i = nl ? 0 : 1;
+	nl = optionnl(argv);
+	i = 0;
+	while (argv[i] && argv[i][0] == '-')
+		i++;
 	while (argv[i])
 	{
 		write(STDOUT, argv[i], ft_strlen(argv[i]));

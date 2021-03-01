@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/13 15:43:41 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 02:25:13 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,16 @@ int
 	}
 	while (1)
 	{
-		write(STDOUT, "> ", 2);
+		write(STDERR, "> ", 2);
 		if (prompt(&input) == -1)
 			puterror(strerror(errno));
 		dup2(shell->stdincpy, STDIN);
 		dup2(shell->stdoutcpy, STDOUT);
 		token = tokenize(input);
+		ft_lstiter(token, showtoken);
+		printf("-----\n");
 		command = makecommands(token);
+		ft_lstiter(command, showcommand);
 		cyclecommand(command, shell);
 		freedata(input, token, command);
 	}

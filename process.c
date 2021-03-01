@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 15:46:31 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/16 12:17:49 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/28 14:24:12 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int
 	{
 		g_exitstatus = 128 + WTERMSIG(stat_loc);
 		if (WTERMSIG(stat_loc) == SIGINT)
-			write(STDOUT, "\n", 1);
+			write(STDERR, "\n", 1);
 		else if (WTERMSIG(stat_loc) == SIGQUIT)
 			write(STDERR, "Quit\n", 5);
 	}

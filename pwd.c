@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:54:38 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/09 16:10:23 by user42           ###   ########.fr       */
+/*   Updated: 2021/02/28 15:58:07 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,11 @@ int
 	(void)aenv;
 	(void)argv;
 	if (!(cwd = getcwd(NULL, 0)))
-		return (-1);
+	{
+		puterror(strerror(errno));
+		if (!(cwd = ft_strdup(getenvval(findenv(*aenv, "PWD")))))
+			return (-1);
+	}
 	write(STDOUT, cwd, ft_strlen(cwd));
 	free(cwd);
 	write(STDOUT, "\n", 1);
