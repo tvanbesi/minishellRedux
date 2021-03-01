@@ -6,7 +6,7 @@
 /*   By: tvanbesi <tvanbesi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/07 19:38:20 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/09 12:45:29 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 16:24:15 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void
 	t_list	*current;
 	t_list	*next;
 
-	if (!*lst)
+	if (!lst || !*lst)
 		return ;
 	current = *lst;
 	while (current)

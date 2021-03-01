@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 15:06:13 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/01 10:11:52 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 16:23:31 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,21 @@ static void
 	return (NULL);
 }
 
+static int
+	operatorsanity(t_list *token)
+{
+	t_list	*current;
+
+	current = token;
+	while (current)
+	{
+		if (gettokentype(token) == OPERATOR && !isvalidoperator(token))
+			return (0);
+		current = current->next;
+	}
+	return (1);
+}
+
 t_list
 	*makecommands(t_list *token)
 {
@@ -76,6 +91,8 @@ t_list
 	t_list		*current;
 	t_list		*currentcpy;
 
+	if (!operatorsanity(token))
+		return (clear(NULL, 1));
 	r = NULL;
 	current = token;
 	while (current)

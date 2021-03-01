@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 16:25:49 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/01 08:11:25 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 16:19:40 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,12 @@ int
 	if (!ft_strncmp(content->s, "|", 2) || !ft_strncmp(content->s, ";", 2))
 		return (1);
 	return (0);
+}
+
+int
+	isvalidoperator(t_list *token)
+{
+	return (isrediroperator(token) || ispipeorsemicolon(token));
 }
 
 int

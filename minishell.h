@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/01 08:46:53 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 16:49:01 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ typedef struct		s_parsedata
 	unsigned int	i;
 	size_t			l;
 	int				qt;
+	int				escape;
 }					t_parsedata;
 
 typedef	enum		e_prompt_r
@@ -192,6 +193,7 @@ int					isoperator(int c);
 int					isspecialchar(int c);
 int					isrediroperator(t_list *token);
 int					ispipeorsemicolon(t_list *token);
+int					isvalidoperator(t_list *token);
 void				deltoken(void *p);
 
 /*
@@ -202,7 +204,7 @@ void				assigncmd(t_list *token, t_list *command);
 int					assignargv(t_list *token, t_list *command);
 int					getcommandtype(t_list *command);
 int					getargc(char **argv);
-t_list				*getredir(t_list *command);
+t_list				*getcommandredir(t_list *command);
 int					getredirtype(t_list *redir);
 char				*getredirstr(t_list *redir);
 char				*getcmd(t_list *command);
