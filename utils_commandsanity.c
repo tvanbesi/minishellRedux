@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:24:09 by user42            #+#    #+#             */
-/*   Updated: 2021/02/13 12:57:35 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/02 06:37:51 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,14 @@ static int
 		return (NOCMD);
 }
 
+static int
+	ishiddenfile(char *s)
+{
+	if (s[0] == '.' && ft_strncmp(s, ".", 2) && ft_strncmp(s, "..", 3))
+		return (1);
+	return (0);
+}
+
 int
 	commandsanity(t_list *command, t_shell *shell)
 {
@@ -72,7 +80,9 @@ int
 	content = command->content;
 	if (!content->cmd)
 		return (EMPTY);
-	if (!ft_strchr(content->cmd, '/'))
+	if (!ft_strncmp(content->cmd, ".", 2) || !ft_strncmp(content->cmd, "..", 3))
+		return (NOCMD);
+	if (!ft_strchr(content->cmd, '/') && !ishiddenfile(content->cmd))
 	{
 		if ((r = builtinsanity(content->cmd)))
 			return (r);

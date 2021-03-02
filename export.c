@@ -6,13 +6,13 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 17:52:33 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/02 00:04:27 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/02 03:43:06 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int
+int
 	isidentifiervalid(char *s)
 {
 	int	i;
@@ -63,8 +63,16 @@ int
 	{
 		if (!isidentifiervalid(argv[i]))
 		{
-			puterror(ERROR_INVALID_IDENTIFIER);
-			r = -2;
+			if (argv[0][0] == '-' && i == 0)
+			{
+				puterror(ERROR_INVALID_OPTION);
+				return (-2);
+			}
+			else
+			{
+				r = -1;
+				puterror(ERROR_INVALID_IDENTIFIER);
+			}
 		}
 		else if (addenv(aenv, argv[i]) == -1)
 			return (-1);

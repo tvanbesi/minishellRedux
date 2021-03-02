@@ -9,4 +9,6 @@
 **/**.old
 **/**.txt
 tester
+tester*
+tmp
 minishell

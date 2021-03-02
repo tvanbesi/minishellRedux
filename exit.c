@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 14:35:01 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/01 00:25:44 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/02 03:34:31 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int
 	if (argv[1])
 	{
 		puterror(ERROR_TOO_MANY_ARG);
-		return (-2);
+		return (-1);
 	}
 	exit((unsigned)ft_atoi(argv[0]));
 }

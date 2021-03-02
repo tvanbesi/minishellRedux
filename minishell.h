@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/01 16:49:01 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/02 03:40:57 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 # define ERROR_NOT_ENOUGH_ARG		"Not enough arguments"
 # define ERROR_NAN					"Numeric argument required"
 # define ERROR_INVALID_IDENTIFIER	"Invalid identifier"
+# define ERROR_INVALID_OPTION		"Invalid option"
 # define ERROR_GNL					"Prompt fail"
 # define ERROR_CYCLING				"Execution cycling error"
 # define ERROR_ISDIR				"is a directory"
@@ -155,6 +156,7 @@ typedef	struct		s_shell
 	int				stdincpy;
 	int				stdoutcpy;
 	int				(*b[7])(char **argv, t_list **aenv);
+	int				exit;
 }					t_shell;
 
 /*
@@ -173,6 +175,7 @@ int					prompt(char **line);
 int					expand(t_list *command, t_list *env);
 t_list				*tokenize(char *input);
 t_list				*makecommands(t_list *tokens);
+int					isidentifiervalid(char *s);
 
 /*
 ***	TOKENS

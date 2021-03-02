@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 18:50:51 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/21 16:16:21 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/03/02 03:44:34 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,26 @@ int
 	unset(char **argv, t_list **aenv)
 {
 	int	i;
+	int	r;
 
 	i = 0;
+	r = 0;
 	while (argv[i])
+	{
+		if (!isidentifiervalid(argv[i]) || ft_strchr(argv[i], '='))
+		{
+			if (argv[i][0] == '-' && i == 0)
+			{
+				puterror(ERROR_INVALID_OPTION);
+				return (-2);
+			}
+			else
+			{
+				r = -1;
+				puterror(ERROR_INVALID_IDENTIFIER);
+			}
+		}
 		removeenv(aenv, argv[i++]);
-	return (0);
+	}
+	return (r);
 }

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 15:06:13 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/01 16:23:31 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/02 05:52:52 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,10 @@ static void
 		puterror(ERROR_PARSE);
 	}
 	else
+	{
+		g_exitstatus = EXIT_STAT_FAIL;
 		puterror(strerror(errno));
+	}
 	return (NULL);
 }
 
@@ -78,6 +81,9 @@ static int
 			return (0);
 		current = current->next;
 	}
+	current = ft_lstlast(token);
+	if (gettokentype(current) == OPERATOR && !ft_strncmp(gettokenstr(current), "|", 2))
+		return (0);
 	return (1);
 }
 
@@ -91,6 +97,8 @@ t_list
 	t_list		*current;
 	t_list		*currentcpy;
 
+	if (!token)
+		 return (NULL);
 	if (!operatorsanity(token))
 		return (clear(NULL, 1));
 	r = NULL;
