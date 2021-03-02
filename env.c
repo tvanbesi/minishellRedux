@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 17:38:48 by tvanbesi          #+#    #+#             */
-/*   Updated: 2020/12/21 16:24:38 by tvanbesi         ###   ########.fr       */
+/*   Updated: 2021/03/01 23:47:56 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,13 @@ int
 	{
 		name = getenvname(current);
 		val = getenvval(current);
-		write(STDOUT, name, ft_strlen(name));
-		write(STDOUT, "=", 1);
-		write(STDOUT, val, ft_strlen(val));
-		write(STDOUT, "\n", 1);
+		if (val)
+		{
+			write(STDOUT, name, ft_strlen(name));
+			write(STDOUT, "=", 1);
+			write(STDOUT, val, ft_strlen(val));
+			write(STDOUT, "\n", 1);
+		}
 		current = current->next;
 	}
 	return (0);

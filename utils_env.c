@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 14:51:30 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/13 12:23:39 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/02 00:21:43 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_list
 	current = env;
 	while (current)
 	{
-		if (!ft_strncmp(getenvname(current), name, ft_strlen(name)))
+		if (!ft_strncmp(getenvname(current), name, ft_strlen(name) + 1))
 			return (current);
 		current = current->next;
 	}
@@ -46,17 +46,41 @@ static t_list
 }
 
 static int
-	getenvdata(char *input, char **val, char **name)
+	getenvdata(char *input, char **val, char **name, t_list **aenv)
 {
+	t_list	*env;
+	char	*tmp;
+
 	if (!(*val = ft_strchr(input, '=')))
-		return (-2);
-	if (!(*val = ft_strdup(&(*val)[1])))
-		return (-1);
-	if (!(*name = ft_substr(input, 0,
-	ft_strlen(input) - (ft_strlen(*val) + 1))))
 	{
-		free(*val);
-		return (-1);
+		*val = NULL;
+		if (!(*name = ft_strdup(input)))
+			return (-1);
+	}
+	else
+	{
+		if (*val - ft_strchr(input, '+') == 1)
+		{
+			if (!(*val = ft_strdup(&(*val)[1])))
+				return (-1);
+			if (!(*name = ft_substr(input, 0, ft_strlen(input) - (ft_strlen(*val) + 2))))
+				return (-1);
+			if ((env = findenv(*aenv, *name)) && getenvval(env))
+			{
+				tmp = *val;
+				if (!(*val = ft_strjoin(getenvval(env), *val)))
+					return (-1);
+				free(tmp);
+			}
+		}
+		else
+		{
+			if (!(*val = ft_strdup(&(*val)[1])))
+				return (-1);
+			if (!(*name = ft_substr(input, 0,
+			ft_strlen(input) - (ft_strlen(*val) + 1))))
+				return (-1);
+		}
 	}
 	return (0);
 }
@@ -77,7 +101,9 @@ int
 	int		replace;
 	int		r;
 
-	if ((r = getenvdata(input, &val, &name)) < 0)
+	val = NULL;
+	name = NULL;
+	if ((r = getenvdata(input, &val, &name, aenv)) < 0)
 		return (r);
 	replace = 0;
 	if ((env = findenv(*aenv, name)))

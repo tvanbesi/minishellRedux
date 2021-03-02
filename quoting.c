@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 08:39:15 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/01 17:23:01 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/02 01:03:01 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,25 +17,23 @@ char
 {
 	t_list	*current;
 	size_t	idlen;
-	size_t	i;
 
 	idlen = 0;
-	i = 0;
-	if (ft_isalpha(s[i]) || s[i] == '_')
+	if (ft_isalpha(s[0]) || s[0] == '_')
 		idlen++;
 	else
 		return (NULL);
-	i++;
-	while (ft_isalnum(s[i]) || s[i] == '_')
-	{
+	while (ft_isalnum(s[idlen]) || s[idlen] == '_')
 		idlen++;
-		i++;
-	}
 	current = env;
 	while (current)
 	{
-		if (!ft_strncmp(getenvname(current), s, idlen + 1))
-			return (getenvval(current));
+		if (!ft_strncmp(getenvname(current), s, idlen))
+		{
+			if (idlen == ft_strlen(getenvname(current)))
+				return (getenvval(current));
+			return (NULL);
+		}
 		current = current->next;
 	}
 	return (NULL);

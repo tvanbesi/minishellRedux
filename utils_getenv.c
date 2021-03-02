@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 17:29:01 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/12 14:21:32 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/01 23:47:41 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,13 @@ static char
 
 	name = getenvname(env);
 	val = getenvval(env);
-	l = ft_strlen(name) + ft_strlen(val) + 2;
+	l = val ? ft_strlen(name) + ft_strlen(val) + 2 : ft_strlen(name) + 2;
 	if (!(r = malloc(l)))
 		return (NULL);
 	ft_strlcpy(r, name, l);
 	ft_strlcat(r, "=", l);
-	ft_strlcat(r, val, l);
+	if (val)
+		ft_strlcat(r, val, l);
 	return (r);
 }
 
