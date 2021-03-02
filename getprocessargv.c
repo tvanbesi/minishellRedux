@@ -1,27 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   getprocessargv.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/06 11:27:54 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/02 14:57:45 by user42           ###   ########.fr       */
+/*   Created: 2021/03/02 17:37:05 by user42            #+#    #+#             */
+/*   Updated: 2021/03/02 17:37:13 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
 char
-	*ft_strjoin(char const *s1, char const *s2)
+	**getprocessargv(char **argv, char *path)
 {
-	char	*r;
-	size_t	n;
+	char	**r;
+	int		l;
+	int		i;
 
-	n = ft_strlen(s1) + ft_strlen(s2);
-	if (!(r = (char*)ft_calloc(n + 1, sizeof(char))))
+	l = getargc(argv);
+	if (!(r = ft_calloc(l + 2, sizeof(*r))))
 		return (NULL);
-	ft_strlcat(r, s1, n + 1);
-	ft_strlcat(r, s2, n + 1);
+	r[0] = ft_strrchr(path, '/');
+	r[l + 1] = NULL;
+	i = 0;
+	while (argv[i])
+	{
+		r[i + 1] = argv[i];
+		i++;
+	}
 	return (r);
 }

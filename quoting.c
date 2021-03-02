@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 08:39:15 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/02 01:03:01 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/02 17:25:10 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ static void
 	}
 	else
 	{
-		if (!ft_isdigit(s[ud->j + 1]) && !(ft_isalpha(s[ud->j + 1]) || s[ud->j + 1] == '_'))
+		if (!ft_isdigit(s[ud->j + 1])
+		&& !(ft_isalpha(s[ud->j + 1]) || s[ud->j + 1] == '_'))
 			r[ud->i++] = s[ud->j++];
 		else if ((ud->param = getidentifier(&s[++(ud->j)], env)))
 			ud->i += ft_strlcpy(&r[ud->i], ud->param, ud->l + 1);

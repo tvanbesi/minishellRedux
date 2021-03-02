@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/02 03:40:57 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/02 20:10:12 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ typedef enum		e_redirtype
 	REDIRAPPEND
 }					t_redirtype;
 
-typedef struct		e_redir
+typedef struct		s_redir
 {
 	int				type;
 	char			*fd_str;
@@ -158,6 +158,8 @@ typedef	struct		s_shell
 	int				(*b[7])(char **argv, t_list **aenv);
 	int				exit;
 }					t_shell;
+
+t_shell				*initshell(char **envp);
 
 /*
 ***	DEBUG
@@ -213,6 +215,8 @@ char				*getredirstr(t_list *redir);
 char				*getcmd(t_list *command);
 char				**getcommandargv(t_list *command);
 char				**getprocessargv(char **argv, char *path);
+t_list				*newcommand(int type);
+t_list				*newredir(char *s);
 void				delcommand(void *p);
 void				delredir(void *p);
 
@@ -224,6 +228,8 @@ t_list				*findenv(t_list *env, const char *name);
 char				*getenvname(t_list *env);
 char				*getenvval(t_list *env);
 char				**getenvp(t_list *env);
+int					getenvdata(char *input, char **val,
+					char **name, t_list **aenv);
 int					addenv(t_list **aenv, char *input);
 void				delenv(void *p);
 
@@ -246,7 +252,7 @@ void				builtin(t_list *command, t_shell *shell, int csanity);
 int					process(t_list *command, t_shell *shell);
 int					minipipe(t_list *command, t_shell *shell);
 void				closefd(int *fd, int n);
-int					redirect(t_list *command, t_shell *shell);
+int					redirect(t_list *command);
 
 /*
 ***	SIGNALS
@@ -260,6 +266,7 @@ void				sigquit(int n);
 */
 
 int					cd(char **argv, t_list **aenv);
+int					setpwdenv(t_list **aenv, char *cd_arg);
 int					echo(char **argv, t_list **aenv);
 int					pwd(char **argv, t_list **aenv);
 int					env(char **argv, t_list **aenv);

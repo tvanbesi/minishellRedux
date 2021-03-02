@@ -2,6 +2,7 @@ SRCS		=	debug.c \
 				builtin.c \
 				cd.c \
 				echo.c \
+				emptytokenexception.c \
 				env.c \
 				error.c \
 				errorcmd.c \
@@ -11,6 +12,9 @@ SRCS		=	debug.c \
 				export.c \
 				findexec.c \
 				getidlen.c \
+				getprocessargv.c \
+				getenvdata.c \
+				initshell.c \
 				main.c \
 				parse_command.c \
 				parse_token.c \
@@ -24,6 +28,7 @@ SRCS		=	debug.c \
 				signal.c \
 				unset.c \
 				utils_addtoken.c \
+				utils_cd.c \
 				utils_command.c \
 				utils_commandsanity.c \
 				utils_commandsanity2.c \
@@ -33,12 +38,12 @@ SRCS		=	debug.c \
 				utils_getcommand.c \
 				utils_getenv.c \
 				utils_gettoken.c \
+				utils_operator.c \
 				utils_token.c \
 				utils_redir.c
 OBJS		= ${SRCS:.c=.o}
 CC			= clang
-#CFLAGS		= -Wall -Wextra -Werror
-CFLAGS		=
+CFLAGS		= -Wall -Wextra -Werror
 NAME		= minishell
 RM			= rm -f
 

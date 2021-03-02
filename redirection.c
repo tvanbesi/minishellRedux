@@ -6,21 +6,21 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 11:17:08 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/02 04:35:13 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/02 18:21:29 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static int
-	openmode(int fd[2], int mode, char *filename)
+	openmode(int fd[2], int mode, char *fname)
 {
 	if (mode == REDIRIN)
-		return ((fd[0] = open(filename, O_RDONLY)));
+		return ((fd[0] = open(fname, O_RDONLY)));
 	else if (mode == REDIRTRUNC)
-		return ((fd[1] = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 000666)));
+		return ((fd[1] = open(fname, O_WRONLY | O_CREAT | O_TRUNC, 000666)));
 	else if (mode == REDIRAPPEND)
-		return ((fd[1] = open(filename, O_WRONLY | O_CREAT | O_APPEND, 000666)));
+		return ((fd[1] = open(fname, O_WRONLY | O_CREAT | O_APPEND, 000666)));
 	return (-1);
 }
 
@@ -49,11 +49,11 @@ static int
 }
 
 int
-	redirect(t_list *command, t_shell *shell)
+	redirect(t_list *command)
 {
 	int			fd[2];
 	t_command	*commandcontent;
-	
+
 	fd[0] = -1;
 	fd[1] = -1;
 	if (skipfiles(fd, command) == -1)

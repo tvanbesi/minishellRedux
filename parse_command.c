@@ -6,51 +6,11 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 15:06:13 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/02 05:52:52 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/02 19:53:38 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static t_list
-	*newcommand(int type)
-{
-	t_list		*command;
-	t_command	*content;
-
-	if (!(content = malloc(sizeof(*content))))
-		return (NULL);
-	content->type = type;
-	content->cmd = NULL;
-	content->argv = NULL;
-	content->redirections = NULL;
-	if (!(command = ft_lstnew(content)))
-		free(content);
-	return (command);
-}
-
-static t_list
-	*newredir(char *s)
-{
-	t_list		*redir;
-	t_redir		*content;
-	int			type;
-
-	type = -1;
-	if (!ft_strncmp(s, "<", 2))
-		type = REDIRIN;
-	else if (!ft_strncmp(s, ">", 2))
-		type = REDIRTRUNC;
-	else if (!ft_strncmp(s, ">>", 3))
-		type = REDIRAPPEND;
-	if (!(content = malloc(sizeof(*content))))
-		return (NULL);
-	content->type = type;
-	content->fd_str = NULL;
-	if (!(redir = ft_lstnew(content)))
-		free(content);
-	return (redir);
-}
 
 static void
 	*clear(t_list **acommand, int parserror)
@@ -82,78 +42,98 @@ static int
 		current = current->next;
 	}
 	current = ft_lstlast(token);
-	if (gettokentype(current) == OPERATOR && !ft_strncmp(gettokenstr(current), "|", 2))
+	if (gettokentype(current) == OPERATOR
+	&& !ft_strncmp(gettokenstr(current), "|", 2))
 		return (0);
 	return (1);
+}
+
+static int
+	parse_redir(t_list *token, t_list *command)
+{
+	t_list		*redir;
+	t_command	*content;
+	t_redir		*redircontent;
+
+	content = command->content;
+	while (token && !(gettokentype(token) == OPERATOR
+	&& ispipeorsemicolon(token)))
+	{
+		if (gettokentype(token) == OPERATOR && isrediroperator(token))
+		{
+			if (!(redir = newredir(gettokenstr(token))))
+				return (1);
+			if (getredirtype(redir) == -1)
+				return (2);
+			token = token->next;
+			if (!token || gettokentype(token) == OPERATOR)
+				return (2);
+			redircontent = redir->content;
+			if (!(redircontent->fd_str = ft_strdup(gettokenstr(token))))
+				return (1);
+			ft_lstadd_back(&content->redirections, redir);
+		}
+		token = token->next;
+	}
+	return (0);
+}
+
+static int
+	parse_cmd(t_list *token, t_list *command)
+{
+	t_command	*content;
+
+	content = command->content;
+	while (token && !(gettokentype(token) == OPERATOR
+	&& ispipeorsemicolon(token)))
+	{
+		if (gettokentype(token) == WORD)
+		{
+			if (!getcmd(command))
+			{
+				if (!(content->cmd = ft_strdup(gettokenstr(token))))
+					return (1);
+			}
+			else
+			{
+				if (assignargv(token, command) == -1)
+					return (1);
+				return (0);
+			}
+		}
+		else if (gettokentype(token) == OPERATOR && isrediroperator(token))
+			token = token->next;
+		token = token->next;
+	}
+	return (0);
 }
 
 t_list
 	*makecommands(t_list *token)
 {
 	t_list		*r;
+	int			n;
 	t_list		*command;
-	t_command	*content;
-	t_list		*redir;
-	t_list		*current;
-	t_list		*currentcpy;
 
 	if (!token)
-		 return (NULL);
+		return (NULL);
 	if (!operatorsanity(token))
 		return (clear(NULL, 1));
 	r = NULL;
-	current = token;
-	while (current)
+	while (token)
 	{
-		if (!(command = newcommand(gettokencommandtype(current))))
+		if (!(command = newcommand(gettokencommandtype(token))))
 			return (error(strerror(errno)));
-		content = command->content;
-		currentcpy = current;
-		if (gettokentype(current) == OPERATOR && ispipeorsemicolon(current))
+		if (gettokentype(token) == OPERATOR && ispipeorsemicolon(token))
 			return (clear(&command, 1));
-		while (current && !(gettokentype(current) == OPERATOR && ispipeorsemicolon(current)))
-		{
-			if (gettokentype(current) == OPERATOR && isrediroperator(current))
-			{
-				if (!(redir = newredir(gettokenstr(current))))
-					return (clear(&command, 0));
-				if (getredirtype(redir) == -1)
-					return (clear(&command, 1));
-				current = current->next;
-				if (!current || gettokentype(current) == OPERATOR)
-					return (clear(&command, 1));
-				if (!(((t_redir*)redir->content)->fd_str = ft_strdup(gettokenstr(current))))
-					return (clear(&command, 0));
-				ft_lstadd_back(&content->redirections, redir);
-			}
-			current = current->next;
-		}
-		current = currentcpy;
-		while (current && !(gettokentype(current) == OPERATOR && ispipeorsemicolon(current)))
-		{
-			if (gettokentype(current) == WORD)
-			{
-				if (!getcmd(command))
-				{
-					if (!(content->cmd = ft_strdup(gettokenstr(current))))
-						return (clear(&command, 0));
-				}
-				else
-				{
-					if (assignargv(current, command) == -1)
-						return (clear(&command, 0));
-					else
-						break ;
-				}
-			}
-			else if (gettokentype(current) == OPERATOR && isrediroperator(current))
-				current = current->next;
-			current = current->next;
-		}
+		if (((n = parse_redir(token, command)) > 0)
+		|| ((n = parse_cmd(token, command)) > 0))
+			return (clear(&command, n - 1));
 		ft_lstadd_back(&r, command);
-		while (current && !(gettokentype(current) == OPERATOR && ispipeorsemicolon(current)))
-			current = current->next;
-		current = current ? current->next : current;
+		while (token && !(gettokentype(token) == OPERATOR
+		&& ispipeorsemicolon(token)))
+			token = token->next;
+		token = token ? token->next : token;
 	}
 	return (r);
 }

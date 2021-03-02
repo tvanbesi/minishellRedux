@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 14:35:01 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/02 03:34:31 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/02 16:35:09 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,14 @@ int
 	i = 0;
 	s = 1;
 	if (argv[0][i] == '-' || argv[0][i] == '+')
-	{
-		if (argv[0][i] == '-')
+		if (argv[0][i++] == '-')
 			s = -1;
-		i++;
-	}
 	argsanity(s, &argv[0][i]);
 	while (argv[0][i])
 		if (!(ft_isdigit(argv[0][i++])))
 		{
 			puterror(ERROR_NAN);
-			exit(2);
+			exit(EXIT_STAT_ERRORPARSE);
 		}
 	if (argv[1])
 	{

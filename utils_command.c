@@ -6,11 +6,28 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 10:34:27 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/01 09:17:10 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/02 19:53:57 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_list
+	*newcommand(int type)
+{
+	t_list		*command;
+	t_command	*content;
+
+	if (!(content = malloc(sizeof(*content))))
+		return (NULL);
+	content->type = type;
+	content->cmd = NULL;
+	content->argv = NULL;
+	content->redirections = NULL;
+	if (!(command = ft_lstnew(content)))
+		free(content);
+	return (command);
+}
 
 void
 	assigncmd(t_list *token, t_list *command)
@@ -46,7 +63,8 @@ static int
 			current = current->next;
 		else if (gettokentype(current) == WORD && gettokenstr(current))
 			r++;
-		else if (gettokentype(current) == OPERATOR && ispipeorsemicolon(current))
+		else if (gettokentype(current) == OPERATOR
+		&& ispipeorsemicolon(current))
 			return (r);
 		current = current->next;
 	}

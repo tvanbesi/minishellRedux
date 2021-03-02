@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 14:51:30 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/02 00:21:43 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/02 20:02:13 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,46 +45,6 @@ static t_list
 	return (env);
 }
 
-static int
-	getenvdata(char *input, char **val, char **name, t_list **aenv)
-{
-	t_list	*env;
-	char	*tmp;
-
-	if (!(*val = ft_strchr(input, '=')))
-	{
-		*val = NULL;
-		if (!(*name = ft_strdup(input)))
-			return (-1);
-	}
-	else
-	{
-		if (*val - ft_strchr(input, '+') == 1)
-		{
-			if (!(*val = ft_strdup(&(*val)[1])))
-				return (-1);
-			if (!(*name = ft_substr(input, 0, ft_strlen(input) - (ft_strlen(*val) + 2))))
-				return (-1);
-			if ((env = findenv(*aenv, *name)) && getenvval(env))
-			{
-				tmp = *val;
-				if (!(*val = ft_strjoin(getenvval(env), *val)))
-					return (-1);
-				free(tmp);
-			}
-		}
-		else
-		{
-			if (!(*val = ft_strdup(&(*val)[1])))
-				return (-1);
-			if (!(*name = ft_substr(input, 0,
-			ft_strlen(input) - (ft_strlen(*val) + 1))))
-				return (-1);
-		}
-	}
-	return (0);
-}
-
 static void
 	freeforreplace(t_env *content)
 {
@@ -101,8 +61,6 @@ int
 	int		replace;
 	int		r;
 
-	val = NULL;
-	name = NULL;
 	if ((r = getenvdata(input, &val, &name, aenv)) < 0)
 		return (r);
 	replace = 0;

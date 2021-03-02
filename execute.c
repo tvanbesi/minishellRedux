@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 18:06:35 by user42            #+#    #+#             */
-/*   Updated: 2021/03/02 04:10:05 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/02 18:21:49 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void
 	int		csanity;
 
 	if (getcommandredir(command))
-		if (redirect(command, shell) == -1)
+		if (redirect(command) == -1)
 		{
 			puterror(strerror(errno));
 			return ;

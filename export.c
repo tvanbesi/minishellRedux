@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 17:52:33 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/02 03:43:06 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/02 18:20:09 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,29 +32,51 @@ int
 	return (1);
 }
 
+static void
+	showexport(t_list **aenv)
+{
+	t_list	*current;
+
+	current = *aenv;
+	while (current)
+	{
+		write(STDOUT, "declare -x ", 11);
+		write(STDOUT, getenvname(current), ft_strlen(getenvname(current)));
+		if (getenvval(current))
+		{
+			write(STDOUT, "=\"", 2);
+			write(STDOUT, getenvval(current), ft_strlen(getenvval(current)));
+			write(STDOUT, "\"", 1);
+		}
+		write(STDOUT, "\n", 1);
+		current = current->next;
+	}
+}
+
+static int
+	handleinvalid(char *argv, int i)
+{
+	if (argv[0] == '-' && i == 0)
+	{
+		puterror(ERROR_INVALID_OPTION);
+		return (-2);
+	}
+	else
+	{
+		puterror(ERROR_INVALID_IDENTIFIER);
+		return (-1);
+	}
+}
+
 int
 	export(char **argv, t_list **aenv)
 {
 	int		i;
 	int		r;
-	t_list	*current;
 
 	if (!argv[0])
 	{
-		current = *aenv;
-		while (current)
-		{
-			write(STDOUT, "declare -x ", 11);
-			write(STDOUT, getenvname(current), ft_strlen(getenvname(current)));
-			if (getenvval(current))
-			{
-				write(STDOUT, "=\"", 2);
-				write(STDOUT, getenvval(current), ft_strlen(getenvval(current)));
-				write(STDOUT, "\"", 1);
-			}
-			write(STDOUT, "\n", 1);
-			current = current->next;
-		}
+		showexport(aenv);
 		return (0);
 	}
 	i = 0;
@@ -63,16 +85,8 @@ int
 	{
 		if (!isidentifiervalid(argv[i]))
 		{
-			if (argv[0][0] == '-' && i == 0)
-			{
-				puterror(ERROR_INVALID_OPTION);
-				return (-2);
-			}
-			else
-			{
-				r = -1;
-				puterror(ERROR_INVALID_IDENTIFIER);
-			}
+			if ((r = handleinvalid(argv[i], i)) == -2)
+				return (r);
 		}
 		else if (addenv(aenv, argv[i]) == -1)
 			return (-1);
