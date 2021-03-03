@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 17:01:08 by user42            #+#    #+#             */
-/*   Updated: 2021/03/02 17:03:25 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/02 22:38:02 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,6 @@ t_shell
 			if (addenv(&shell->env, *envp++) == -1)
 				return (NULL);
 	if (setshlvl(&shell->env) == -1)
-		return (NULL);
-	if (addenv(&shell->env, "_=/usr/bin/env") == -1)
 		return (NULL);
 	shell->stdincpy = dup(STDIN);
 	shell->stdoutcpy = dup(STDOUT);

@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/02 20:10:12 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/03 14:22:32 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,8 @@ int					expand(t_list *command, t_list *env);
 t_list				*tokenize(char *input);
 t_list				*makecommands(t_list *tokens);
 int					isidentifiervalid(char *s);
+int					shouldescape(int c1, int c2, int q);
+int					shouldexpand(int c1, int c2, int q);
 
 /*
 ***	TOKENS

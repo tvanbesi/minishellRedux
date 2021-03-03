@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 08:39:15 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/02 17:25:10 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/03 14:53:03 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,9 @@ static void
 	}
 	else
 	{
-		if (!ft_isdigit(s[ud->j + 1])
+		if (ud->q != '\'' && s[ud->j + 1] == '\"')
+			ud->j++;
+		else if (!ft_isdigit(s[ud->j + 1])
 		&& !(ft_isalpha(s[ud->j + 1]) || s[ud->j + 1] == '_'))
 			r[ud->i++] = s[ud->j++];
 		else if ((ud->param = getidentifier(&s[++(ud->j)], env)))
@@ -90,8 +92,7 @@ static void
 	}
 	else if (!ft_strncmp(mode, "special", 7))
 	{
-		if (isspecialchar(s[ud->j + 1]))
-			r[ud->i++] = s[++(ud->j)];
+		r[ud->i++] = s[++(ud->j)];
 		ud->j++;
 	}
 }
@@ -111,15 +112,12 @@ char
 			editunquotedata(r, s, &ud, "open");
 		else if (ud.q && ud.q == s[ud.j])
 			editunquotedata(r, s, &ud, "close");
+		else if (shouldescape(s[ud.j], s[ud.j + 1], ud.q))
+			editunquotedata(r, s, &ud, "special");
+		else if (shouldexpand(s[ud.j], s[ud.j + 1], ud.q))
+			expansion(r, s, env, &ud);
 		else
-		{
-			if (ud.q != 39 && s[ud.j] == '\\')
-				editunquotedata(r, s, &ud, "special");
-			else if (ud.q != 39 && s[ud.j] == '$')
-				expansion(r, s, env, &ud);
-			else
-				r[ud.i++] = s[ud.j++];
-		}
+			r[ud.i++] = s[ud.j++];
 	}
 	r[ud.i] = '\0';
 	free(s);

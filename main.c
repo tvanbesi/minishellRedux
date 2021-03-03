@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/02 17:07:30 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/03 14:07:33 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,15 @@ static void
 	t_list	*command;
 
 	quit = 0;
+	input = NULL;
 	while (!quit)
 	{
 		write(STDERR, "> ", 2);
 		if ((quit = (argc >= 3 && !ft_strncmp(argv[1], "-c", 3))))
-			input = argv[2];
+		{
+			if (!(input = ft_strdup(argv[2])))
+				puterror(strerror(errno));
+		}
 		else if (prompt(&input) == -1)
 			puterror(strerror(errno));
 		dup2(shell->stdincpy, STDIN);

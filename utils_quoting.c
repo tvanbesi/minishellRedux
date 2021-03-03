@@ -1,41 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prompt.c                                           :+:      :+:    :+:   */
+/*   utils_quoting.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/12 14:15:05 by user42            #+#    #+#             */
-/*   Updated: 2021/03/03 12:43:57 by user42           ###   ########.fr       */
+/*   Created: 2021/03/03 14:16:22 by user42            #+#    #+#             */
+/*   Updated: 2021/03/03 14:48:44 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int
-	prompt(char **line)
+	shouldescape(int c1, int c2, int q)
 {
-	ssize_t	b;
-	int		i;
-	char	buf[1];
+	return (c1 == '\\' && (!q || (q == '\"' && (c2 == '$' || isquote(c2)))));
+}
 
-	if (!(*line = malloc(BUFFER_SIZE)))
-		return (-1);
-	i = 0;
-	while ((b = read(STDIN, buf, 1)) > 0)
-	{
-		//Extend when necessary
-		if (buf[0] == '\n')
-			break ;
-		(*line)[i++] = buf[0];
-	}
-	(*line)[i] = '\0';
-	if (b == 0 && !(*line)[0])
-	{
-		write(STDERR, "exit", 4);
-		exit(g_exitstatus);
-	}
-	if (b == -1)
-		return (-1);
-	return (0);
+int
+	shouldexpand(int c1, int c2, int q)
+{
+	return (c1 == '$'
+	&& ((q != '\'' && (ft_isalnum(c2) || c2 == '_' || c2 == '?'))
+	|| (!q && c2 == '\"')));
 }
