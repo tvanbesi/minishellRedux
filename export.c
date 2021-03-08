@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 17:52:33 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/02 18:20:09 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/08 21:01:11 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,27 +69,30 @@ static int
 }
 
 int
-	export(char **argv, t_list **aenv)
+	export(t_list *argv, t_list **aenv)
 {
-	int		i;
 	int		r;
+	int		i;
+	t_list	*current;
 
-	if (!argv[0])
+	current = argv;
+	if (!current)
 	{
 		showexport(aenv);
 		return (0);
 	}
-	i = 0;
 	r = 0;
-	while (argv[i])
+	i = 0;
+	while (current)
 	{
-		if (!isidentifiervalid(argv[i]))
+		if (!isidentifiervalid(gettokenstr(current)))
 		{
-			if ((r = handleinvalid(argv[i], i)) == -2)
+			if ((r = handleinvalid(gettokenstr(current), i)) == -2)
 				return (r);
 		}
-		else if (addenv(aenv, argv[i]) == -1)
+		else if (addenv(aenv, gettokenstr(current)) == -1)
 			return (-1);
+		current = current->next;
 		i++;
 	}
 	return (r);

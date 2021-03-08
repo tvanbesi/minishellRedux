@@ -3,70 +3,95 @@
 /*                                                        :::      ::::::::   */
 /*   parse_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/12 11:35:57 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/03 15:09:03 by user42           ###   ########.fr       */
+/*   Created: 2021/03/07 17:40:07 by user42            #+#    #+#             */
+/*   Updated: 2021/03/08 22:57:33 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void
-	quote(t_parsedata *pd, int c)
-{
-	if (!pd->qt && isquote(c))
-		pd->qt = c;
-	else if (pd->qt && c == pd->qt)
-		pd->qt = 0;
-}
-
 static int
-	tokenizeword(char *input, t_list **atoken, t_parsedata *pd)
+	operatorsanity(t_list *token)
 {
-	pd->l--;
-	if (addword(atoken, &input[pd->i - pd->l], pd->l) == -1)
-		return (-1);
-	if (addmetachar(atoken, &input[pd->i]) == -1)
-		return (-1);
-	while (ismetachar(input[pd->i]))
-		pd->i++;
-	pd->l = 0;
+	t_list	*current;
+
+	current = token;
+	while (current)
+	{
+		if (gettokentype(current) == OPERATOR && !isvalidoperator(current))
+			return (-1);
+		current = current->next;
+	}
 	return (0);
 }
 
 static void
-	initparsedata(t_parsedata *pd)
+	*errorparse(t_list **token)
 {
-	pd->i = 0;
-	pd->l = 0;
-	pd->qt = 0;
+	ft_lstclear(token, deltoken);
+	puterror(ERROR_PARSE);
+	g_exitstatus = EXIT_STAT_ERRORPARSE;
+	return (NULL);
 }
 
 t_list
-	*tokenize(char *input)
+	*parse_token(char *input)
 {
 	t_list			*r;
-	t_parsedata		pd;
+	unsigned int	s;
+	int				i;
+	size_t			l;
+	int				qt;
 
+	r = NULL;
+	s = 0;
+	i = 0;
+	l = 1;
+	qt = 0;
 	if (!input)
 		return (NULL);
-	r = NULL;
-	initparsedata(&pd);
-	while (input[pd.i])
+	while (input[i])
 	{
-		pd.l++;
-		if (pd.i > 0 && (input[pd.i - 1] != '\\' || pd.qt == '\''))
-			quote(&pd, input[pd.i]);
-		if (!pd.qt && ismetachar(input[pd.i]))
+		if (!qt && isquote(input[i]))
+			qt = input[i];
+		else if (qt && qt == input[i])
+			qt = 0;
+		if (input[i] == '\\')
 		{
-			if (tokenizeword(input, &r, &pd) == -1)
-				return (error(strerror(errno)));
+			if (!input[i + 1])
+				return (errorparse(&r));
+			i += 2;
+			l += 2;
+			continue ;
+		}
+		if (!qt && ismetachar(input[i]))
+		{
+			if (addtoken(&r, input, s, l - 1, WORD) == -1)
+				return (NULL); // clear all that shit
+			l = 0;
+			s = i;
+			while (ismetachar(input[i]))
+			{
+				i++;
+				l++;
+			}
+			if (addtoken(&r, input, s, l, OPERATOR) == -1)
+				return (NULL);
+			s = i;
+			l = 1;
 		}
 		else
-			pd.i++;
+		{
+			i++;
+			l++;
+		}
 	}
-	if (addword(&r, &input[pd.i - pd.l], pd.l) == -1)
-		return (error(strerror(errno)));
+	if (addtoken(&r, input, s, l - 1, WORD) == -1)
+		return (NULL);
+	if (operatorsanity(r) == -1
+	|| (gettokentype(r) == OPERATOR && ispipeorsemicolon(r)))
+		return (errorparse(&r));
 	return (r);
 }

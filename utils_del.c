@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 14:12:51 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/01 10:06:45 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/08 16:02:05 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ void
 	t_command	*command;
 
 	command = p;
-	free(command->cmd);
-	ft_cafree(command->argv);
+	ft_lstclear(&command->argv, deltoken);
 	ft_lstclear(&command->redirections, delredir);
 	free(command);
 }
@@ -51,6 +50,6 @@ void
 	t_redir	*redir;
 
 	redir = p;
-	free(redir->fd_str);
+	deltoken(redir->fd_str);
 	free(redir);
 }

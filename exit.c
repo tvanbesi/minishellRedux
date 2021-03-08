@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 14:35:01 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/02 16:35:09 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/08 19:14:56 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,30 +32,34 @@ static void
 }
 
 int
-	exitshell(char **argv, t_list **aenv)
+	exitshell(t_list *argv, t_list **aenv)
 {
-	int	i;
-	int	s;
+	int		s;
+	int		i;
+	t_list	*current;
+	char	*arg;
 
 	(void)aenv;
-	if (!argv[0])
+	current = argv;
+	if (!current)
 		exit(g_exitstatus);
+	arg = gettokenstr(argv);
 	i = 0;
 	s = 1;
-	if (argv[0][i] == '-' || argv[0][i] == '+')
-		if (argv[0][i++] == '-')
+	if (arg[i] == '-' || arg[i] == '+')
+		if (arg[i++] == '-')
 			s = -1;
-	argsanity(s, &argv[0][i]);
-	while (argv[0][i])
-		if (!(ft_isdigit(argv[0][i++])))
+	argsanity(s, &arg[i]);
+	while (arg[i])
+		if (!(ft_isdigit(arg[i++])))
 		{
 			puterror(ERROR_NAN);
 			exit(EXIT_STAT_ERRORPARSE);
 		}
-	if (argv[1])
+	if (current->next)
 	{
 		puterror(ERROR_TOO_MANY_ARG);
 		return (-1);
 	}
-	exit((unsigned)ft_atoi(argv[0]));
+	exit((unsigned)ft_atoi(arg));
 }

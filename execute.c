@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 18:06:35 by user42            #+#    #+#             */
-/*   Updated: 2021/03/02 18:21:49 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/08 23:12:33 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,17 @@ static void
 void
 	cyclecommand(t_list *command, t_shell *shell)
 {
+	int	r;
+
 	while (command && !shell->exit)
 	{
 		if (getcommandtype(command) == SIMPLE)
 		{
-			if (expand(command, shell->env) == -1)
-				puterror(strerror(errno));
+			if ((r = expandcommand(command, shell->env)) < 0)
+			{
+				if (r == -1)
+					puterror(strerror(errno));
+			}
 			else
 				execute(command, shell);
 		}

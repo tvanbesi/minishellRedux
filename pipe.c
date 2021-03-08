@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 12:09:27 by user42            #+#    #+#             */
-/*   Updated: 2021/03/02 05:43:47 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/08 19:33:17 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,17 @@ static int
 static void
 	pipecommand(t_list *command, t_shell *shell, int n)
 {
+	int	r;
+
 	while (--n > 0)
 		command = command->next;
-	if (expand(command, shell->env) == -1)
-		puterror(strerror(errno));
-	execute(command, shell);
+	if ((r = expandcommand(command, shell->env)) < 0)
+	{
+		if (r == -1)
+			puterror(strerror(errno));
+	}
+	else
+		execute(command, shell);
 }
 
 static int

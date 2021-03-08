@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/03 14:22:32 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/08 22:38:31 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 
 # define ERROR_NOCMD				"Command not found"
 # define ERROR_PARSE				"Parse error"
+# define ERROR_BADREDIR				"Ambiguous redirect"
 # define ERROR_TOO_MANY_ARG			"Too many arguments"
 # define ERROR_NOT_ENOUGH_ARG		"Not enough arguments"
 # define ERROR_NAN					"Numeric argument required"
@@ -127,7 +128,7 @@ typedef enum		e_redirtype
 typedef struct		s_redir
 {
 	int				type;
-	char			*fd_str;
+	t_token			*fd_str;
 }					t_redir;
 
 typedef	enum		e_commandtype
@@ -139,8 +140,7 @@ typedef	enum		e_commandtype
 typedef	struct		s_command
 {
 	int				type;
-	char			*cmd;
-	char			**argv;
+	t_list			*argv;
 	t_list			*redirections;
 }					t_command;
 
@@ -155,7 +155,7 @@ typedef	struct		s_shell
 	t_list			*env;
 	int				stdincpy;
 	int				stdoutcpy;
-	int				(*b[7])(char **argv, t_list **aenv);
+	int				(*b[7])(t_list *argv, t_list **aenv);
 	int				exit;
 }					t_shell;
 
@@ -174,9 +174,11 @@ void				showcommand(void *p);
 
 char				*readstdin(void);
 int					prompt(char **line);
-int					expand(t_list *command, t_list *env);
+int					expandcommand(t_list *command, t_list *env);
+char				*expand(char *s, t_list *env);
 t_list				*tokenize(char *input);
-t_list				*makecommands(t_list *tokens);
+t_list				*parse_token(char *input);
+t_list				*parse_command(t_list *token);
 int					isidentifiervalid(char *s);
 int					shouldescape(int c1, int c2, int q);
 int					shouldexpand(int c1, int c2, int q);
@@ -185,11 +187,12 @@ int					shouldexpand(int c1, int c2, int q);
 ***	TOKENS
 */
 
-int					addword(t_list **atoken, const char *input, size_t l);
-int					addmetachar(t_list **atoken, const char *input);
+t_list				*newtoken(int type);
+int					addtoken(t_list **atoken, const char *input, unsigned int s, size_t l, int type);
+t_token				*tokendup(void *p);
 char				*getidentifier(char *s, t_list *env);
 size_t				getidlen(char *s, t_list *env);
-char				*unquote(char *s, t_list *env);
+//char				*unquote(char *s, t_list *env);
 int					gettokentype(t_list *token);
 char				*gettokenstr(t_list *token);
 int					gettokencommandtype(t_list *token);
@@ -211,12 +214,13 @@ void				assigncmd(t_list *token, t_list *command);
 int					assignargv(t_list *token, t_list *command);
 int					getcommandtype(t_list *command);
 int					getargc(char **argv);
+char				*getcmd(t_list *command);
 t_list				*getcommandredir(t_list *command);
 int					getredirtype(t_list *redir);
+t_token				*getredirtoken(t_list *redir);
 char				*getredirstr(t_list *redir);
-char				*getcmd(t_list *command);
-char				**getcommandargv(t_list *command);
-char				**getprocessargv(char **argv, char *path);
+t_list				*getcommandargv(t_list *command);
+char				**getprocessargv(t_list *argv, char *path);
 t_list				*newcommand(int type);
 t_list				*newredir(char *s);
 void				delcommand(void *p);
@@ -267,14 +271,14 @@ void				sigquit(int n);
 ***	BUILTINS
 */
 
-int					cd(char **argv, t_list **aenv);
+int					cd(t_list *argv, t_list **aenv);
 int					setpwdenv(t_list **aenv, char *cd_arg);
-int					echo(char **argv, t_list **aenv);
-int					pwd(char **argv, t_list **aenv);
-int					env(char **argv, t_list **aenv);
-int					export(char **argv, t_list **aenv);
-int					unset(char **argv, t_list **aenv);
-int					exitshell(char **argv, t_list **aenv);
+int					echo(t_list *argv, t_list **aenv);
+int					pwd(t_list *argv, t_list **aenv);
+int					env(t_list *argv, t_list **aenv);
+int					export(t_list *argv, t_list **aenv);
+int					unset(t_list *argv, t_list **aenv);
+int					exitshell(t_list *argv, t_list **aenv);
 
 /*
 ***	ERROR

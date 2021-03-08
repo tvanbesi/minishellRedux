@@ -6,23 +6,40 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 16:25:49 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/02 18:19:13 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/08 22:45:38 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+t_token
+	*tokendup(void *p)
+{
+	t_token	*r;
+	t_token	*content;
+
+	if (!(r = malloc(sizeof(*r))))
+		return (NULL);
+	content = p;
+	r->type = content->type;
+	if (!(r->s = ft_strdup(content->s)))
+	{
+		free(r);
+		return (NULL);
+	}
+	return (r);
+}
+
 int
 	isquote(int c)
 {
-	return (c == 34 || c == 39);
+	return (c == '\'' || c == '\"');
 }
 
 int
 	ismetachar(int c)
 {
-	return (c == ' ' || c == '\t' || c == ';'
-	|| c == '<' || c == '>' || c == '|');
+	return (c == ' ' || c == '\t' || isoperator(c));
 }
 
 int

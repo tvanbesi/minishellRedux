@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 18:50:51 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/02 03:44:34 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/08 19:12:18 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,20 @@ void
 }
 
 int
-	unset(char **argv, t_list **aenv)
+	unset(t_list *argv, t_list **aenv)
 {
-	int	i;
-	int	r;
+	int		i;
+	int		r;
+	char	*arg;
 
 	i = 0;
 	r = 0;
-	while (argv[i])
+	while (argv)
 	{
-		if (!isidentifiervalid(argv[i]) || ft_strchr(argv[i], '='))
+		arg = gettokenstr(argv);
+		if (!isidentifiervalid(arg) || ft_strchr(arg, '='))
 		{
-			if (argv[i][0] == '-' && i == 0)
+			if (arg[0] == '-' && i == 0)
 			{
 				puterror(ERROR_INVALID_OPTION);
 				return (-2);
@@ -59,7 +61,8 @@ int
 				puterror(ERROR_INVALID_IDENTIFIER);
 			}
 		}
-		removeenv(aenv, argv[i++]);
+		removeenv(aenv, arg);
+		argv = argv->next;
 	}
 	return (r);
 }

@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:24:09 by user42            #+#    #+#             */
-/*   Updated: 2021/03/02 06:37:51 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/08 19:21:57 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,28 +72,30 @@ static int
 int
 	commandsanity(t_list *command, t_shell *shell)
 {
-	t_command	*content;
+	t_list		*token;
 	int			r;
 	t_list		*pathenv;
 	char		**paths;
 
-	content = command->content;
-	if (!content->cmd)
+	token = getcommandargv(command);
+	while (token && !ft_strlen(gettokenstr(token)))
+		token = token->next;
+	if (!token)
 		return (EMPTY);
-	if (!ft_strncmp(content->cmd, ".", 2) || !ft_strncmp(content->cmd, "..", 3))
+	if (!ft_strncmp(gettokenstr(token), ".", 2) || !ft_strncmp(gettokenstr(token), "..", 3))
 		return (NOCMD);
-	if (!ft_strchr(content->cmd, '/') && !ishiddenfile(content->cmd))
+	if (!ft_strchr(gettokenstr(token), '/') && !ishiddenfile(gettokenstr(token)))
 	{
-		if ((r = builtinsanity(content->cmd)))
+		if ((r = builtinsanity(gettokenstr(token))))
 			return (r);
 		if (!(pathenv = findenv(shell->env, "PATH")))
-			return (filesanity(content->cmd));
+			return (filesanity(gettokenstr(token)));
 		if (!(paths = ft_split(getenvval(pathenv), ':')))
 			return (-1);
-		r = findexec(content->cmd, paths, &content->cmd);
+		r = findexec(gettokenstr(token), paths, &((t_token*)token->content)->s);
 		ft_cafree(paths);
-		return (ret(r, content->cmd));
+		return (ret(r, gettokenstr(token)));
 	}
 	else
-		return (filesanity(content->cmd));
+		return (filesanity(gettokenstr(token)));
 }

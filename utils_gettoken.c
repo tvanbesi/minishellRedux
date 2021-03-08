@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 10:29:31 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/01 09:55:01 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/07 22:06:29 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,7 @@ int
 			return (SIMPLE);
 		else if (!ft_strncmp(content->s, "|", 2))
 			return (PIPE);
-		token = token->next;
-		token = nextoperator(token);
+		token = nextoperator(token->next);
 	}
 	if (!token)
 		return (SIMPLE);

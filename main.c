@@ -1,4 +1,5 @@
 /* ************************************************************************** */
+
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
@@ -6,7 +7,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 11:12:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/03 14:07:33 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/08 19:50:10 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +30,8 @@ static void
 {
 	int		quit;
 	char	*input;
-	t_list	*token;
-	t_list	*command;
+	t_list	*token = NULL;
+	t_list	*command = NULL;
 
 	quit = 0;
 	input = NULL;
@@ -46,8 +47,10 @@ static void
 			puterror(strerror(errno));
 		dup2(shell->stdincpy, STDIN);
 		dup2(shell->stdoutcpy, STDOUT);
-		token = tokenize(input);
-		command = makecommands(token);
+		token = parse_token(input);
+		//ft_lstiter(token, showtoken);
+		command = parse_command(token);
+		//ft_lstiter(command, showcommand);
 		cyclecommand(command, shell);
 		freedata(&input, &token, &command);
 	}

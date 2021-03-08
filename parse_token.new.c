@@ -1,27 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_quoting.c                                    :+:      :+:    :+:   */
+/*   parse_token.new.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/03 14:16:22 by user42            #+#    #+#             */
-/*   Updated: 2021/03/03 15:59:21 by user42           ###   ########.fr       */
+/*   Created: 2021/03/03 17:41:23 by user42            #+#    #+#             */
+/*   Updated: 2021/03/03 17:51:32 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int
-	shouldescape(int c1, int c2, int q)
+static char
+	*getword(char *input)
 {
-	return (c1 == '\\' && (!q || (q == '\"' && (c2 == '$' || isquote(c2)))));
+	int		i;
+
+	i = 0;
+	while (input[i])
+	{
+		if (ismetachar(input[i]))
+			return (ft_substr(input, 0, i));
+		i++;
+	}
+	return (ft_strdup(input));
 }
 
-int
-	shouldexpand(int c1, int c2, int q)
+t_list
+	*parse_token(char *input)
 {
-	return (c1 == '$'
-	&& ((q != '\'' && (ft_isalnum(c2) || c2 == '_' || c2 == '?'))
-	|| (!q && c2 == '\"')));
+	t_list	*r;
+	int		i;
+
+	if (!input)
+		return (NULL);
+	r = NULL;
+	i = 0;
+	while (input[i])
+	{
+		
+		i++;
+	}
+	return (r);
 }

@@ -6,29 +6,13 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 10:34:27 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/02 19:53:57 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/08 14:56:32 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_list
-	*newcommand(int type)
-{
-	t_list		*command;
-	t_command	*content;
-
-	if (!(content = malloc(sizeof(*content))))
-		return (NULL);
-	content->type = type;
-	content->cmd = NULL;
-	content->argv = NULL;
-	content->redirections = NULL;
-	if (!(command = ft_lstnew(content)))
-		free(content);
-	return (command);
-}
-
+/*
 void
 	assigncmd(t_list *token, t_list *command)
 {
@@ -70,26 +54,27 @@ static int
 	}
 	return (r);
 }
-
+*/
 static int
-	tokentoargv(int argc, t_list *current, char **argv)
+	tokentoargv(t_list *current, t_list **argv)
 {
-	int	i;
+	t_list	*token;
+	t_token	*content;
 
-	i = 0;
-	while (i < argc)
+	while (current && !(gettokentype(current) == OPERATOR && ispipeorsemicolon(current)))
 	{
 		if (gettokentype(current) == OPERATOR && isrediroperator(current))
 			current = current->next;
-		else
+		else if (gettokentype(current) == WORD)
 		{
-			if (gettokentype(current) == WORD && gettokenstr(current))
-				argv[i] = ft_strdup(gettokenstr(current));
-			if (argv[i++] == NULL)
+			if (!(content = tokendup(current->content)))
+				return (-1);
+			if (!(token = ft_lstnew(content)))
 			{
-				ft_cafree(argv);
+				free(content);
 				return (-1);
 			}
+			ft_lstadd_back(argv, token);
 		}
 		current = current->next;
 	}
@@ -99,18 +84,12 @@ static int
 int
 	assignargv(t_list *token, t_list *command)
 {
-	char		**argv;
-	int			argc;
-	t_list		*current;
+	t_list		*argv;
 	t_command	*commandcontent;
 
 	commandcontent = command->content;
-	current = token;
-	argc = countargv(current);
-	if (!(argv = ft_calloc(argc + 1, sizeof(*argv))))
-		return (-1);
-	argv[argc] = NULL;
-	if (tokentoargv(argc, current, argv) == -1)
+	argv = NULL;
+	if (tokentoargv(token, &argv) == -1)
 		return (-1);
 	commandcontent->argv = argv;
 	return (0);

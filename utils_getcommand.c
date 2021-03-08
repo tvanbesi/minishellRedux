@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 18:15:49 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/02 17:37:05 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/08 19:39:33 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,16 @@ int
 char
 	*getcmd(t_list *command)
 {
-	t_command	*content;
+	t_list		*argv;
+	t_token		*content;
 
-	content = command->content;
-	return (content->cmd);
+	argv = getcommandargv(command);
+	content = argv->content;
+	return (content->s);
 }
 
-char
-	**getcommandargv(t_list *command)
+t_list
+	*getcommandargv(t_list *command)
 {
 	t_command	*content;
 
@@ -46,17 +48,4 @@ t_list
 
 	content = command->content;
 	return (content->redirections);
-}
-
-int
-	getargc(char **argv)
-{
-	int	r;
-
-	if (!argv)
-		return (0);
-	r = 0;
-	while (*argv++)
-		r++;
-	return (r);
 }

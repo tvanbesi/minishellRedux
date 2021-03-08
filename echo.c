@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:13:32 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/02 20:32:12 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/08 23:02:13 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,20 +46,24 @@ static int
 }
 
 int
-	echo(char **argv, t_list **aenv)
+	echo(t_list *argv, t_list **aenv)
 {
 	int			nl;
-	int			i;
+	t_list		*current;
 
 	(void)aenv;
-	i = 0;
-	while (isvalidoption(argv[i]))
-		nl = optionnl(argv[i++]);
-	while (argv[i])
+	current = argv;
+	nl = 1;
+	while (current && isvalidoption(gettokenstr(current)))
 	{
-		write(STDOUT, argv[i], ft_strlen(argv[i]));
-		i++;
-		if (argv[i])
+		nl = optionnl(gettokenstr(current));
+		current = current->next;
+	}
+	while (current)
+	{
+		write(STDOUT, gettokenstr(current), ft_strlen(gettokenstr(current)));
+		current = current->next;
+		if (current)
 			write(STDOUT, " ", 1);
 	}
 	if (nl)

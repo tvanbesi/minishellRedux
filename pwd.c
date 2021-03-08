@@ -6,14 +6,14 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:54:38 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/02 02:35:25 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/08 19:02:45 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int
-	pwd(char **argv, t_list **aenv)
+	pwd(t_list *argv, t_list **aenv)
 {
 	char		*cwd;
 	t_list		*env;

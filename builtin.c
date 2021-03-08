@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 16:29:47 by user42            #+#    #+#             */
-/*   Updated: 2021/03/02 03:32:39 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/08 18:30:21 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 void
 	builtin(t_list *command, t_shell *shell, int csanity)
 {
-	char	**argv;
+	t_list	*argv;
 	int		r;
 
 	argv = getcommandargv(command);
+	argv = argv->next;
 	if (csanity == EXITSHELL)
 		shell->exit = 1;
 	csanity -= BUILTIN_START + 1;

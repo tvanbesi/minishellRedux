@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:07:04 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/02 16:31:20 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/08 18:59:29 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,24 +58,26 @@ static int
 }
 
 int
-	cd(char **argv, t_list **aenv)
+	cd(t_list *argv, t_list **aenv)
 {
 	char		*path;
 	char		*cd_arg;
+	t_list		*current;
 
 	path = NULL;
 	cd_arg = NULL;
-	if (!argv[0])
+	current = argv;
+	if (!current)
 	{
 		if (findhome(&path, aenv) < 0)
 			return (findhome(&path, aenv));
 	}
-	else if (argv[1])
+	else if (current->next)
 	{
 		puterror(ERROR_TOO_MANY_ARG);
 		return (-1);
 	}
-	else if (setpath(&path, &cd_arg, argv[0]) == -1)
+	else if (setpath(&path, &cd_arg, gettokenstr(current)) == -1)
 		return (-1);
 	if (chdir(path) == -1)
 		return (-1);

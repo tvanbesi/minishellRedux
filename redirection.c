@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/15 11:17:08 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/02 18:21:29 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/08 18:14:59 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,9 @@ static int
 static int
 	skipfiles(int fd[2], t_list *command)
 {
-	t_command	*commandcontent;
 	t_list		*current;
 
-	commandcontent = command->content;
-	current = commandcontent->redirections;
+	current = getcommandredir(command);
 	while (current)
 	{
 		if (openmode(fd, getredirtype(current), getredirstr(current)) == -1)
@@ -52,13 +50,11 @@ int
 	redirect(t_list *command)
 {
 	int			fd[2];
-	t_command	*commandcontent;
 
 	fd[0] = -1;
 	fd[1] = -1;
 	if (skipfiles(fd, command) == -1)
 		return (-1);
-	commandcontent = command->content;
 	if (fd[0] != -1)
 	{
 		dup2(fd[0], STDIN);

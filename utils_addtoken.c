@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils_addtoken.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/16 07:27:17 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/02/13 15:40:52 by user42           ###   ########.fr       */
+/*   Created: 2021/03/07 21:28:29 by user42            #+#    #+#             */
+/*   Updated: 2021/03/08 22:43:09 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_list
+t_list
 	*newtoken(int type)
 {
 	t_list	*token;
@@ -28,66 +28,39 @@ static t_list
 }
 
 int
-	addword(t_list **atoken, const char *input, size_t l)
+	addtoken(t_list **atoken, const char *input, unsigned int s, size_t l, int type)
 {
 	t_list	*token;
 	t_token	*content;
-	char	*s;
+	char	*str;
+	char	*tmp;
 
 	if (l)
 	{
-		if (!(s = ft_substr(input, 0, l)))
+		if (!(str = ft_substr(input, s, l)))
 			return (-1);
-		if (!(token = newtoken(WORD)))
+		if (!(token = newtoken(type)))
 		{
-			free(s);
+			free(str);
 			return (-1);
 		}
 		content = token->content;
-		content->s = s;
-		ft_lstadd_back(atoken, token);
-	}
-	return (0);
-}
-
-static void
-	initparsedata(t_parsedata *pd)
-{
-	pd->i = 0;
-	pd->l = 0;
-}
-
-static void
-	incrementparsedata(t_parsedata *pd)
-{
-	pd->i++;
-	pd->l++;
-}
-
-int
-	addmetachar(t_list **atoken, const char *input)
-{
-	t_list			*token;
-	char			*s;
-	t_parsedata		pd;
-
-	initparsedata(&pd);
-	while (ismetachar(input[pd.i]))
-	{
-		if (ft_isspht(input[pd.i]))
-			pd.i++;
-		else if (isoperator(input[pd.i]))
+		if (type == OPERATOR)
 		{
-			if (!(token = newtoken(OPERATOR)))
+			tmp = str;
+			str = ft_strtrim(str, " \t");
+			free(tmp);
+			if (!str)
+			{
+				ft_lstdelone(token, deltoken);
 				return (-1);
-			while (isoperator(input[pd.i]))
-				incrementparsedata(&pd);
-			if (!(s = ft_substr(input, pd.i - pd.l, pd.l)))
-				return (-1);
-			((t_token*)token->content)->s = s;
-			ft_lstadd_back(atoken, token);
-			pd.l = 0;
+			}
 		}
+		content->s = str;
+		if (ft_strlen(str))
+			ft_lstadd_back(atoken, token);
+		else
+			ft_lstdelone(token, deltoken);
 	}
 	return (0);
 }

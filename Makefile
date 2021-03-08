@@ -22,7 +22,6 @@ SRCS		=	debug.c \
 				process.c \
 				prompt.c \
 				pwd.c \
-				quoting.c \
 				readstdin.c \
 				redirection.c \
 				signal.c \
