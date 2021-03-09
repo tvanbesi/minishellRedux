@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 17:01:08 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 16:58:24 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 00:11:14 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,31 @@ static void
 	shell->b[6] = exitshell;
 }
 
+static int
+	initpwd(t_list **aenv)
+{
+	t_list	*env;
+	char	*newenv;
+	char	*cwd;
+
+	newenv = NULL;
+	if (!(env = findenv(*aenv, "PWD")) || !getenvval(env))
+	{
+		if (!(cwd = getcwd(NULL, 0)))
+			return (-1);
+		newenv = ft_strjoin("PWD=", cwd);
+		if (newenv)
+			addenv(aenv, newenv);
+		free(newenv);
+		if (errno != 0)
+		{
+			puterror(strerror(errno));
+			return (-1);
+		}
+	}
+	return (0);
+}
+
 t_shell
 	*initshell(char **envp)
 {
@@ -65,6 +90,8 @@ t_shell
 			if (addenv(&shell->env, *envp++) == -1)
 				return (NULL);
 	if (setshlvl(&shell->env) == -1)
+		return (NULL);
+	if (initpwd(&shell->env) == -1)
 		return (NULL);
 	shell->stdincpy = dup(STDIN);
 	shell->stdoutcpy = dup(STDOUT);
