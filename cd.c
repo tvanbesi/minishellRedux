@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:07:04 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/09 21:19:38 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 00:36:36 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int
 	if (!argv)
 	{
 		if (findhome(&path, aenv) < 0)
-			return (findhome(&path, aenv));
+			return (-1);
 	}
 	else if (argv->next)
 		return (toomanyarg());
