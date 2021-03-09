@@ -6,90 +6,74 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/07 17:40:07 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 16:30:12 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 22:31:41 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static void
-	*errorparse(t_list **token)
+	quote(int *qt, int c)
 {
-	ft_lstclear(token, deltoken);
-	puterror(ERROR_PARSE);
-	g_exitstatus = EXIT_STAT_ERRORPARSE;
-	return (NULL);
+	if (!*qt && isquote(c))
+		*qt = c;
+	else if (*qt && *qt == c)
+		*qt = 0;
+}
+
+static int
+	escape(char *input, t_parsedata *pd)
+{
+	if (input[pd->i] == '\\')
+	{
+		if (!input[pd->i + 1])
+			return (-1);
+		pd->i += 2;
+		pd->l += 2;
+	}
+	return (0);
 }
 
 static void
-	*fail(t_list **token)
+	initparsedata(t_parsedata *pd)
 {
-	ft_lstclear(token, deltoken);
-	puterror(strerror(errno));
-	g_exitstatus = EXIT_STAT_FAIL;
-	return (NULL);
+	pd->s = 0;
+	pd->i = 0;
+	pd->l = 1;
+	pd->qt = 0;
+}
+
+static void
+	inc(t_parsedata *pd)
+{
+	pd->i++;
+	pd->l++;
 }
 
 t_list
 	*parse_token(char *input)
 {
 	t_list			*r;
-	unsigned int	s;
-	int				i;
-	size_t			l;
-	int				qt;
+	t_parsedata		pd;
 
 	r = NULL;
-	s = 0;
-	i = 0;
-	l = 1;
-	qt = 0;
+	initparsedata(&pd);
 	if (!input)
 		return (NULL);
-	while (input[i])
+	while (input[pd.i])
 	{
-		if (!qt && isquote(input[i]))
-			qt = input[i];
-		else if (qt && qt == input[i])
-			qt = 0;
-		if (input[i] == '\\')
+		quote(&pd.qt, input[pd.i]);
+		if (escape(input, &pd) == -1)
+			return (errorparse(&r));
+		else if (!pd.qt && ismetachar(input[pd.i]))
 		{
-			if (!input[i + 1])
-				return (errorparse(&r));
-			i += 2;
-			l += 2;
-		}
-		else if (!qt && ismetachar(input[i]))
-		{
-			if (addtoken(&r, &input[s], l - 1, WORD) == -1)
+			if (addword(&r, input, &pd) == -1)
 				return (fail(&r));
-			l = 0;
-			while (ismetachar(input[i]))
-			{
-				while (ft_isspht(input[i]))
-					i++;
-				s = i;
-				while (isoperator(input[i]))
-				{
-					i++;
-					l++;
-				}
-				if (addtoken(&r, &input[s], l, OPERATOR) == -1)
-					return (fail(&r));
-				while (ft_isspht(input[i]))
-					i++;
-				s = i;
-				l = 0;
-			}
-			l = 1;
 		}
 		else
-		{
-			i++;
-			l++;
-		}
+			inc(&pd);
 	}
-	if (addtoken(&r, &input[s], l - 1, WORD) == -1)
+	if (addtoken(&r, &input[pd.s], pd.l - 1, WORD) == -1)
 		return (fail(&r));
 	if (operatorsanity(r) == -1)
 		return (errorparse(&r));

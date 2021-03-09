@@ -38,6 +38,7 @@ SRCS		=	builtin.c \
 				utils_del.c \
 				utils_env.c \
 				utils_expand.c \
+				utils_parsing.c \
 				utils_quoting.c \
 				utils_fd.c \
 				utils_getcommand.c \
