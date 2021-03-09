@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/07 17:40:07 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 15:33:14 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 16:30:12 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ t_list
 		}
 		else if (!qt && ismetachar(input[i]))
 		{
-			if (addtoken(&r, input, s, l - 1, WORD) == -1)
+			if (addtoken(&r, &input[s], l - 1, WORD) == -1)
 				return (fail(&r));
 			l = 0;
 			while (ismetachar(input[i]))
@@ -74,7 +74,7 @@ t_list
 					i++;
 					l++;
 				}
-				if (addtoken(&r, input, s, l, OPERATOR) == -1)
+				if (addtoken(&r, &input[s], l, OPERATOR) == -1)
 					return (fail(&r));
 				while (ft_isspht(input[i]))
 					i++;
@@ -89,7 +89,7 @@ t_list
 			l++;
 		}
 	}
-	if (addtoken(&r, input, s, l - 1, WORD) == -1)
+	if (addtoken(&r, &input[s], l - 1, WORD) == -1)
 		return (fail(&r));
 	if (operatorsanity(r) == -1)
 		return (errorparse(&r));

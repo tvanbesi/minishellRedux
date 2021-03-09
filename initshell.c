@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 17:01:08 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 16:03:19 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 16:58:24 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ t_shell
 	g_pid = 0;
 	if (!(shell = malloc(sizeof(*shell))))
 		return (NULL);
+	shell->env = NULL;
 	if (envp)
 		while (*envp)
 			if (addenv(&shell->env, *envp++) == -1)

@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/09 16:26:31 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 16:31:16 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,7 @@ int					operatorsanity(t_list *token);
 */
 
 t_list				*newtoken(int type);
-int					addtoken(t_list **atoken, const char *input, unsigned int s, size_t l, int type);
+int					addtoken(t_list **atoken, const char *input, size_t l, int type);
 t_token				*tokendup(void *p);
 char				*getidentifier(char *s, t_list *env);
 size_t				getidlen(char *s, t_list *env);

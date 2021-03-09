@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/07 21:28:29 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 01:15:48 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 16:37:50 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,32 @@ t_list
 	return (token);
 }
 
+static int
+	trimoperator(char **str, t_list *token)
+{
+	char	*tmp;
+
+	tmp = *str;
+	*str = ft_strtrim(*str, " \t");
+	free(tmp);
+	if (!*str)
+	{
+		ft_lstdelone(token, deltoken);
+		return (-1);
+	}
+	return (0);
+}
+
 int
-	addtoken(t_list **atoken, const char *input, unsigned int s, size_t l, int type)
+	addtoken(t_list **atoken, const char *input, size_t l, int type)
 {
 	t_list	*token;
 	t_token	*content;
 	char	*str;
-	char	*tmp;
 
 	if (l)
 	{
-		if (!(str = ft_substr(input, s, l)))
+		if (!(str = ft_substr(input, 0, l)))
 			return (-1);
 		if (!(token = newtoken(type)))
 		{
@@ -45,17 +60,8 @@ int
 			return (-1);
 		}
 		content = token->content;
-		if (type == OPERATOR)
-		{
-			tmp = str;
-			str = ft_strtrim(str, " \t");
-			free(tmp);
-			if (!str)
-			{
-				ft_lstdelone(token, deltoken);
-				return (-1);
-			}
-		}
+		if (type == OPERATOR && trimoperator(&str, token) == -1)
+			return (-1);
 		content->s = str;
 		if (ft_strlen(str))
 			ft_lstadd_back(atoken, token);

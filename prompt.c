@@ -6,25 +6,42 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:15:05 by user42            #+#    #+#             */
-/*   Updated: 2021/03/03 12:43:57 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 17:18:40 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int
+	extendline(char **line, int lfactor)
+{
+	char	*tmp;
+
+	tmp = *line;
+	if ((*line = malloc(BUFFER_SIZE * lfactor + 1)))
+		ft_strlcpy(*line, tmp, BUFFER_SIZE * lfactor + 1);
+	free(tmp);
+	if (!*line)
+		return (-1);
+	return (0);
+}
 
 int
 	prompt(char **line)
 {
 	ssize_t	b;
 	int		i;
+	int		lfactor;
 	char	buf[1];
 
-	if (!(*line = malloc(BUFFER_SIZE)))
+	lfactor = 1;
+	if (!(*line = malloc(BUFFER_SIZE * lfactor + 1)))
 		return (-1);
 	i = 0;
 	while ((b = read(STDIN, buf, 1)) > 0)
 	{
-		//Extend when necessary
+		if (i == BUFFER_SIZE * lfactor && extendline(line, ++lfactor) == -1)
+			return (-1);
 		if (buf[0] == '\n')
 			break ;
 		(*line)[i++] = buf[0];
@@ -35,7 +52,6 @@ int
 		write(STDERR, "exit", 4);
 		exit(g_exitstatus);
 	}
-	if (b == -1)
-		return (-1);
-	return (0);
+	b = b == -1 ? b : 0;
+	return (b);
 }

@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 12:09:27 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 13:35:38 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 17:04:20 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,8 @@ int
 		if (pipe(&fd[(n - 1) * 2]) == -1)
 		{
 			puterror(strerror(errno));
-			closefd(fd, npipe);
+			closefd(fd, n - 1);
+			free(fd);
 			return (0);
 		}
 	if ((g_exitstatus = minipipechildren(command, shell, fd, npipe)) == -1)
