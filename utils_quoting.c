@@ -6,22 +6,20 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/03 14:16:22 by user42            #+#    #+#             */
-/*   Updated: 2021/03/03 15:59:21 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 14:17:44 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int
-	shouldescape(int c1, int c2, int q)
+	shouldescape(int c1, int c2, int qt)
 {
-	return (c1 == '\\' && (!q || (q == '\"' && (c2 == '$' || isquote(c2)))));
+	return (qt != '\'' && c1 == '\\' && !(qt == '\"' && !isspecialchar(c2)));
 }
 
 int
-	shouldexpand(int c1, int c2, int q)
+	shouldexpand(int c, int qt)
 {
-	return (c1 == '$'
-	&& ((q != '\'' && (ft_isalnum(c2) || c2 == '_' || c2 == '?'))
-	|| (!q && c2 == '\"')));
+	return (qt != '\'' && c == '$');
 }

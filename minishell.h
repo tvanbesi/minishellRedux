@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/08 22:38:31 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 14:31:49 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,10 @@ typedef struct		s_unquotedata
 
 typedef struct		s_parsedata
 {
-	unsigned int	i;
-	size_t			l;
-	int				qt;
-	int				escape;
+	int	i;
+	int	j;
+	int	qt;
+	int	idlen;
 }					t_parsedata;
 
 typedef	enum		e_prompt_r
@@ -180,8 +180,8 @@ t_list				*tokenize(char *input);
 t_list				*parse_token(char *input);
 t_list				*parse_command(t_list *token);
 int					isidentifiervalid(char *s);
-int					shouldescape(int c1, int c2, int q);
-int					shouldexpand(int c1, int c2, int q);
+int					shouldescape(int c1, int c2, int qt);
+int					shouldexpand(int c, int qt);
 
 /*
 ***	TOKENS

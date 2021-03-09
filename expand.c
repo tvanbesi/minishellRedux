@@ -6,14 +6,14 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/08 15:48:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 13:27:53 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 14:43:31 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static void
-	expansion(char *dst, char *src, t_list *env, int idlen, int qt)
+	expansion(char *dst, char *src, t_list *env, t_parsedata *pd)
 {
 	char	*strexitstatus;
 	char	*param;
@@ -21,20 +21,17 @@ static void
 	if (src[1] == '?')
 	{
 		strexitstatus = ft_itoa(g_exitstatus);
-		ft_strlcat(dst, strexitstatus, idlen + 1);
+		ft_strlcat(dst, strexitstatus, pd->idlen + 1);
 		free(strexitstatus);
 	}
 	else
 	{
 		if (!ft_isdigit(src[1])
 		&& !(ft_isalpha(src[1]) || src[1] == '_')
-		&& (!src[1] || src[1] == qt || !isquote(src[1])))
-		{
-			ft_strlcat(dst, "$", idlen + 1);
-			return ;
-		}
+		&& (!src[1] || src[1] == pd->qt || !isquote(src[1])))
+			ft_strlcat(dst, "$", pd->idlen + 1);
 		else if ((param = getidentifier(&src[1], env)))
-			ft_strlcat(dst, param, idlen + 1);
+			ft_strlcat(dst, param, pd->idlen + 1);
 	}
 }
 
@@ -65,55 +62,93 @@ char
 	return (NULL);
 }
 
+static void
+	escape(int *i, int *j, char *dst, char *src)
+{
+	(*i)++;
+	dst[*j] = src[*i];
+	(*j)++;
+	(*i)++;
+}
+
+static int
+	nulltoken(int qt, int l, char **s, int c)
+{
+	if (!qt && !l && !c)
+	{
+		free(*s);
+		*s = NULL;
+		return (1);
+	}
+	return (0);
+}
+
+static int
+	quote(int *qt, int c, int *i)
+{
+	if (!*qt && isquote(c))
+	{
+		*qt = c;
+		(*i)++;
+		return (1);
+	}
+	else if (*qt && *qt == c)
+	{
+		*qt = 0;
+		(*i)++;
+		return (1);
+	}
+	return (0);
+}
+
+static void
+	initpd(t_parsedata *pd, int idlen)
+{
+	pd->i = 0;
+	pd->j = 0;
+	pd->qt = 0;
+	pd->idlen = idlen;
+}
+
+static void
+	expand_and_escape(char **dst, char *src, int idlen, t_list *env)
+{
+	t_parsedata	pd;
+
+	initpd(&pd, idlen);
+	while (src[pd.i])
+	{
+		if (quote(&pd.qt, src[pd.i], &pd.i))
+			;
+		else if (shouldescape(src[pd.i], src[pd.i + 1], pd.qt))
+			escape(&pd.i, &pd.j, *dst, src);
+		else if (shouldexpand(src[pd.i], pd.qt))
+		{
+			expansion(*dst, &(src[pd.i++]), env, &pd);
+			if (ft_isdigit(src[pd.i]) || src[pd.i] == '?')
+				pd.i++;
+			else
+				while (ft_isalnum(src[pd.i]) || src[pd.i] == '_')
+					pd.i++;
+			if (nulltoken(pd.qt, ft_strlen(*dst), dst, src[pd.i]))
+				return ;
+			pd.j = ft_strlen(*dst);
+		}
+		else
+			(*dst)[pd.j++] = src[pd.i++];
+	}
+}
+
 int
 	expandtoken(t_token *token, t_list *env)
 {
 	char	*s;
 	size_t	idlen;
-	int		i;
-	int		j;
-	int		qt;
 
 	idlen = getidlen(token->s, env);
 	if (!(s = ft_calloc(idlen + 1, sizeof(char))))
 		return (-1);
-	i = 0;
-	j = 0;
-	qt = 0;
-	while (token->s[i])
-	{
-		if (!qt && isquote(token->s[i]))
-			qt = token->s[i++];
-		else if (qt && qt == token->s[i])
-		{
-			qt = 0;
-			i++;
-		}
-		else if (qt != '\'' && token->s[i] == '\\' && !(qt == '\"' && !isspecialchar(token->s[i + 1])))
-		{
-			s[j++] = token->s[++i];
-			i++;
-		}
-		else if (qt != '\'' && token->s[i] == '$')
-		{
-			expansion(s, &(token->s[i]), env, idlen, qt);
-			i++;
-			if (ft_isdigit(token->s[i]) || token->s[i] == '?')
-				i++;
-			else
-				while (ft_isalnum(token->s[i]) || token->s[i]  == '_')
-					i++;
-			if (!qt && !ft_strlen(s) && !token->s[i])
-			{
-				free(s);
-				s = NULL;
-				break ;
-			}
-			j = ft_strlen(s);
-		}
-		else
-			s[j++] = token->s[i++];
-	}
+	expand_and_escape(&s, token->s, idlen, env);
 	free(token->s);
 	token->s = s;
 	if (!token->s)
@@ -121,21 +156,19 @@ int
 	return (0);
 }
 
-t_list
-	*trimcommand(t_list **argv)
+static t_list
+	*trimcommand(t_list *argv)
 {
 	t_list	*r;
 	t_token	*content;
-	t_list	*current;
 	t_list	*tmp;
 
-	current = *argv;
 	r = NULL;
-	while (current)
+	while (argv)
 	{
-		if (gettokenstr(current))
+		if (gettokenstr(argv))
 		{
-			if (!(content = tokendup(current->content)))
+			if (!(content = tokendup(argv->content)))
 			{
 				ft_lstclear(&r, deltoken);
 				return (NULL);
@@ -148,7 +181,7 @@ t_list
 			}
 			ft_lstadd_back(&r, tmp);
 		}
-		current = current->next;
+		argv = argv->next;
 	}
 	return (r);
 }
@@ -156,7 +189,7 @@ t_list
 static int
 	parse_redir(t_list *current, t_list *env)
 {
-	int	r;
+	int			r;
 	t_redir		*redircontent;
 
 	while (current)
@@ -193,7 +226,7 @@ int
 		current = current->next;
 	}
 	commandcontent = command->content;
-	if (!(current = trimcommand(&commandcontent->argv)))
+	if (!(current = trimcommand(commandcontent->argv)))
 		return (-1);
 	ft_lstclear(&commandcontent->argv, deltoken);
 	commandcontent->argv = current;
