@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/07 23:06:56 by user42            #+#    #+#             */
-/*   Updated: 2021/03/08 21:30:35 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 15:32:55 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int
 }
 
 static int
-	parse_redir(t_list *token, t_list *command)
+	parse_redircmd(t_list *token, t_list *command)
 {
 	t_list		*redir;
 	t_command	*content;
@@ -89,12 +89,11 @@ t_list
 	r = NULL;
 	if (!token)
 		return (NULL);
-
 	while (token)
 	{
 		if (!(command = newcommand(gettokencommandtype(token))))
 			return (NULL);
-		if (parse_redir(token, command) < 0)
+		if (parse_redircmd(token, command) < 0)
 			printf("error redir\n");
 		if (parse_cmd(token, command) < 0)
 			printf("error command parse\n");

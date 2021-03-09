@@ -8,14 +8,17 @@ SRCS		=	debug.c \
 				errorcmd.c \
 				execute.c \
 				exit.c \
-				expand.c \
+				expand_and_escape.c \
+				expandcommand.c \
 				export.c \
 				findexec.c \
+				getidentifier.c \
 				getidlen.c \
 				getprocessargv.c \
 				getenvdata.c \
 				initshell.c \
 				main.c \
+				operatorsanity.c \
 				parse_command.c \
 				parse_token.c \
 				pipe.c \
@@ -33,6 +36,7 @@ SRCS		=	debug.c \
 				utils_commandsanity2.c \
 				utils_del.c \
 				utils_env.c \
+				utils_expand.c \
 				utils_quoting.c \
 				utils_fd.c \
 				utils_getcommand.c \

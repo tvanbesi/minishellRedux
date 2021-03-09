@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/09 14:31:49 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 15:34:12 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,12 @@ t_list				*parse_command(t_list *token);
 int					isidentifiervalid(char *s);
 int					shouldescape(int c1, int c2, int qt);
 int					shouldexpand(int c, int qt);
+void				expansion(char *dst, char *src, t_list *env, t_parsedata *pd);
+void				expand_and_escape(char **dst, char *src, int idlen, t_list *env);
+int					expandtoken(t_token *token, t_list *env);
+t_list				*trimcommand(t_list *argv);
+int					parse_redir(t_list *current, t_list *env);
+int					operatorsanity(t_list *token);
 
 /*
 ***	TOKENS

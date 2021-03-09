@@ -6,14 +6,14 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:49:33 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 01:52:23 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 15:04:20 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static void
-	increment(size_t *r, size_t *i, char *mode)
+	increment(size_t *r, size_t *i, char *mode, char *s)
 {
 	if (!ft_strncmp(mode, "exitstatus", 10))
 	{
@@ -24,6 +24,14 @@ static void
 	{
 		*r += 1;
 		*i += 1;
+	}
+	else if (!ft_strncmp(mode, "param", 6))
+	{
+		if (ft_isdigit(s[*i]))
+			(*i)++;
+		else
+			while (ft_isalnum(s[*i]) || s[*i] == '_')
+				(*i)++;
 	}
 }
 
@@ -41,21 +49,16 @@ size_t
 		if (s[i] == '$')
 		{
 			if (s[i + 1] == '?')
-				increment(&r, &i, "exitstatus");
+				increment(&r, &i, "exitstatus", s);
 			else
 			{
-				if ((param = getidentifier(&s[i + 1], env)))
+				if ((param = getidentifier(&s[++i], env)))
 					r += ft_strlen(param);
-				i++;
-				if (ft_isdigit(s[i]))
-					i++;
-				else
-					while (ft_isalnum(s[i]) || s[i] == '_')
-						i++;
+				increment(&r, &i, "param", s);
 			}
 		}
 		else
-			increment(&r, &i, "default");
+			increment(&r, &i, "default", s);
 	}
 	return (r);
 }
