@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 14:35:01 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/08 19:14:56 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 12:44:48 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,22 @@ static void
 		}
 }
 
+static int
+	toomanyarg(void)
+{
+	puterror(ERROR_TOO_MANY_ARG);
+	return (-1);
+}
+
 int
 	exitshell(t_list *argv, t_list **aenv)
 {
 	int		s;
 	int		i;
-	t_list	*current;
 	char	*arg;
 
 	(void)aenv;
-	current = argv;
-	if (!current)
+	if (!argv)
 		exit(g_exitstatus);
 	arg = gettokenstr(argv);
 	i = 0;
@@ -56,10 +61,7 @@ int
 			puterror(ERROR_NAN);
 			exit(EXIT_STAT_ERRORPARSE);
 		}
-	if (current->next)
-	{
-		puterror(ERROR_TOO_MANY_ARG);
-		return (-1);
-	}
+	if (argv->next)
+		return (toomanyarg());
 	exit((unsigned)ft_atoi(arg));
 }
