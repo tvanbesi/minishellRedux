@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:13:39 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 19:27:58 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 21:24:42 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static int
 {
 	size_t	fullpathlen;
 
+	free(*executable);
 	if (entry->d_type != DT_REG)
 		return (0);
 	fullpathlen = ft_strlen(path) + ft_strlen(entry->d_name) + 2;
@@ -30,6 +31,12 @@ static int
 	ft_strlcat(*executable, "/", fullpathlen);
 	ft_strlcat(*executable, entry->d_name, fullpathlen);
 	return (0);
+}
+
+static int
+	isdirectory(char *d_name, char *filename)
+{
+	return (!ft_strncmp(d_name, filename, ft_strlen(filename) + 1));
 }
 
 int
@@ -45,10 +52,8 @@ int
 		{
 			while ((entry = readdir(stream)))
 			{
-				if (!ft_strncmp(entry->d_name, filename,
-					ft_strlen(filename) + 1))
+				if (isdirectory(entry->d_name, filename))
 				{
-					free(*executable);
 					getexecdata(*paths, stream, executable, entry);
 					r = entry->d_type == DT_REG;
 					if (closedir(stream) == -1)

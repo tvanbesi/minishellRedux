@@ -14,6 +14,7 @@ SRCS		=	debug.c \
 				findexec.c \
 				getidentifier.c \
 				getidlen.c \
+				getpipeexitstatus.c \
 				getprocessargv.c \
 				getenvdata.c \
 				initshell.c \
@@ -22,6 +23,7 @@ SRCS		=	debug.c \
 				parse_command.c \
 				parse_token.c \
 				pipe.c \
+				pipechildren.c \
 				process.c \
 				prompt.c \
 				pwd.c \

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:07:04 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/09 12:40:07 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 21:19:38 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,13 @@ static int
 	return (r);
 }
 
+static int
+	toomanyarg(void)
+{
+	puterror(ERROR_TOO_MANY_ARG);
+	return (-1);
+}
+
 int
 	cd(t_list *argv, t_list **aenv)
 {
@@ -71,14 +78,14 @@ int
 			return (findhome(&path, aenv));
 	}
 	else if (argv->next)
-	{
-		puterror(ERROR_TOO_MANY_ARG);
-		return (-1);
-	}
+		return (toomanyarg());
 	else if (setpath(&path, &cd_arg, gettokenstr(argv)) == -1)
 		return (-1);
 	if (chdir(path) == -1)
+	{
+		free(path);
 		return (-1);
+	}
 	free(path);
 	if (setpwdenv(aenv, cd_arg) == -1)
 		return (-1);
