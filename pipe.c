@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 12:09:27 by user42            #+#    #+#             */
-/*   Updated: 2021/03/08 19:33:17 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 13:35:38 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void
 }
 
 static int
-	getpipeexitstatus(void)
+	getpipeexitstatus(int nchildren)
 {
 	int	pid;
 	int	stat_loc;
@@ -52,8 +52,10 @@ static int
 	int	r;
 
 	pidtmp = 0;
-	while ((pid = wait(&stat_loc)) != -1)
+	while (nchildren-- > 0)
 	{
+		if ((pid = wait(&stat_loc)) == -1)
+			return (-1);
 		if (pid > pidtmp)
 			r = stat_loc;
 		pidtmp = pid;
@@ -91,7 +93,7 @@ static int
 		}
 	}
 	closefd(fd, npipe);
-	return (getpipeexitstatus());
+	return (getpipeexitstatus(nchildren));
 }
 
 int

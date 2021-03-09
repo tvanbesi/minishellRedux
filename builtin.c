@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 16:29:47 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 13:10:48 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 13:28:39 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ void
 		shell->exit = 1;
 	csanity -= BUILTIN_START + 1;
 	if ((r = (*(shell->b)[csanity])(argv, &shell->env)) == -1 && errno != 0)
-		printf("%d --- HELLOTHERE\n", r);
-		//puterror(strerror(errno));
+		puterror(strerror(errno));
 	if (r == 0)
 		g_exitstatus = EXIT_STAT_SUCCESS;
 	else if (r == -1)

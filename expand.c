@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/08 15:48:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 02:40:40 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 13:27:53 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,16 +153,12 @@ t_list
 	return (r);
 }
 
-int
-	expandcommand(t_list *command, t_list *env)
+static int
+	parse_redir(t_list *current, t_list *env)
 {
-	t_list		*current;
+	int	r;
 	t_redir		*redircontent;
-	t_token		*tokencontent;
-	t_command	*commandcontent;
-	int			r;
 
-	current = getcommandredir(command);
 	while (current)
 	{
 		redircontent = current->content;
@@ -174,6 +170,20 @@ int
 		}
 		current = current->next;
 	}
+	return (0);
+}
+
+int
+	expandcommand(t_list *command, t_list *env)
+{
+	t_list		*current;
+	t_token		*tokencontent;
+	t_command	*commandcontent;
+	int			r;
+
+	current = getcommandredir(command);
+	if ((r = parse_redir(current, env)) < 0)
+		return (r);
 	current = getcommandargv(command);
 	while (current)
 	{
@@ -189,4 +199,3 @@ int
 	commandcontent->argv = current;
 	return (0);
 }
-
