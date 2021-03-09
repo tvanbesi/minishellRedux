@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 14:51:30 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/09 15:56:13 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 16:03:05 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@ int
 	int		replace;
 	int		r;
 
-	if (!input)
-		return (0);
 	if ((r = getenvdata(input, &val, &name, aenv)) < 0)
 		return (r);
 	replace = 0;

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 18:50:51 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/08 19:12:18 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 16:12:20 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,13 @@ void
 	}
 }
 
+static int
+	invalidoption(void)
+{
+	puterror(ERROR_INVALID_OPTION);
+	return (-2);
+}
+
 int
 	unset(t_list *argv, t_list **aenv)
 {
@@ -51,10 +58,7 @@ int
 		if (!isidentifiervalid(arg) || ft_strchr(arg, '='))
 		{
 			if (arg[0] == '-' && i == 0)
-			{
-				puterror(ERROR_INVALID_OPTION);
-				return (-2);
-			}
+				return (invalidoption());
 			else
 			{
 				r = -1;

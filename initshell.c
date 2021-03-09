@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 17:01:08 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 15:57:59 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 16:03:19 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ static int
 		if ((newlvl = ft_itoa(ft_atoi(getenvval(env)) + 1)))
 			newenv = ft_strjoin("SHLVL=", newlvl);
 		free(newlvl);
-		addenv(aenv, newenv);
+		if (newenv)
+			addenv(aenv, newenv);
 		free(newenv);
 		if (errno != 0)
 		{

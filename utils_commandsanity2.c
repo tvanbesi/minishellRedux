@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 12:25:32 by user42            #+#    #+#             */
-/*   Updated: 2021/02/13 12:30:38 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 16:24:53 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,4 +22,14 @@ int
 	isbuiltin(int n)
 {
 	return (n > BUILTIN_START && n < BUILTIN_END);
+}
+
+int
+	csanityextracheck(char *s)
+{
+	if (!s)
+		return (EMPTY);
+	if (!ft_strncmp(s, ".", 2) || !ft_strncmp(s, "..", 3))
+		return (NOCMD);
+	return (0);
 }

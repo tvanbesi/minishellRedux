@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:24:09 by user42            #+#    #+#             */
-/*   Updated: 2021/03/08 19:21:57 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 16:26:03 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,12 @@ int
 	char		**paths;
 
 	token = getcommandargv(command);
-	while (token && !ft_strlen(gettokenstr(token)))
+	while (token && !gettokenstr(token))
 		token = token->next;
-	if (!token)
-		return (EMPTY);
-	if (!ft_strncmp(gettokenstr(token), ".", 2) || !ft_strncmp(gettokenstr(token), "..", 3))
-		return (NOCMD);
-	if (!ft_strchr(gettokenstr(token), '/') && !ishiddenfile(gettokenstr(token)))
+	if ((r = csanityextracheck(gettokenstr(token))) != 0)
+		return (r);
+	if (!ft_strchr(gettokenstr(token), '/')
+	&& !ishiddenfile(gettokenstr(token)))
 	{
 		if ((r = builtinsanity(gettokenstr(token))))
 			return (r);
