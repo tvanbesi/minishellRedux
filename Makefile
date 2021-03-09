@@ -1,5 +1,4 @@
-SRCS		=	debug.c \
-				builtin.c \
+SRCS		=	builtin.c \
 				cd.c \
 				echo.c \
 				emptytokenexception.c \
