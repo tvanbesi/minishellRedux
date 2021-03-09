@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 17:01:08 by user42            #+#    #+#             */
-/*   Updated: 2021/03/02 22:38:02 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 15:57:59 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,19 @@ static int
 	char	*newenv;
 	char	*newlvl;
 
+	newenv = NULL;
 	if ((env = findenv(*aenv, "SHLVL")))
 	{
-		if (!(newlvl = ft_itoa(ft_atoi(getenvval(env)) + 1)))
-			return (-1);
-		if (!(newenv = ft_strjoin("SHLVL=", newlvl)))
-			return (-1);
+		if ((newlvl = ft_itoa(ft_atoi(getenvval(env)) + 1)))
+			newenv = ft_strjoin("SHLVL=", newlvl);
 		free(newlvl);
-		if (addenv(aenv, newenv) == -1)
+		addenv(aenv, newenv);
+		free(newenv);
+		if (errno != 0)
+		{
+			puterror(strerror(errno));
 			return (-1);
+		}
 	}
 	else if (addenv(aenv, "SHLVL=1") == -1)
 		return (-1);
