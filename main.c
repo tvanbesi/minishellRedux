@@ -48,10 +48,11 @@ static void
 		dup2(shell->stdincpy, STDIN);
 		dup2(shell->stdoutcpy, STDOUT);
 		token = parse_token(input);
-		//ft_lstiter(token, showtoken);
+//		ft_lstiter(token, showtoken);
 		command = parse_command(token);
-		//ft_lstiter(command, showcommand);
+//		ft_lstiter(command, showcommand);
 		cyclecommand(command, shell);
+//		ft_lstiter(command, showcommand);
 		freedata(&input, &token, &command);
 	}
 }

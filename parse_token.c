@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/07 17:40:07 by user42            #+#    #+#             */
-/*   Updated: 2021/03/08 22:57:33 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 01:23:59 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,24 @@ static int
 	t_list	*current;
 
 	current = token;
+	if (current && gettokentype(current) == OPERATOR && ispipeorsemicolon(current))
+		return (-1);
 	while (current)
 	{
-		if (gettokentype(current) == OPERATOR && !isvalidoperator(current))
-			return (-1);
+		if (gettokentype(current) == OPERATOR)
+		{
+		 	if (!isvalidoperator(current))
+				return (-1);
+			else if (isrediroperator(current) && (!current->next || gettokentype(current->next) == OPERATOR))
+				return (-1);
+			else if (current->next && gettokentype(current->next) == OPERATOR && !isrediroperator(current->next))
+				return (-1);
+		}
 		current = current->next;
 	}
+	current = ft_lstlast(token);
+	if (current && gettokentype(current) == OPERATOR && ft_strncmp(gettokenstr(current), ";", 2))
+		return (-1);
 	return (0);
 }
 
@@ -71,15 +83,23 @@ t_list
 			if (addtoken(&r, input, s, l - 1, WORD) == -1)
 				return (NULL); // clear all that shit
 			l = 0;
-			s = i;
 			while (ismetachar(input[i]))
 			{
-				i++;
-				l++;
+				while (ft_isspht(input[i]))
+					i++;
+				s = i;
+				while (isoperator(input[i]))
+				{
+					i++;
+					l++;
+				}
+				if (addtoken(&r, input, s, l, OPERATOR) == -1)
+					return (NULL);
+				while (ft_isspht(input[i]))
+					i++;
+				s = i;
+				l = 0;
 			}
-			if (addtoken(&r, input, s, l, OPERATOR) == -1)
-				return (NULL);
-			s = i;
 			l = 1;
 		}
 		else
@@ -90,8 +110,7 @@ t_list
 	}
 	if (addtoken(&r, input, s, l - 1, WORD) == -1)
 		return (NULL);
-	if (operatorsanity(r) == -1
-	|| (gettokentype(r) == OPERATOR && ispipeorsemicolon(r)))
+	if (operatorsanity(r) == -1)
 		return (errorparse(&r));
 	return (r);
 }

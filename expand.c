@@ -6,14 +6,14 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/08 15:48:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/08 23:54:24 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 02:40:40 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static void
-	expansion(char *dst, char *src, t_list *env, int idlen)
+	expansion(char *dst, char *src, t_list *env, int idlen, int qt)
 {
 	char	*strexitstatus;
 	char	*param;
@@ -27,12 +27,13 @@ static void
 	else
 	{
 		if (!ft_isdigit(src[1])
-		&& !(ft_isalpha(src[1]) || src[1] == '_'))
+		&& !(ft_isalpha(src[1]) || src[1] == '_')
+		&& (!src[1] || src[1] == qt || !isquote(src[1])))
 		{
 			ft_strlcat(dst, "$", idlen + 1);
 			return ;
 		}
-		if ((param = getidentifier(&src[1], env)))
+		else if ((param = getidentifier(&src[1], env)))
 			ft_strlcat(dst, param, idlen + 1);
 	}
 }
@@ -88,24 +89,23 @@ int
 			qt = 0;
 			i++;
 		}
-		else if (qt != '\'' && token->s[i] == '\\')
+		else if (qt != '\'' && token->s[i] == '\\' && !(qt == '\"' && !isspecialchar(token->s[i + 1])))
 		{
 			s[j++] = token->s[++i];
 			i++;
 		}
 		else if (qt != '\'' && token->s[i] == '$')
 		{
-			expansion(s, &(token->s[i]), env, idlen);
+			expansion(s, &(token->s[i]), env, idlen, qt);
 			i++;
-			if (ft_isdigit(token->s[i]))
-				i++;
-			else if (token->s[i] == '?')
+			if (ft_isdigit(token->s[i]) || token->s[i] == '?')
 				i++;
 			else
 				while (ft_isalnum(token->s[i]) || token->s[i]  == '_')
 					i++;
 			if (!qt && !ft_strlen(s) && !token->s[i])
 			{
+				free(s);
 				s = NULL;
 				break ;
 			}
