@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 17:18:05 by user42            #+#    #+#             */
-/*   Updated: 2021/02/28 23:35:59 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 17:52:35 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ char				**ft_split(char const *s, char c);
 char				**ft_splits(char const *s, char *str);
 double				ft_atof(char *str);
 double				ft_pow(double x, int y);
+int					ft_min(int a, int b);
 int					ft_atoi(const char *str);
 int					ft_isalnum(int c);
 int					ft_isalpha(int c);

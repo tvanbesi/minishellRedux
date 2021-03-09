@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 12:09:27 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 17:04:20 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 20:47:56 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,21 +44,21 @@ static void
 }
 
 static int
-	getpipeexitstatus(int nchildren)
+	getpipeexitstatus(int nchildren, int *pid_children)
 {
-	int	pid;
 	int	stat_loc;
-	int pidtmp;
 	int	r;
+	int	i;
 
-	pidtmp = 0;
-	while (nchildren-- > 0)
+	i = 0;
+	r = 0;
+	while (nchildren - i > 0)
 	{
-		if ((pid = wait(&stat_loc)) == -1)
+		if (waitpid(pid_children[i], &stat_loc, 0) == -1)
 			return (-1);
-		if (pid > pidtmp)
+		if (i == nchildren - 1)
 			r = stat_loc;
-		pidtmp = pid;
+		i++;
 	}
 	if (WIFEXITED(r))
 		return (WEXITSTATUS(r));
@@ -74,26 +74,43 @@ static int
 	int	nchildren;
 	int	n;
 	int pid;
+	int	*pid_children;
+	int	r;
 
 	nchildren = npipe + 1;
+	if (!(pid_children = malloc(nchildren * sizeof(int))))
+		return (-1);
 	n = 0;
 	while (n++ < nchildren)
 	{
+		if (n < nchildren && pipe(&fd[(n - 1) * 2]) == -1)
+		{
+			closefd(fd, n - 1);
+			return (-1);
+		}
 		if ((pid = fork()) == -1)
 			return (-1);
 		if (pid == 0)
 		{
-			if (n != 1)
+			if (n > 1)
 				dup2(fd[(n - 2) * 2], STDIN);
-			if (n != nchildren)
+			if (n < nchildren)
 				dup2(fd[(n - 1) * 2 + 1], STDOUT);
-			closefd(fd, npipe);
+			closefd(fd, ft_min(n, npipe));
 			pipecommand(command, shell, n);
 			exit(g_exitstatus);
 		}
+		else
+			pid_children[n - 1] = pid;
+		if (n > 1)
+		{
+			close(fd[(n - 2) * 2]);
+			close(fd[(n - 2) * 2 + 1]);
+		}
 	}
-	closefd(fd, npipe);
-	return (getpipeexitstatus(nchildren));
+	r = getpipeexitstatus(nchildren, pid_children);
+	free(pid_children);
+	return (r);
 }
 
 int
@@ -102,25 +119,14 @@ int
 	int		*fd;
 	int		stat_loc;
 	int		npipe;
-	int		n;
 
 	stat_loc = 0;
 	npipe = getnpipe(command);
 	if (!(fd = (int*)malloc(sizeof(int) * npipe * 2)))
 		return (-1);
-	n = 0;
-	while (n++ < npipe)
-		if (pipe(&fd[(n - 1) * 2]) == -1)
-		{
-			puterror(strerror(errno));
-			closefd(fd, n - 1);
-			free(fd);
-			return (0);
-		}
 	if ((g_exitstatus = minipipechildren(command, shell, fd, npipe)) == -1)
 		puterror(strerror(errno));
 	g_pid = 0;
 	free(fd);
-	fd = NULL;
 	return (0);
 }

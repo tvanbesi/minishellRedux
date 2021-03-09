@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:13:39 by user42            #+#    #+#             */
-/*   Updated: 2021/02/13 12:07:45 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 19:27:58 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ int
 {
 	DIR				*stream;
 	struct dirent	*entry;
+	int				r;
 
 	while (*paths)
 	{
@@ -49,9 +50,10 @@ int
 				{
 					free(*executable);
 					getexecdata(*paths, stream, executable, entry);
+					r = entry->d_type == DT_REG;
 					if (closedir(stream) == -1)
 						return (-1);
-					return (entry->d_type == DT_REG);
+					return (r);
 				}
 			}
 			if (closedir(stream) == -1)

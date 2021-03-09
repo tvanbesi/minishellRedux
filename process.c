@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 15:46:31 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/09 04:07:24 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 19:47:39 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,5 @@ int
 	}
 	else if (waitpid(g_pid, &stat_loc, 0) == -1)
 		return (-1);
-	g_pid = 0;
 	return (handleexit(stat_loc));
 }

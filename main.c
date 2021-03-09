@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 15:05:20 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 16:04:46 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 18:54:23 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ static void
 		dup2(shell->stdoutcpy, STDOUT);
 		token = parse_token(input);
 		command = parse_command(token);
+		//printf("size\t%d\n", ft_lstsize(command));
 		cyclecommand(command, shell);
 		freedata(&input, &token, &command);
 	}
