@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:24:09 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 16:26:03 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 23:35:53 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int
 	token = getcommandargv(command);
 	while (token && !gettokenstr(token))
 		token = token->next;
-	if ((r = csanityextracheck(gettokenstr(token))) != 0)
+	if ((r = csanityextracheck(token)) != 0)
 		return (r);
 	if (!ft_strchr(gettokenstr(token), '/')
 	&& !ishiddenfile(gettokenstr(token)))

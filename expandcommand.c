@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 15:28:10 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 15:32:18 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 23:41:38 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int
 		current = current->next;
 	}
 	commandcontent = command->content;
-	if (!(current = trimcommand(commandcontent->argv)))
+	if (!(current = trimcommand(commandcontent->argv)) && errno)
 		return (-1);
 	ft_lstclear(&commandcontent->argv, deltoken);
 	commandcontent->argv = current;

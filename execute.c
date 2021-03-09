@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 18:06:35 by user42            #+#    #+#             */
-/*   Updated: 2021/03/08 23:12:33 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 23:33:34 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,13 @@ static void
 		*command = (*command)->next;
 }
 
+static void
+	nlsignal(void)
+{
+	if (g_exitstatus == 128 + SIGINT || g_exitstatus == 128 + SIGQUIT)
+		write(STDERR, "\n", 1);
+}
+
 void
 	cyclecommand(t_list *command, t_shell *shell)
 {
@@ -83,5 +90,6 @@ void
 		command = command->next;
 		dup2(shell->stdincpy, STDIN);
 		dup2(shell->stdoutcpy, STDOUT);
+		nlsignal();
 	}
 }

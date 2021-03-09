@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 15:46:31 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/09 19:47:39 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 23:20:35 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,7 @@ static int
 			g_exitstatus = WEXITSTATUS(stat_loc);
 	}
 	else if (WIFSIGNALED(stat_loc))
-	{
 		g_exitstatus = 128 + WTERMSIG(stat_loc);
-		if (WTERMSIG(stat_loc) == SIGINT)
-			write(STDERR, "\n", 1);
-		else if (WTERMSIG(stat_loc) == SIGQUIT)
-			write(STDERR, "Quit\n", 5);
-	}
 	return (0);
 }
 
@@ -57,5 +51,6 @@ int
 	}
 	else if (waitpid(g_pid, &stat_loc, 0) == -1)
 		return (-1);
+	g_pid = 0;
 	return (handleexit(stat_loc));
 }

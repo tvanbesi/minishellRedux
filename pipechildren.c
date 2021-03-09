@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 21:28:43 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 21:44:12 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 23:25:52 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ int
 	while (n++ < nchildren)
 	{
 		if ((n < nchildren && pipe(&fd[(n - 1) * 2]) == -1)
-		|| ((pid_children[n - 1] = fork()) == -1))
+		|| ((g_pid = fork()) == -1))
 			return (ret(fd, pid_children, n - 1));
-		if (pid_children[n - 1] == 0)
+		if ((pid_children[n - 1] = g_pid) == 0)
 		{
 			pipeflow(fd, n, nchildren);
 			pipecommand(command, shell, n);

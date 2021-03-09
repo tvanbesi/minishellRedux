@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/13 12:25:32 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 16:24:53 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 23:37:56 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,13 @@ int
 }
 
 int
-	csanityextracheck(char *s)
+	csanityextracheck(t_list *token)
 {
+	char	*s;
+
+	if (!token)
+		return (EMPTY);
+	s = gettokenstr(token);
 	if (!s)
 		return (EMPTY);
 	if (!ft_strncmp(s, ".", 2) || !ft_strncmp(s, "..", 3))
