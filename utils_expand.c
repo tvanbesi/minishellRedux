@@ -6,13 +6,13 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 14:52:09 by user42            #+#    #+#             */
-/*   Updated: 2021/03/10 15:11:40 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 15:48:20 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void
+int
 	expansion(char *dst, char *src, t_list *env, t_parsedata *pd)
 {
 	char	*strexitstatus;
@@ -31,20 +31,31 @@ void
 		&& (!src[1] || src[1] == pd->qt || !isquote(src[1])))
 			ft_strlcat(dst, "$", pd->idlen + 1);
 		else if ((param = getidentifier(&src[1], env)))
+		{
+			if (!(param = ft_strtrim(param, " \t")))
+				return (-1);
 			ft_strlcat(dst, param, pd->idlen + 1);
+			free(param);
+		}
 	}
+	return (0);
 }
 
 int
 	expandtoken(t_token *token, t_list *env)
 {
 	char	*s;
-	size_t	idlen;
+	ssize_t	idlen;
 
-	idlen = getidlen(token->s, env);
+	if ((idlen = getidlen(token->s, env)) == -1)
+		return (-1);
 	if (!(s = ft_calloc(idlen + 1, sizeof(char))))
 		return (-1);
-	expand_and_escape(&s, token->s, idlen, env);
+	if (expand_and_escape(&s, token->s, idlen, env) == -1)
+	{
+		free(s);
+		return (-1);
+	}
 	free(token->s);
 	token->s = s;
 	if (!token->s)
