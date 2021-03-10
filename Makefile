@@ -31,6 +31,7 @@ SRCS		=	builtin.c \
 				readstdin.c \
 				redirection.c \
 				signal.c \
+				trimcommand.c \
 				unset.c \
 				utils_addtoken.c \
 				utils_addtokenexpanded.c \

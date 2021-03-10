@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 22:00:35 by user42            #+#    #+#             */
-/*   Updated: 2021/03/10 23:26:48 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 00:23:02 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,19 @@ int
 	content = token->content;
 	content->s = str;
 	ft_lstadd_back(atoken, token);
+	return (0);
+}
+
+int
+	addwordexpanded(t_list **r, char *input, t_parsedata *pd)
+{
+	if (addtokenexpanded(r, &input[pd->s], pd->l - 1, WORD) == -1)
+		return (-1);
+	pd->l = 0;
+	while (ft_isspht(input[pd->i]))
+		pd->i++;
+	pd->s = pd->i;
+	pd->l = 1;
 	return (0);
 }
 

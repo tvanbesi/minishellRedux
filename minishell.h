@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/10 23:26:36 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 00:24:53 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,6 +196,8 @@ void				*errorparse(t_list **token);
 void				*fail(t_list **token);
 int					addword(t_list **r, char *input, t_parsedata *pd);
 int					addwordexpanded(t_list **r, char *input, t_parsedata *pd);
+int					openquote(char *s, t_parsedata *pd);
+int					closequote(char *s, t_parsedata *pd, t_list **r);
 
 /*
 ***	TOKENS
@@ -307,6 +309,12 @@ int					exitshell(t_list *argv, t_list **aenv);
 void				puterrorcmd(char *cmd, int csanity);
 void				puterror(char *msg);
 void				*error(char *msg);
+
+/*
+***	MISC
+*/
+
+void				collapsestr(char *s, int i);
 
 extern	int			g_pid;
 extern	int			g_exitstatus;

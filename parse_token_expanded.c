@@ -6,18 +6,11 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 19:37:25 by user42            #+#    #+#             */
-/*   Updated: 2021/03/10 23:36:29 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 00:30:46 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void
-	collapsestr(char *s, int i)
-{
-	ft_memmove(&s[i], &s[i + 1], ft_strlen(&s[i]) - 1);
-	s[ft_strlen(s) - 1] = '\0';
-}
 
 static void
 	escape(char *input, t_parsedata *pd)
@@ -41,6 +34,26 @@ static void
 {
 	pd->i++;
 	pd->l++;
+	pd->escape = 0;
+}
+
+static int
+	escape_and_quote(char *input, t_parsedata *pd, t_list **r)
+{
+	if (pd->escape)
+	{
+		inc(pd);
+		return (1);
+	}
+	else if (openquote(input, pd) || closequote(input, pd, r))
+		return (1);
+	else if (input[pd->i] == '\\'
+	&& (!pd->qt || (pd->qt == '\"' && isspecialchar(input[pd->i + 1]))))
+	{
+		escape(input, pd);
+		return (1);
+	}
+	return (0);
 }
 
 t_list
@@ -54,26 +67,9 @@ t_list
 	if (!input)
 		return (NULL);
 	while (input[pd.i])
-	{ 
-		if (pd.escape)
-		{
-			inc(&pd);
-			pd.escape = 0;
-		}
-		else if (!pd.qt && isquote(input[pd.i]))
-		{
-			pd.qt = input[pd.i];
-			collapsestr(input, pd.i);
-		}
-		else if (pd.qt && input[pd.i] == pd.qt)
-		{
-			pd.qt = 0;
-			collapsestr(input, pd.i);
-			if (!input[pd.i] && pd.l == 1)
-				addnulltoken(&r);
-		}
-		else if (input[pd.i] == '\\' && (!pd.qt || (pd.qt == '\"' && isspecialchar(input[pd.i + 1]))))
-			escape(input, &pd);
+	{
+		if (escape_and_quote(input, &pd, &r))
+			;
 		else if (!pd.qt && ft_isspht(input[pd.i]))
 		{
 			if (addwordexpanded(&r, input, &pd) == -1)
