@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/10 15:45:28 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 17:44:19 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ typedef enum		e_redirtype
 typedef struct		s_redir
 {
 	int				type;
-	t_token			*fd_str;
+	t_list			*fd_str;
 }					t_redir;
 
 typedef	enum		e_commandtype
@@ -184,13 +184,12 @@ t_list				*parse_command(t_list *token);
 int					isidentifiervalid(char *s);
 int					shouldescape(int c1, int c2, int qt);
 int					shouldexpand(int c, int qt);
-int					expansion(char *dst, char *src, t_list *env, t_parsedata *pd);
-int					expand_and_escape(char **dst, char *src, int idlen, t_list *env);
+void				expansion(char *dst, char *src, t_list *env, t_parsedata *pd);
+void				expand_and_escape(char **dst, char *src, int idlen, t_list *env);
 int					expandtoken(t_token *token, t_list *env);
 int					trimcommand(t_list **argv);
 int					parse_redir(t_list *current, t_list *env);
 int					operatorsanity(t_list *token);
-void				skipidentifier(char *s, t_parsedata *pd);
 void				*errorparse(t_list **token);
 void				*fail(t_list **token);
 int					addword(t_list **r, char *input, t_parsedata *pd);
@@ -203,7 +202,8 @@ t_list				*newtoken(int type);
 int					addtoken(t_list **atoken, const char *input, size_t l, int type);
 t_token				*tokendup(void *p);
 char				*getidentifier(char *s, t_list *env);
-ssize_t				getidlen(char *s, t_list *env);
+size_t				getidlen(char *s, t_list *env);
+//char				*unquote(char *s, t_list *env);
 int					gettokentype(t_list *token);
 char				*gettokenstr(t_list *token);
 int					gettokencommandtype(t_list *token);

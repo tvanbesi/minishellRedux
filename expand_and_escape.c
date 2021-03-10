@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/08 15:48:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/10 16:11:24 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/09 15:36:11 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static void
 	pd->idlen = idlen;
 }
 
-int
+void
 	expand_and_escape(char **dst, char *src, int idlen, t_list *env)
 {
 	t_parsedata	pd;
@@ -74,15 +74,17 @@ int
 			escape(&pd.i, &pd.j, *dst, src);
 		else if (shouldexpand(src[pd.i], pd.qt))
 		{
-			if (expansion(*dst, &(src[pd.i++]), env, &pd) == -1)
-				return (-1);
-			skipidentifier(src, &pd);
+			expansion(*dst, &(src[pd.i++]), env, &pd);
+			if (ft_isdigit(src[pd.i]) || src[pd.i] == '?')
+				pd.i++;
+			else
+				while (ft_isalnum(src[pd.i]) || src[pd.i] == '_')
+					pd.i++;
 			if (nulltoken(pd.qt, ft_strlen(*dst), dst, src[pd.i]))
-				return (0);
+				return ;
 			pd.j = ft_strlen(*dst);
 		}
 		else
 			(*dst)[pd.j++] = src[pd.i++];
 	}
-	return (0);
 }

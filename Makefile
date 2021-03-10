@@ -47,8 +47,7 @@ SRCS		=	builtin.c \
 				utils_gettoken.c \
 				utils_operator.c \
 				utils_token.c \
-				utils_redir.c \
-				utils_misc.c
+				utils_redir.c
 OBJS		= ${SRCS:.c=.o}
 CC			= clang
 CFLAGS		= -Wall -Wextra -Werror

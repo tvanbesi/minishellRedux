@@ -6,11 +6,20 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 12:16:00 by user42            #+#    #+#             */
-/*   Updated: 2021/03/10 13:44:22 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 17:24:16 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void
+	showtoken(void *p)
+{
+	t_token	*content;
+
+	content = p;
+	printf("|%s|\n", content->s);
+}
 
 void
 	showcommand(void *p)

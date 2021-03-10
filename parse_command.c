@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/07 23:06:56 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 15:32:55 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 17:54:10 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ static int
 	t_list		*redir;
 	t_command	*content;
 	t_redir		*redircontent;
+	t_token		*tokencontent;
+	t_list		*newtoken;
 
 	content = command->content;
 	while (token && !(gettokentype(token) == OPERATOR
@@ -71,8 +73,11 @@ static int
 			if (!token || gettokentype(token) == OPERATOR)
 				return (-2);
 			redircontent = redir->content;
-			if (!(redircontent->fd_str = tokendup(token->content)))
-				return (-1);
+			if (!(tokencontent = tokendup(token->content)))
+				return (-1); // FREEEEEE
+			if (!(newtoken = ft_lstnew(tokencontent)))
+				return (-1); // FREE AGAIN
+			redircontent->fd_str = newtoken;
 			ft_lstadd_back(&content->redirections, redir);
 		}
 		token = token->next;

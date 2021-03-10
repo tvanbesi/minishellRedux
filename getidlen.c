@@ -6,14 +6,14 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 16:49:33 by user42            #+#    #+#             */
-/*   Updated: 2021/03/10 16:15:50 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 12:41:40 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static void
-	increment(ssize_t *r, size_t *i, char *mode, char *s)
+	increment(size_t *r, size_t *i, char *mode, char *s)
 {
 	if (!ft_strncmp(mode, "exitstatus", 10))
 	{
@@ -35,20 +35,10 @@ static void
 	}
 }
 
-static int
-	incparam(ssize_t *r, char *param)
-{
-	if (!(param = ft_strtrim(param, " \t")))
-		return (-1);
-	*r += ft_strlen(param);
-	free(param);
-	return (0);
-}
-
-ssize_t
+size_t
 	getidlen(char *s, t_list *env)
 {
-	ssize_t	r;
+	size_t	r;
 	size_t	i;
 	char	*param;
 
@@ -63,8 +53,7 @@ ssize_t
 			else
 			{
 				if ((param = getidentifier(&s[++i], env)))
-					if (incparam(&r, param) == -1)
-						return (-1);
+					r += ft_strlen(param);
 				increment(&r, &i, "param", s);
 			}
 		}

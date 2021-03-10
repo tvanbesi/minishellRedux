@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 14:12:51 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/08 16:02:05 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 17:54:44 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,6 @@ void
 	t_redir	*redir;
 
 	redir = p;
-	deltoken(redir->fd_str);
+	ft_lstclear(&redir->fd_str, deltoken);
 	free(redir);
 }
