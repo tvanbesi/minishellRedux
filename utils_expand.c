@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 14:52:09 by user42            #+#    #+#             */
-/*   Updated: 2021/03/10 17:56:50 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 18:30:05 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,10 @@ int
 		if ((r = expandtoken(getredirtoken(current), env)) < 0)
 		{
 			if (r == -2)
+			{
 				puterror(ERROR_BADREDIR);
+				g_exitstatus = EXIT_STAT_FAIL;
+			}
 			return (r);
 		}
 		current = current->next;
