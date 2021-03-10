@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/01 08:45:23 by user42            #+#    #+#             */
-/*   Updated: 2021/03/10 17:53:11 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 22:16:52 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,15 @@ t_token
 	content = redir->content;
 	fd_str = content->fd_str;
 	return ((t_token*)fd_str->content);
+}
+
+t_list
+	*getredirtokenlst(t_list *redir)
+{
+	t_redir	*content;
+
+	content = redir->content;
+	return (content->fd_str);
 }
 
 char

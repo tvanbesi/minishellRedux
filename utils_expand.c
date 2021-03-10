@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 14:52:09 by user42            #+#    #+#             */
-/*   Updated: 2021/03/10 18:30:05 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 23:44:07 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,27 @@ void
 }
 
 int
-	expandtoken(t_token *token, t_list *env)
+	expandtoken(t_list **dst, t_list *src, t_list *env)
 {
-	char	*s;
+	t_list	*current;
+	char	*rawargv;
 	size_t	idlen;
+	t_list	*tmp;
 
-	idlen = getidlen(token->s, env);
-	if (!(s = ft_calloc(idlen + 1, sizeof(char))))
-		return (-1);
-	expand_and_escape(&s, token->s, idlen, env);
-	free(token->s);
-	token->s = s;
-	if (!token->s)
+	current = src;
+	while (current)
+	{
+		rawargv = NULL;
+		idlen = getidlen(gettokenstr(current), env);
+		if (!(rawargv = ft_calloc(idlen + 1, sizeof(char))))
+			return (-1);
+		expand_and_escape(&rawargv, gettokenstr(current), idlen, env);
+		tmp = parse_token_expanded(rawargv);
+		ft_lstadd_back(dst, tmp);
+		free(rawargv);
+		current = current->next;
+	}
+	if (!*dst)
 		return (-2);
 	return (0);
 }
@@ -92,18 +101,31 @@ int
 int
 	parse_redir(t_list *current, t_list *env)
 {
-	int			r;
+	int		r;
+	t_list	*expandedredir;
+	t_redir	*redircontent;
 
 	while (current)
 	{
-		if ((r = expandtoken(getredirtoken(current), env)) < 0)
+		expandedredir = NULL;
+		redircontent = current->content;
+		if ((r = expandtoken(&expandedredir, redircontent->fd_str, env)) < 0)
 		{
+			ft_lstclear(&expandedredir, deltoken);
 			if (r == -2)
 			{
 				puterror(ERROR_BADREDIR);
 				g_exitstatus = EXIT_STAT_FAIL;
 			}
 			return (r);
+		}
+		ft_lstclear(&redircontent->fd_str, deltoken);
+		redircontent->fd_str = expandedredir;
+		if (ft_lstsize(expandedredir) > 1)
+		{
+			puterror(ERROR_BADREDIR);
+			g_exitstatus = EXIT_STAT_FAIL;
+			return (-2);
 		}
 		current = current->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/08 15:48:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 15:36:11 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 21:28:07 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 static void
 	escape(int *i, int *j, char *dst, char *src)
 {
-	(*i)++;
-	dst[*j] = src[*i];
-	(*j)++;
-	(*i)++;
+	dst[(*j)++] = src[(*i)++];
+	dst[(*j)++] = src[(*i)++];
 }
 
 static int
@@ -36,16 +34,15 @@ static int
 static int
 	quote(int *qt, int c, int *i)
 {
+	(void)i;
 	if (!*qt && isquote(c))
 	{
 		*qt = c;
-		(*i)++;
 		return (1);
 	}
 	else if (*qt && *qt == c)
 	{
 		*qt = 0;
-		(*i)++;
 		return (1);
 	}
 	return (0);
@@ -70,7 +67,7 @@ void
 	{
 		if (quote(&pd.qt, src[pd.i], &pd.i))
 			;
-		else if (shouldescape(src[pd.i], src[pd.i + 1], pd.qt))
+		if (shouldescape(src[pd.i], src[pd.i + 1], pd.qt))
 			escape(&pd.i, &pd.j, *dst, src);
 		else if (shouldexpand(src[pd.i], pd.qt))
 		{

@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/10 17:44:19 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 23:26:36 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ typedef struct		s_parsedata
 	int				j;
 	int				qt;
 	int				idlen;
+	int				escape;
 	unsigned int	s;
 	size_t			l;
 }					t_parsedata;
@@ -180,19 +181,21 @@ int					expandcommand(t_list *command, t_list *env);
 char				*expand(char *s, t_list *env);
 t_list				*tokenize(char *input);
 t_list				*parse_token(char *input);
+t_list				*parse_token_expanded(char *input);
 t_list				*parse_command(t_list *token);
 int					isidentifiervalid(char *s);
 int					shouldescape(int c1, int c2, int qt);
 int					shouldexpand(int c, int qt);
 void				expansion(char *dst, char *src, t_list *env, t_parsedata *pd);
 void				expand_and_escape(char **dst, char *src, int idlen, t_list *env);
-int					expandtoken(t_token *token, t_list *env);
+int					expandtoken(t_list **dst, t_list *src, t_list *env);
 int					trimcommand(t_list **argv);
 int					parse_redir(t_list *current, t_list *env);
 int					operatorsanity(t_list *token);
 void				*errorparse(t_list **token);
 void				*fail(t_list **token);
 int					addword(t_list **r, char *input, t_parsedata *pd);
+int					addwordexpanded(t_list **r, char *input, t_parsedata *pd);
 
 /*
 ***	TOKENS
@@ -200,6 +203,8 @@ int					addword(t_list **r, char *input, t_parsedata *pd);
 
 t_list				*newtoken(int type);
 int					addtoken(t_list **atoken, const char *input, size_t l, int type);
+int					addnulltoken(t_list **atoken);
+int					addtokenexpanded(t_list **atoken, const char *input, size_t l, int type);
 t_token				*tokendup(void *p);
 char				*getidentifier(char *s, t_list *env);
 size_t				getidlen(char *s, t_list *env);
@@ -230,6 +235,7 @@ t_list				*getcommandredir(t_list *command);
 int					getredirtype(t_list *redir);
 t_token				*getredirtoken(t_list *redir);
 char				*getredirstr(t_list *redir);
+t_list				*getredirtokenlst(t_list *redir);
 t_list				*getcommandargv(t_list *command);
 char				**getprocessargv(t_list *argv, char *path);
 t_list				*newcommand(int type);
