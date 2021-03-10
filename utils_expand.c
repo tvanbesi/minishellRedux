@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 14:52:09 by user42            #+#    #+#             */
-/*   Updated: 2021/03/10 12:43:53 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 15:11:40 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,34 +52,41 @@ int
 	return (0);
 }
 
-t_list
-	*trimcommand(t_list *argv)
+static int
+	ret(t_token *content, t_list **r)
+{
+	ft_lstclear(r, deltoken);
+	deltoken(content);
+	return (-1);
+}
+
+int
+	trimcommand(t_list **argv)
 {
 	t_list	*r;
 	t_token	*content;
 	t_list	*tmp;
+	t_list	*current;
 
 	r = NULL;
-	while (argv)
+	if (!argv)
+		return (0);
+	current = *argv;
+	while (current)
 	{
-		if (gettokenstr(argv))
+		if (gettokenstr(current))
 		{
-			if (!(content = tokendup(argv->content)))
-			{
-				ft_lstclear(&r, deltoken);
-				return (NULL);
-			}
+			if (!(content = tokendup(current->content)))
+				ret(content, &r);
 			if (!(tmp = ft_lstnew(content)))
-			{
-				ft_lstclear(&r, deltoken);
-				deltoken(content);
-				return (NULL);
-			}
+				ret(content, &r);
 			ft_lstadd_back(&r, tmp);
 		}
-		argv = argv->next;
+		current = current->next;
 	}
-	return (r);
+	ft_lstclear(argv, deltoken);
+	*argv = r;
+	return (0);
 }
 
 int

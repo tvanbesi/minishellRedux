@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 17:18:05 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 17:52:35 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 14:59:41 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void				ft_lstadd_front(t_list **alst, t_list *new);
 void				ft_lstclear(t_list **lst, void (*del)(void*));
 void				ft_lstdelone(t_list *lst, void (*del)(void*));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
+void				ft_lstremove(t_list **alst, void (*del)(void*));
 void				ft_cafree(char **a);
 
 #endif
