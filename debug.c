@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 12:16:00 by user42            #+#    #+#             */
-/*   Updated: 2021/03/10 12:28:31 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 13:44:22 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,27 @@ void
 	t_command	*commandcontent;
 
 	commandcontent = p;
+	if (commandcontent->type == SIMPLE)
+		printf("SIMPLE\n");
+	else if (commandcontent->type == PIPE)
+		printf("PIPE\n");
+	else
+		printf("BAD CMD TYPE\n");
 	current = commandcontent->redirections;
 	while (current)
 	{
+		if (getredirtype(current) == REDIRIN)
+			printf("<\t");
+		if (getredirtype(current) == REDIRAPPEND)
+			printf(">>\t");
+		if (getredirtype(current) == REDIRTRUNC)
+			printf(">\t");
 		printf("REDIR\t%s\n", getredirstr(current));
 		current = current->next;
 	}
 	current = commandcontent->argv;
+	if (!current)
+		printf("NOARGV\n");
 	while (current)
 	{
 		printf("|%s|\t", gettokenstr(current));
