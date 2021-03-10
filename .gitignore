@@ -5,7 +5,6 @@
 **.old
 **.txt
 libft/libft.a
-debug.c
 **/**.a
 **/**.o
 **/**.out

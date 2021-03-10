@@ -1,37 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   getidentifier.c                                    :+:      :+:    :+:   */
+/*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/09 14:49:27 by user42            #+#    #+#             */
-/*   Updated: 2021/03/10 12:52:33 by user42           ###   ########.fr       */
+/*   Created: 2021/03/10 12:16:00 by user42            #+#    #+#             */
+/*   Updated: 2021/03/10 12:28:31 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char
-	*getidentifier(char *s, t_list *env)
+void
+	showcommand(void *p)
 {
-	t_list	*current;
-	size_t	idlen;
+	t_list		*current;
+	t_command	*commandcontent;
 
-	idlen = 0;
-	if (ft_isalpha(s[0]) || s[0] == '_')
-		idlen++;
-	else
-		return (NULL);
-	while (ft_isalnum(s[idlen]) || s[idlen] == '_')
-		idlen++;
-	current = env;
+	commandcontent = p;
+	current = commandcontent->redirections;
 	while (current)
 	{
-		if (!ft_strncmp(getenvname(current), s, idlen)
-		&& idlen == ft_strlen(getenvname(current)))
-			return (getenvval(current));
+		printf("REDIR\t%s\n", getredirstr(current));
 		current = current->next;
 	}
-	return (NULL);
+	current = commandcontent->argv;
+	while (current)
+	{
+		printf("|%s|\t", gettokenstr(current));
+		current = current->next;
+	}
+	printf("\n");
 }

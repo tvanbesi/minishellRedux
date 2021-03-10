@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 15:05:20 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 23:18:01 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/10 12:41:50 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,9 @@ static void
 		dup2(shell->stdoutcpy, STDOUT);
 		token = parse_token(input);
 		command = parse_command(token);
+		//ft_lstiter(command, showcommand);
 		cyclecommand(command, shell);
+		//ft_lstiter(command, showcommand);
 		freedata(&input, &token, &command);
 	}
 }
