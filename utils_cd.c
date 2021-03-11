@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 16:30:09 by user42            #+#    #+#             */
-/*   Updated: 2021/03/11 19:34:35 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 21:08:17 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,11 +123,16 @@ int
 		;
 	else if ((tmp = getenvvalbyname(*aenv, "PWD")))
 	{
+		free(cwd);
 		if (!(cwd = ft_strdup(tmp)))
 			return (-1);
 	}
-	else if (!(cwd = ft_strdup("")))
-		return (-1);
+	else
+	{
+		free(cwd);
+		if (!(cwd = ft_strdup("")))
+			return (-1);
+	}
 	r = setrelpwdenv(aenv, &cwd, path);
 	free(cwd);
 	return (r);

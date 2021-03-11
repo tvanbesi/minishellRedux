@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 21:28:43 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 23:25:52 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 21:16:08 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,8 @@ int
 			pipecommand(command, shell, n);
 			exit(g_exitstatus);
 		}
-		close2fd(n, fd[(n - 2) * 2], fd[(n - 2) * 2 + 1]);
+		if (n > 1)
+			close2fd(n, fd[(n - 2) * 2], fd[(n - 2) * 2 + 1]);
 	}
 	r = getpipeexitstatus(nchildren, pid_children);
 	free(pid_children);

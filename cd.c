@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:07:04 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/11 19:05:51 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 21:11:24 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,19 +30,28 @@ static int
 static int
 	setpath(char **path, char *argv, int *okcd)
 {
-	if (!ft_strncmp(argv, ".", 2))
+	if (!ft_strncmp(argv, ".", 2) && !(*path = getcwd(NULL, 0)))
 	{
-		if (!(*path = getcwd(NULL, 0)))
-		{
-			*okcd = 0;
-			puterror(strerror(errno));
-			if (!(*path = ft_strdup(".")))
-				return (-1);
-			return (-3);
-		}
+		*okcd = 0;
+		puterror(strerror(errno));
+		if (!(*path = ft_strdup(".")))
+			return (-1);
+		return (-3);
 	}
-	else if (!(*path = ft_strdup(argv)))
-		return (-1);
+	else if (!ft_strncmp(argv, "..", 3) && !(*path = getcwd(NULL, 0)))
+	{
+		puterror(strerror(errno));
+		if (!(*path = ft_strdup("..")))
+			return (-1);
+		return (-3);
+	}
+	else
+	{
+		if (*path)
+			free(*path);
+		if (!(*path = ft_strdup(argv)))
+			return (-1);
+	}
 	if (!ft_strlen(*path))
 		*okcd = 0;
 	return (0);
