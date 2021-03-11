@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:07:04 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/11 17:16:37 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 19:05:51 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int
 	if (!(env = findenv(*aenv, "HOME")) || !getenvval(env))
 	{
 		puterror(ERROR_NOHOME);
-		return (-2);
+		return (-3);
 	}
 	if (!(*path = ft_strdup(getenvval(env))))
 		return (-1);
@@ -43,6 +43,8 @@ static int
 	}
 	else if (!(*path = ft_strdup(argv)))
 		return (-1);
+	if (!ft_strlen(*path))
+		*okcd = 0;
 	return (0);
 }
 

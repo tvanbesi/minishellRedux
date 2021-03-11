@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/11 15:12:17 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 18:31:00 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -304,6 +304,7 @@ int					env(t_list *argv, t_list **aenv);
 int					export(t_list *argv, t_list **aenv);
 int					unset(t_list *argv, t_list **aenv);
 int					exitshell(t_list *argv, t_list **aenv);
+void				resolvepath(char *rpath);
 
 /*
 ***	ERROR
@@ -317,6 +318,7 @@ void				*error(char *msg);
 ***	MISC
 */
 
+void				loopcollapsestr(char *s, int i, int n);
 void				collapsestr(char *s, int i);
 
 extern	int			g_pid;

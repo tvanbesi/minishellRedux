@@ -6,14 +6,14 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 16:30:09 by user42            #+#    #+#             */
-/*   Updated: 2021/03/11 17:23:46 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 19:18:38 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static int
-	setoldpwd(t_list **aenv)
+	setoldpwd(t_list **aenv, int quit)
 {
 	char	*opwd;
 	char	*tmp;
@@ -21,9 +21,9 @@ static int
 	size_t	l;
 
 	if (!(env_pwd = findenv(*aenv, "PWD")))
-		return (0);
+		return (1);
 	else if (!(tmp = getenvval(env_pwd)))
-		return (0);
+		return (1);
 	l = ft_strlen(tmp) + 7;
 	if (!(opwd = malloc(l + 1)))
 		return (-1);
@@ -35,7 +35,7 @@ static int
 		return (-1);
 	}
 	free(opwd);
-	return (0);
+	return (quit);
 }
 
 static int
@@ -92,6 +92,7 @@ static int
 	ft_strlcat(pwdenv, *cwd, l + 1);
 	ft_strlcat(pwdenv, "/", l + 1);
 	ft_strlcat(pwdenv, path, l + 1);
+	resolvepath(pwdenv);
 	if (addenv(aenv, pwdenv) == -1)
 	{
 		free(pwdenv);
@@ -106,9 +107,10 @@ int
 {
 	char	*cwd;
 	char	*tmp;
+	int		r;
 
-	if (setoldpwd(aenv) == -1)
-		return (-1);
+	if ((r = setoldpwd(aenv, path[0] != '\0')) <= 0)
+		return (r);
 	cwd = NULL;
 	if (path[0] == '/')
 	{
@@ -125,11 +127,7 @@ int
 	}
 	else if (!(cwd = ft_strdup("")))
 		return (-1);
-	if (setrelpwdenv(aenv, &cwd, path) == -1)
-	{
-		free(cwd);
-		return (-1);
-	}
+	r = setrelpwdenv(aenv, &cwd, path);
 	free(cwd);
-	return (0);
+	return (r);
 }

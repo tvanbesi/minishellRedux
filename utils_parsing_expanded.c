@@ -6,11 +6,18 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 22:31:44 by user42            #+#    #+#             */
-/*   Updated: 2021/03/11 00:24:13 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 18:30:38 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void
+	loopcollapsestr(char *s, int i, int n)
+{
+	while (n-- > 0)
+		collapsestr(s, i);
+}
 
 void
 	collapsestr(char *s, int i)

@@ -17,6 +17,7 @@ SRCS		=	builtin.c \
 				getpipeexitstatus.c \
 				getprocessargv.c \
 				getenvdata.c \
+				resolvepath.c \
 				initshell.c \
 				main.c \
 				operatorsanity.c \
