@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 19:37:25 by user42            #+#    #+#             */
-/*   Updated: 2021/03/11 01:39:28 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 11:38:37 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int
 	else if (openquote(input, pd) || closequote(input, pd, r))
 		return (1);
 	else if (input[pd->i] == '\\'
-	&& (!pd->qt || (pd->qt == '\"' && isspecialchar(input[pd->i + 1]))))
+	&& (!pd->qt || (pd->qt == '\"' && (isspecialchar(input[pd->i + 1]) || isquote(input[pd->i + 1])))))
 	{
 		escape(input, pd);
 		return (1);
