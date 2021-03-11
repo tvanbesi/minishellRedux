@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/08 15:48:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/11 01:47:53 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 12:21:07 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,8 @@ static int
 }
 
 static int
-	quote(int *qt, int c, int *i)
+	quote(int *qt, int c)
 {
-	(void)i;
 	if (!*qt && isquote(c))
 	{
 		*qt = c;
@@ -65,7 +64,7 @@ void
 	initpd(&pd, idlen);
 	while (src[pd.i])
 	{
-		if (quote(&pd.qt, src[pd.i], &pd.i))
+		if (quote(&pd.qt, src[pd.i]))
 			;
 		if (shouldescape(src[pd.i], src[pd.i + 1], pd.qt))
 			escape(&pd.i, &pd.j, *dst, src);
