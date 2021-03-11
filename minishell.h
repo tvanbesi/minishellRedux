@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/11 01:48:49 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 02:04:51 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 # define ERROR_GNL					"Prompt fail"
 # define ERROR_CYCLING				"Execution cycling error"
 # define ERROR_ISDIR				"is a directory"
-# define ERROR_ISNEXEC				"is not executable"
+# define ERROR_ISNEXEC				"permission denied"
 # define ERROR_NOHOME				"HOME not set"
 # define ERROR_NOFILE				"no such file or directory"
 # define ERROR_FATAL				"Fatal error"
