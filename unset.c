@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 18:50:51 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/09 16:12:20 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 01:26:47 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int
 				return (invalidoption());
 			else
 			{
-				r = -1;
+				r = -3;
 				puterror(ERROR_INVALID_IDENTIFIER);
 			}
 		}

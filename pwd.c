@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:54:38 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/08 19:02:45 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 01:17:00 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,7 @@ int
 			return (-1);
 	}
 	else if (!(cwd = getcwd(NULL, 0)))
-	{
-		puterror(strerror(errno));
 		return (-1);
-	}
 	write(STDOUT, cwd, ft_strlen(cwd));
 	free(cwd);
 	write(STDOUT, "\n", 1);

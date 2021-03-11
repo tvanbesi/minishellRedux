@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 17:52:33 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/09 13:35:51 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 01:25:07 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int
 	else
 	{
 		puterror(ERROR_INVALID_IDENTIFIER);
-		return (-1);
+		return (-3);
 	}
 }
 
@@ -88,7 +88,7 @@ int
 		if (!isidentifiervalid(gettokenstr(current)))
 		{
 			if ((r = handleinvalid(gettokenstr(current), i)) == -2)
-				return (r);
+				return (-2);
 		}
 		else if (addenv(aenv, gettokenstr(current)) == -1)
 			return (-1);

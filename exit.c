@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 14:35:01 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/09 12:44:48 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 01:27:29 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int
 	toomanyarg(void)
 {
 	puterror(ERROR_TOO_MANY_ARG);
-	return (-1);
+	return (-3);
 }
 
 int
