@@ -6,11 +6,21 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 17:44:23 by user42            #+#    #+#             */
-/*   Updated: 2021/03/11 19:34:42 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 19:43:57 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void
+	removedot(char *rpath)
+{
+	char	*pdotdot;
+
+	while ((pdotdot = ft_strnstr(rpath, "/.", ft_strlen(rpath)))
+	&& pdotdot[2] != '.')
+		loopcollapsestr(pdotdot, 0, 2);
+}
 
 void
 	resolvepath(char *rpath)
@@ -19,6 +29,7 @@ void
 	char	*pprevdir;
 	char	*tmp;
 
+	removedot(rpath);
 	while ((pdotdot = ft_strnstr(rpath, "/..", ft_strlen(rpath))))
 	{
 		pprevdir = ft_strchr(rpath, '/');
