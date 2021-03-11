@@ -21,6 +21,7 @@ SRCS		=	builtin.c \
 				main.c \
 				operatorsanity.c \
 				parse_command.c \
+				parse_redircmd.c \
 				parse_token.c \
 				parse_token_expanded.c \
 				pipe.c \

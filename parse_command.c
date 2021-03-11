@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/07 23:06:56 by user42            #+#    #+#             */
-/*   Updated: 2021/03/10 17:54:10 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 00:43:33 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,39 +50,12 @@ static int
 	return (0);
 }
 
-static int
-	parse_redircmd(t_list *token, t_list *command)
+static void
+	*ret(t_list **r)
 {
-	t_list		*redir;
-	t_command	*content;
-	t_redir		*redircontent;
-	t_token		*tokencontent;
-	t_list		*newtoken;
-
-	content = command->content;
-	while (token && !(gettokentype(token) == OPERATOR
-	&& ispipeorsemicolon(token)))
-	{
-		if (gettokentype(token) == OPERATOR && isrediroperator(token))
-		{
-			if (!(redir = newredir(gettokenstr(token))))
-				return (-1);
-			if (getredirtype(redir) == -1)
-				return (-2);
-			token = token->next;
-			if (!token || gettokentype(token) == OPERATOR)
-				return (-2);
-			redircontent = redir->content;
-			if (!(tokencontent = tokendup(token->content)))
-				return (-1); // FREEEEEE
-			if (!(newtoken = ft_lstnew(tokencontent)))
-				return (-1); // FREE AGAIN
-			redircontent->fd_str = newtoken;
-			ft_lstadd_back(&content->redirections, redir);
-		}
-		token = token->next;
-	}
-	return (0);
+	puterror(strerror(errno));
+	ft_lstclear(r, delcommand);
+	return (NULL);
 }
 
 t_list
@@ -97,11 +70,11 @@ t_list
 	while (token)
 	{
 		if (!(command = newcommand(gettokencommandtype(token))))
-			return (NULL);
+			return (ret(&r));
 		if (parse_redircmd(token, command) < 0)
-			printf("error redir\n");
+			return (ret(&r));
 		if (parse_cmd(token, command) < 0)
-			printf("error command parse\n");
+			return (ret(&r));
 		ft_lstadd_back(&r, command);
 		while (token && !(gettokentype(token) == OPERATOR
 		&& ispipeorsemicolon(token)))
