@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 16:30:09 by user42            #+#    #+#             */
-/*   Updated: 2021/03/10 00:58:52 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 17:23:46 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,70 +18,118 @@ static int
 	char	*opwd;
 	char	*tmp;
 	t_list	*env_pwd;
-	int		r;
+	size_t	l;
 
 	if (!(env_pwd = findenv(*aenv, "PWD")))
 		return (0);
-	r = 0;
-	if (getenvval(env_pwd))
-		opwd = ft_strdup(getenvval(env_pwd));
-	else
-		opwd = ft_strdup("");
-	if (!opwd)
+	else if (!(tmp = getenvval(env_pwd)))
+		return (0);
+	l = ft_strlen(tmp) + 7;
+	if (!(opwd = malloc(l + 1)))
 		return (-1);
-	tmp = opwd;
-	opwd = ft_strjoin("OLDPWD=", opwd);
-	free(tmp);
-	if (!opwd)
+	ft_strlcpy(opwd, "OLDPWD=", l + 1);
+	ft_strlcat(opwd, tmp, l + 1);
+	if (addenv(aenv, opwd) == -1)
+	{
+		free(opwd);
 		return (-1);
-	if ((r = addenv(aenv, opwd) == -1))
-		puterror(strerror(errno));
+	}
 	free(opwd);
-	return (r);
+	return (0);
 }
 
 static int
-	setcwd(char **cwd, t_list *env_pwd, char *cd_arg)
+	setabspwdenv(t_list **aenv, char *path)
 {
-	if (env_pwd)
+	char	*pwdenv;
+	size_t	l;
+
+	l = ft_strlen(path) + 1 + 4;
+	if (!(pwdenv = malloc(l + 1)))
+		return (-1);
+	ft_strlcpy(pwdenv, "PWD=", l + 1);
+	ft_strlcat(pwdenv, path, l + 1);
+	if (addenv(aenv, pwdenv) == -1)
 	{
-		if (getenvval(env_pwd) && !ft_strncmp(cd_arg, ".", 2))
-			*cwd = ft_strjoin(getenvval(env_pwd), "/.");
-		else
-			*cwd = ft_strdup("");
-		if (!*cwd)
+		free(pwdenv);
+		return (-1);
+	}
+	free(pwdenv);
+	return (0);
+}
+
+static int
+	resetnullcwd(char **cwd, t_list *env)
+{
+	t_list	*env_pwd;
+
+	env_pwd = findenv(env, "PWD");
+	if (!*cwd)
+	{
+		if (!env)
+		{
+			if (!(*cwd = ft_strdup("")))
+				return (-1);
+		}
+		else if (!(*cwd = ft_strdup(getenvval(env_pwd))))
 			return (-1);
 	}
-	else
-		*cwd = NULL;
+	return (0);
+}
+
+static int
+	setrelpwdenv(t_list **aenv, char **cwd, char *path)
+{
+	char	*pwdenv;
+	size_t	l;
+
+	if (resetnullcwd(cwd, *aenv) == -1)
+		return (-1);
+	l = ft_strlen(*cwd) + ft_strlen(path) + 1 + 4;
+	if (!(pwdenv = malloc(l + 1)))
+		return (-1);
+	ft_strlcpy(pwdenv, "PWD=", l + 1);
+	ft_strlcat(pwdenv, *cwd, l + 1);
+	ft_strlcat(pwdenv, "/", l + 1);
+	ft_strlcat(pwdenv, path, l + 1);
+	if (addenv(aenv, pwdenv) == -1)
+	{
+		free(pwdenv);
+		return (-1);
+	}
+	free(pwdenv);
 	return (0);
 }
 
 int
-	setpwdenv(t_list **aenv, char *cd_arg)
+	updatepwd(t_list **aenv, char *path)
 {
 	char	*cwd;
 	char	*tmp;
-	t_list	*env_pwd;
 
-	env_pwd = findenv(*aenv, "PWD");
-	cwd = NULL;
-	if (!(cwd = getcwd(NULL, 0)) && setcwd(&cwd, env_pwd, cd_arg) == -1)
-		return (-1);
-	if (!cwd)
-		return (setoldpwd(aenv));
-	tmp = cwd;
-	cwd = ft_strjoin("PWD=", cwd);
-	free(tmp);
-	if (!cwd)
-		return (-1);
 	if (setoldpwd(aenv) == -1)
+		return (-1);
+	cwd = NULL;
+	if (path[0] == '/')
+	{
+		if ((setabspwdenv(aenv, path)) == -1)
+			return (-1);
+		return (0);
+	}
+	else if (!(cwd = getcwd(NULL, 0)))
+		;
+	else if ((tmp = getenvvalbyname(*aenv, "PWD")))
+	{
+		if (!(cwd = ft_strdup(tmp)))
+			return (-1);
+	}
+	else if (!(cwd = ft_strdup("")))
+		return (-1);
+	if (setrelpwdenv(aenv, &cwd, path) == -1)
 	{
 		free(cwd);
 		return (-1);
 	}
-	if (addenv(aenv, cwd) == -1)
-		puterror(strerror(errno));
 	free(cwd);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:07:04 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/10 00:36:36 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 17:16:37 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,68 +28,56 @@ static int
 }
 
 static int
-	setpath(char **path, char **cd_arg, char *argv)
+	setpath(char **path, char *argv, int *okcd)
 {
-	if (!argv[0])
+	if (!ft_strncmp(argv, ".", 2))
 	{
-		if (!(*path = ft_strdup(".")))
-			return (-1);
+		if (!(*path = getcwd(NULL, 0)))
+		{
+			*okcd = 0;
+			puterror(strerror(errno));
+			if (!(*path = ft_strdup(".")))
+				return (-1);
+			return (-3);
+		}
 	}
-	else
-	{
-		if (!(*path = ft_strdup(argv)))
-			return (-1);
-		*cd_arg = argv;
-	}
-	return (0);
-}
-
-static int
-	exception(t_list **aenv, char *cd_arg)
-{
-	char	*tmp;
-	int		r;
-
-	if (!(tmp = ft_strjoin("PWD=", cd_arg)))
+	else if (!(*path = ft_strdup(argv)))
 		return (-1);
-	r = addenv(aenv, tmp);
-	free(tmp);
-	return (r);
+	return (0);
 }
 
 static int
 	toomanyarg(void)
 {
 	puterror(ERROR_TOO_MANY_ARG);
-	return (-1);
+	return (-3);
 }
 
 int
 	cd(t_list *argv, t_list **aenv)
 {
 	char		*path;
-	char		*cd_arg;
+	int			okcd;
+	int			r;
 
 	path = NULL;
-	cd_arg = NULL;
+	okcd = 1;
 	if (!argv)
 	{
-		if (findhome(&path, aenv) < 0)
-			return (-1);
+		if ((r = findhome(&path, aenv)) < 0)
+			return (r);
+		if (!ft_strlen(path))
+			return (0);
 	}
 	else if (argv->next)
 		return (toomanyarg());
-	else if (setpath(&path, &cd_arg, gettokenstr(argv)) == -1)
+	else if ((r = setpath(&path, gettokenstr(argv), &okcd)) == -1)
 		return (-1);
-	if (chdir(path) == -1)
+	if ((okcd && chdir(path) == -1) || updatepwd(aenv, path) == -1)
 	{
 		free(path);
 		return (-1);
 	}
 	free(path);
-	if (setpwdenv(aenv, cd_arg) == -1)
-		return (-1);
-	if (cd_arg && cd_arg[0] == '/' && cd_arg[1] == '/' && cd_arg[2] != '/')
-		return (exception(aenv, cd_arg));
-	return (0);
+	return (r);
 }

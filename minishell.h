@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/11 02:04:51 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 15:12:17 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,6 +253,8 @@ void				delredir(void *p);
 t_list				*findenv(t_list *env, const char *name);
 char				*getenvname(t_list *env);
 char				*getenvval(t_list *env);
+char				*getenvvalbyname(t_list *env, char *name);
+char				*getenvstr(t_list *env);
 char				**getenvp(t_list *env);
 int					getenvdata(char *input, char **val,
 					char **name, t_list **aenv);
@@ -295,7 +297,7 @@ void				sigquit(int n);
 */
 
 int					cd(t_list *argv, t_list **aenv);
-int					setpwdenv(t_list **aenv, char *cd_arg);
+int					updatepwd(t_list **aenv, char *path);
 int					echo(t_list *argv, t_list **aenv);
 int					pwd(t_list *argv, t_list **aenv);
 int					env(t_list *argv, t_list **aenv);

@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 17:29:01 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/01 23:47:41 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 15:11:56 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,17 @@ char
 	return (content->val);
 }
 
-static char
+char
+	*getenvvalbyname(t_list *env, char *name)
+{
+	t_list	*lenv;
+
+	if (!(lenv = findenv(env, name)))
+		return (NULL);
+	return (getenvval(lenv));
+}
+
+char
 	*getenvstr(t_list *env)
 {
 	char	*r;
