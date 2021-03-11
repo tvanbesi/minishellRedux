@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 16:30:09 by user42            #+#    #+#             */
-/*   Updated: 2021/03/11 19:18:38 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 19:34:35 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ static int
 		return (-1);
 	ft_strlcpy(pwdenv, "PWD=", l + 1);
 	ft_strlcat(pwdenv, path, l + 1);
+	resolvepath(pwdenv);
 	if (addenv(aenv, pwdenv) == -1)
 	{
 		free(pwdenv);
