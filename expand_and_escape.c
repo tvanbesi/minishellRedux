@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/08 15:48:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/10 21:28:07 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 01:47:53 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void
 			;
 		if (shouldescape(src[pd.i], src[pd.i + 1], pd.qt))
 			escape(&pd.i, &pd.j, *dst, src);
-		else if (shouldexpand(src[pd.i], pd.qt))
+		else if (shouldexpand(src[pd.i], src[pd.i + 1], pd.qt))
 		{
 			expansion(*dst, &(src[pd.i++]), env, &pd);
 			if (ft_isdigit(src[pd.i]) || src[pd.i] == '?')
