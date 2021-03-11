@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 17:44:23 by user42            #+#    #+#             */
-/*   Updated: 2021/03/11 19:43:57 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 19:53:08 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,11 @@ void
 	removedot(char *rpath)
 {
 	char	*pdotdot;
+	char	*cwd;
 
+	if (!(cwd = getcwd(NULL, 0)))
+		return ;
+	free(cwd);
 	while ((pdotdot = ft_strnstr(rpath, "/.", ft_strlen(rpath)))
 	&& pdotdot[2] != '.')
 		loopcollapsestr(pdotdot, 0, 2);
