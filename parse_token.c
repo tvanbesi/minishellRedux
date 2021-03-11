@@ -6,33 +6,11 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/07 17:40:07 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 22:31:41 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 20:45:35 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void
-	quote(int *qt, int c)
-{
-	if (!*qt && isquote(c))
-		*qt = c;
-	else if (*qt && *qt == c)
-		*qt = 0;
-}
-
-static int
-	escape(char *input, t_parsedata *pd)
-{
-	if (input[pd->i] == '\\')
-	{
-		if (!input[pd->i + 1])
-			return (-1);
-		pd->i += 2;
-		pd->l += 2;
-	}
-	return (0);
-}
 
 static void
 	initparsedata(t_parsedata *pd)
@@ -43,17 +21,11 @@ static void
 	pd->qt = 0;
 }
 
-static void
-	inc(t_parsedata *pd)
-{
-	pd->i++;
-	pd->l++;
-}
-
 t_list
 	*parse_token(char *input)
 {
 	t_list			*r;
+	int				ret;
 	t_parsedata		pd;
 
 	r = NULL;
@@ -61,18 +33,12 @@ t_list
 	if (!input)
 		return (NULL);
 	while (input[pd.i])
-	{
-		quote(&pd.qt, input[pd.i]);
-		if (escape(input, &pd) == -1)
-			return (errorparse(&r));
-		else if (!pd.qt && ismetachar(input[pd.i]))
+		if ((ret = parse_token_loop(&r, input, &pd)) < 0)
 		{
-			if (addword(&r, input, &pd) == -1)
+			if (ret == -1)
 				return (fail(&r));
+			return (errorparse(&r));
 		}
-		else
-			inc(&pd);
-	}
 	if (addtoken(&r, &input[pd.s], pd.l - 1, WORD) == -1)
 		return (fail(&r));
 	if (operatorsanity(r) == -1)

@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/11 18:31:00 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/11 20:42:25 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,7 @@ int					expandcommand(t_list *command, t_list *env);
 char				*expand(char *s, t_list *env);
 t_list				*tokenize(char *input);
 t_list				*parse_token(char *input);
+int					parse_token_loop(t_list **r, char *input, t_parsedata *pd);
 t_list				*parse_token_expanded(char *input);
 t_list				*parse_command(t_list *token);
 int					isidentifiervalid(char *s);

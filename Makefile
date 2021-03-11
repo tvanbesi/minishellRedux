@@ -24,6 +24,7 @@ SRCS		=	builtin.c \
 				parse_command.c \
 				parse_redircmd.c \
 				parse_token.c \
+				parse_token_loop.c \
 				parse_token_expanded.c \
 				pipe.c \
 				pipechildren.c \
