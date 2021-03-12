@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 21:28:43 by user42            #+#    #+#             */
-/*   Updated: 2021/03/11 21:16:08 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/12 17:36:06 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,12 @@ static void
 }
 
 static void
-	close2fd(int n, int fd1, int fd2)
+	close2fd(int n, int *fd)
 {
 	if (n > 1)
 	{
-		close(fd1);
-		close(fd2);
+		close(fd[(n - 2) * 2]);
+		close(fd[(n - 2) * 2 + 1]);
 	}
 }
 
@@ -79,8 +79,7 @@ int
 			pipecommand(command, shell, n);
 			exit(g_exitstatus);
 		}
-		if (n > 1)
-			close2fd(n, fd[(n - 2) * 2], fd[(n - 2) * 2 + 1]);
+		close2fd(n, fd);
 	}
 	r = getpipeexitstatus(nchildren, pid_children);
 	free(pid_children);

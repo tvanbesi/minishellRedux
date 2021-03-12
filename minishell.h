@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/12 17:32:09 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/12 17:43:53 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ typedef struct		s_parsedata
 	int				opoldpwd;
 	int				okcd;
 	int				r;
+	char			*buf;
+	char			*param;
 }					t_parsedata;
 
 typedef	enum		e_prompt_r

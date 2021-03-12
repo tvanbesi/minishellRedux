@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 17:44:23 by user42            #+#    #+#             */
-/*   Updated: 2021/03/11 21:01:09 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/12 17:38:17 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,14 @@ void
 	while ((pdotdot = ft_strnstr(rpath, "/.", ft_strlen(rpath)))
 	&& pdotdot[2] != '.')
 		loopcollapsestr(pdotdot, 0, 2);
+}
+
+static void
+	doubleslash(char *rpath)
+{
+	if (rpath[4] == '/' && rpath[5] == '/' && rpath[6] == '/')
+		while (rpath[5] == '/')
+			collapsestr(rpath, 5);
 }
 
 void
@@ -49,9 +57,5 @@ void
 	}
 	if (!ft_strchr(rpath, '/'))
 		ft_strlcat(rpath, "/", 6);
-	if (rpath[4] == '/' && rpath[5] == '/' && rpath[6] == '/')
-	{
-		while (rpath[5] == '/')
-			collapsestr(rpath, 5);
-	}
+	doubleslash(rpath);
 }
