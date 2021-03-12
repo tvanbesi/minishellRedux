@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/12 17:43:53 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/12 18:12:35 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,18 +175,15 @@ void				showcommand(void *p);
 char				*readstdin(void);
 int					prompt(char **line);
 int					expandcommand(t_list *command, t_list *env);
-//char				*expand(char *s, t_list *env);
 t_list				*tokenize(char *input);
 t_list				*parse_token(char *input);
 int					parse_token_loop(t_list **r, char *input, t_parsedata *pd);
-//t_list				*parse_token_expanded(char *input);
 t_list				*parse_command(t_list *token);
 int					isidentifiervalid(char *s);
-//int					shouldescape(int c1, int c2, int qt);
-//int					shouldexpand(int c1, int c2, int qt);
-//void				expansion(char *dst, char *src, t_list *env, t_parsedata *pd);
 t_list				*expand_and_escape(char *src, t_list *env);
 int					expandtoken(t_list **dst, t_list *src, t_list *env);
+int					expandloop(t_list **r, char *src, t_parsedata *pd, t_list *env);
+int					expand(t_list **atoken, char *src, t_parsedata *pd, t_list *env);
 int					parse_redircmd(t_list *token, t_list *command);
 int					trimcommand(t_list **argv);
 int					parse_redir(t_list *redir, t_list *env);
@@ -210,7 +207,6 @@ size_t				getidlen(char *s, t_list *env);
 int					gettokentype(t_list *token);
 char				*gettokenstr(t_list *token);
 int					gettokencommandtype(t_list *token);
-//int					emptytokenexception(char *word, t_list *env);
 int					isquote(int c);
 int					ismetachar(int c);
 int					isoperator(int c);

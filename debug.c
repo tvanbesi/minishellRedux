@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 12:16:00 by user42            #+#    #+#             */
-/*   Updated: 2021/03/10 17:24:16 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/12 18:15:03 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,22 @@ void
 
 	content = p;
 	printf("|%s|\n", content->s);
+}
+
+static void
+	showredir(t_list *redir)
+{
+	while (redir)
+	{
+		if (getredirtype(redir) == REDIRIN)
+			printf("<\t");
+		if (getredirtype(redir) == REDIRAPPEND)
+			printf(">>\t");
+		if (getredirtype(redir) == REDIRTRUNC)
+			printf(">\t");
+		printf("REDIR\t%s\n", getredirstr(redir));
+		redir = redir->next;
+	}
 }
 
 void
@@ -34,18 +50,7 @@ void
 		printf("PIPE\n");
 	else
 		printf("BAD CMD TYPE\n");
-	current = commandcontent->redirections;
-	while (current)
-	{
-		if (getredirtype(current) == REDIRIN)
-			printf("<\t");
-		if (getredirtype(current) == REDIRAPPEND)
-			printf(">>\t");
-		if (getredirtype(current) == REDIRTRUNC)
-			printf(">\t");
-		printf("REDIR\t%s\n", getredirstr(current));
-		current = current->next;
-	}
+	showredir(commandcontent->redirections);
 	current = commandcontent->argv;
 	if (!current)
 		printf("NOARGV\n");
