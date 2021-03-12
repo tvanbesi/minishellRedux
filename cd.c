@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:07:04 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/11 21:11:24 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/12 16:55:43 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,21 @@ static int
 	if (!(env = findenv(*aenv, "HOME")) || !getenvval(env))
 	{
 		puterror(ERROR_NOHOME);
+		return (-3);
+	}
+	if (!(*path = ft_strdup(getenvval(env))))
+		return (-1);
+	return (0);
+}
+
+static int
+	findoldpwd(char **path, t_list **aenv)
+{
+	t_list	*env;
+
+	if (!(env = findenv(*aenv, "OLDPWD")) || !getenvval(env))
+	{
+		puterror(ERROR_NOOLDPWD);
 		return (-3);
 	}
 	if (!(*path = ft_strdup(getenvval(env))))
@@ -69,10 +84,12 @@ int
 {
 	char		*path;
 	int			okcd;
+	int			opoldpwd;
 	int			r;
 
 	path = NULL;
 	okcd = 1;
+	opoldpwd = 0;
 	if (!argv)
 	{
 		if ((r = findhome(&path, aenv)) < 0)
@@ -82,6 +99,12 @@ int
 	}
 	else if (argv->next)
 		return (toomanyarg());
+	else if (!ft_strncmp(gettokenstr(argv), "-", 2))
+	{
+		if ((r = findoldpwd(&path, aenv)) < 0)
+			return (r);
+		opoldpwd = 1;
+	}
 	else if ((r = setpath(&path, gettokenstr(argv), &okcd)) == -1)
 		return (-1);
 	if ((okcd && chdir(path) == -1) || updatepwd(aenv, path) == -1)
@@ -89,6 +112,8 @@ int
 		free(path);
 		return (-1);
 	}
+	if (opoldpwd)
+		ft_putendl_fd(path, STDOUT);
 	free(path);
 	return (r);
 }

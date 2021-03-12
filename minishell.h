@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/12 16:24:16 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/12 16:48:23 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@
 # define ERROR_ISDIR				"is a directory"
 # define ERROR_ISNEXEC				"permission denied"
 # define ERROR_NOHOME				"HOME not set"
+# define ERROR_NOOLDPWD				"OLDPWD not set"
 # define ERROR_NOFILE				"no such file or directory"
 # define ERROR_FATAL				"Fatal error"
 
