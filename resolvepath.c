@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/11 17:44:23 by user42            #+#    #+#             */
-/*   Updated: 2021/03/12 17:38:17 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/12 18:55:31 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static void
 	if (rpath[4] == '/' && rpath[5] == '/' && rpath[6] == '/')
 		while (rpath[5] == '/')
 			collapsestr(rpath, 5);
+	if (ft_strlen(rpath) > 4 && rpath[ft_strlen(rpath) - 1] == '/')
+		collapsestr(rpath, ft_strlen(rpath) - 1);
 }
 
 void
