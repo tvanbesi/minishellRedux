@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/08 15:48:01 by user42            #+#    #+#             */
-/*   Updated: 2021/03/12 16:29:55 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/12 17:02:28 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static void
 	pd->qt = 0;
 	pd->idlen = getidlen(src, env);
 }
-
 
 static int
 	parse_expansion(t_list **atoken, char *buf, char *param, t_parsedata *pd)
@@ -44,7 +43,6 @@ static int
 	}
 	return (0);
 }
-
 
 static int
 	expand(t_list **atoken, char *buf, char *src, t_parsedata *pd, t_list *env)
@@ -82,7 +80,6 @@ static int
 static int
 	restempty(char *s, t_parsedata *pd)
 {
-
 	if (!s[0])
 		return (1);
 	if (!pd->qt && isquote(s[0]))
@@ -93,8 +90,8 @@ static int
 t_list
 	*expand_and_escape(char *src, t_list *env)
 {
-	t_list	*r;
-	char	*buf;
+	t_list		*r;
+	char		*buf;
 	t_parsedata	pd;
 
 	r = NULL;
@@ -177,69 +174,3 @@ t_list
 	free(buf);
 	return (r);
 }
-
-/*
-static void
-	escape(int *i, int *j, char *dst, char *src)
-{
-	dst[(*j)++] = src[(*i)++];
-	dst[(*j)++] = src[(*i)++];
-}
-
-static int
-	nulltoken(int qt, int l, char **s, int c)
-{
-	if (!qt && !l && !c)
-	{
-		free(*s);
-		*s = NULL;
-		return (1);
-	}
-	return (0);
-}
-
-static int
-	quote(int *qt, int c)
-{
-	if (!*qt && isquote(c))
-	{
-		*qt = c;
-		return (1);
-	}
-	else if (*qt && *qt == c)
-	{
-		*qt = 0;
-		return (1);
-	}
-	return (0);
-}
-
-void
-	expand_and_escape(char **dst, char *src, int idlen, t_list *env)
-{
-	t_parsedata	pd;
-
-	initpd(&pd, idlen);
-	while (src[pd.i])
-	{
-		if (quote(&pd.qt, src[pd.i]))
-			;
-		if (shouldescape(src[pd.i], src[pd.i + 1], pd.qt))
-			escape(&pd.i, &pd.j, *dst, src);
-		else if (shouldexpand(src[pd.i], src[pd.i + 1], pd.qt))
-		{
-			expansion(*dst, &(src[pd.i++]), env, &pd);
-			if (ft_isdigit(src[pd.i]) || src[pd.i] == '?')
-				pd.i++;
-			else
-				while (ft_isalnum(src[pd.i]) || src[pd.i] == '_')
-					pd.i++;
-			if (nulltoken(pd.qt, ft_strlen(*dst), dst, src[pd.i]))
-				return ;
-			pd.j = ft_strlen(*dst);
-		}
-		else
-			(*dst)[pd.j++] = src[pd.i++];
-	}
-}
-*/

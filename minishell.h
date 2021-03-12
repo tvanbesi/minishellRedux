@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/12 16:48:23 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/12 17:32:09 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,15 +82,6 @@ typedef struct		s_readstdindata
 	size_t			len;
 }					t_readstdindata;
 
-typedef struct		s_unquotedata
-{
-	size_t			l;
-	size_t			i;
-	size_t			j;
-	int				q;
-	char			*param;
-}					t_unquotedata;
-
 typedef struct		s_parsedata
 {
 	int				i;
@@ -100,6 +91,9 @@ typedef struct		s_parsedata
 	int				escape;
 	unsigned int	s;
 	size_t			l;
+	int				opoldpwd;
+	int				okcd;
+	int				r;
 }					t_parsedata;
 
 typedef	enum		e_prompt_r
@@ -297,6 +291,10 @@ void				sigquit(int n);
 */
 
 int					cd(t_list *argv, t_list **aenv);
+int					findhome(char **path, t_list **aenv);
+int					findoldpwd(char **path, t_list **aenv, int *opoldpwd);
+int					setabspwdenv(t_list **aenv, char *path);
+int					setrelpwdenv(t_list **aenv, char **cwd, char *path);
 int					updatepwd(t_list **aenv, char *path);
 int					echo(t_list *argv, t_list **aenv);
 int					pwd(t_list *argv, t_list **aenv);

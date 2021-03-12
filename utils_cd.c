@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 16:30:09 by user42            #+#    #+#             */
-/*   Updated: 2021/03/11 21:08:17 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/12 17:32:54 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,68 +39,25 @@ static int
 }
 
 static int
-	setabspwdenv(t_list **aenv, char *path)
+	emptypwd(char **cwd)
 {
-	char	*pwdenv;
-	size_t	l;
-
-	l = ft_strlen(path) + 1 + 4;
-	if (!(pwdenv = malloc(l + 1)))
+	free(*cwd);
+	if (!(*cwd = ft_strdup("")))
 		return (-1);
-	ft_strlcpy(pwdenv, "PWD=", l + 1);
-	ft_strlcat(pwdenv, path, l + 1);
-	resolvepath(pwdenv);
-	if (addenv(aenv, pwdenv) == -1)
-	{
-		free(pwdenv);
-		return (-1);
-	}
-	free(pwdenv);
 	return (0);
 }
 
 static int
-	resetnullcwd(char **cwd, t_list *env)
+	findpwd(char *tmp, char **cwd, t_list *env)
 {
-	t_list	*env_pwd;
-
-	env_pwd = findenv(env, "PWD");
-	if (!*cwd)
+	if ((tmp = getenvvalbyname(env, "PWD")))
 	{
-		if (!env)
-		{
-			if (!(*cwd = ft_strdup("")))
-				return (-1);
-		}
-		else if (!(*cwd = ft_strdup(getenvval(env_pwd))))
+		free(*cwd);
+		if (!(*cwd = ft_strdup(tmp)))
 			return (-1);
+		return (0);
 	}
-	return (0);
-}
-
-static int
-	setrelpwdenv(t_list **aenv, char **cwd, char *path)
-{
-	char	*pwdenv;
-	size_t	l;
-
-	if (resetnullcwd(cwd, *aenv) == -1)
-		return (-1);
-	l = ft_strlen(*cwd) + ft_strlen(path) + 1 + 4;
-	if (!(pwdenv = malloc(l + 1)))
-		return (-1);
-	ft_strlcpy(pwdenv, "PWD=", l + 1);
-	ft_strlcat(pwdenv, *cwd, l + 1);
-	ft_strlcat(pwdenv, "/", l + 1);
-	ft_strlcat(pwdenv, path, l + 1);
-	resolvepath(pwdenv);
-	if (addenv(aenv, pwdenv) == -1)
-	{
-		free(pwdenv);
-		return (-1);
-	}
-	free(pwdenv);
-	return (0);
+	return (1);
 }
 
 int
@@ -113,6 +70,7 @@ int
 	if ((r = setoldpwd(aenv, path[0] != '\0')) <= 0)
 		return (r);
 	cwd = NULL;
+	tmp = NULL;
 	if (path[0] == '/')
 	{
 		if ((setabspwdenv(aenv, path)) == -1)
@@ -121,18 +79,10 @@ int
 	}
 	else if (!(cwd = getcwd(NULL, 0)))
 		;
-	else if ((tmp = getenvvalbyname(*aenv, "PWD")))
-	{
-		free(cwd);
-		if (!(cwd = ft_strdup(tmp)))
-			return (-1);
-	}
-	else
-	{
-		free(cwd);
-		if (!(cwd = ft_strdup("")))
-			return (-1);
-	}
+	else if ((r = findpwd(tmp, &cwd, *aenv)) <= 0)
+		;
+	else if (r == -1 || emptypwd(&cwd) == -1)
+		return (-1);
 	r = setrelpwdenv(aenv, &cwd, path);
 	free(cwd);
 	return (r);

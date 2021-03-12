@@ -6,41 +6,11 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 13:07:04 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/12 16:55:43 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/12 17:16:51 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int
-	findhome(char **path, t_list **aenv)
-{
-	t_list	*env;
-
-	if (!(env = findenv(*aenv, "HOME")) || !getenvval(env))
-	{
-		puterror(ERROR_NOHOME);
-		return (-3);
-	}
-	if (!(*path = ft_strdup(getenvval(env))))
-		return (-1);
-	return (0);
-}
-
-static int
-	findoldpwd(char **path, t_list **aenv)
-{
-	t_list	*env;
-
-	if (!(env = findenv(*aenv, "OLDPWD")) || !getenvval(env))
-	{
-		puterror(ERROR_NOOLDPWD);
-		return (-3);
-	}
-	if (!(*path = ft_strdup(getenvval(env))))
-		return (-1);
-	return (0);
-}
 
 static int
 	setpath(char **path, char *argv, int *okcd)
@@ -79,41 +49,47 @@ static int
 	return (-3);
 }
 
+static int
+	ret(char *s)
+{
+	free(s);
+	return (-1);
+}
+
+static void
+	initparsedata(t_parsedata *pd)
+{
+	pd->opoldpwd = 0;
+	pd->okcd = 1;
+	pd->r = 0;
+}
+
 int
 	cd(t_list *argv, t_list **aenv)
 {
 	char		*path;
-	int			okcd;
-	int			opoldpwd;
-	int			r;
+	t_parsedata	pd;
 
 	path = NULL;
-	okcd = 1;
-	opoldpwd = 0;
+	initparsedata(&pd);
 	if (!argv)
 	{
-		if ((r = findhome(&path, aenv)) < 0)
-			return (r);
-		if (!ft_strlen(path))
-			return (0);
+		if ((pd.r = findhome(&path, aenv)) <= 0)
+			return (pd.r);
 	}
 	else if (argv->next)
 		return (toomanyarg());
 	else if (!ft_strncmp(gettokenstr(argv), "-", 2))
 	{
-		if ((r = findoldpwd(&path, aenv)) < 0)
-			return (r);
-		opoldpwd = 1;
+		if ((pd.r = findoldpwd(&path, aenv, &pd.opoldpwd)) < 0)
+			return (pd.r);
 	}
-	else if ((r = setpath(&path, gettokenstr(argv), &okcd)) == -1)
+	else if ((pd.r = setpath(&path, gettokenstr(argv), &pd.okcd)) == -1)
 		return (-1);
-	if ((okcd && chdir(path) == -1) || updatepwd(aenv, path) == -1)
-	{
-		free(path);
-		return (-1);
-	}
-	if (opoldpwd)
+	if ((pd.okcd && chdir(path) == -1) || updatepwd(aenv, path) == -1)
+		return (ret(path));
+	if (pd.opoldpwd)
 		ft_putendl_fd(path, STDOUT);
 	free(path);
-	return (r);
+	return (pd.r);
 }

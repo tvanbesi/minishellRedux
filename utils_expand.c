@@ -6,35 +6,11 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 14:52:09 by user42            #+#    #+#             */
-/*   Updated: 2021/03/12 16:25:09 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/12 17:00:34 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
-void
-	expansion(char *dst, char *src, t_list *env, t_parsedata *pd)
-{
-	char	*strexitstatus;
-	char	*param;
-
-	if (src[1] == '?')
-	{
-		strexitstatus = ft_itoa(g_exitstatus);
-		ft_strlcat(dst, strexitstatus, pd->idlen + 1);
-		free(strexitstatus);
-	}
-	else
-	{
-		if (!ft_isdigit(src[1])
-		&& !(ft_isalpha(src[1]) || src[1] == '_')
-		&& (!src[1] || src[1] == pd->qt || !isquote(src[1])))
-			ft_strlcat(dst, "$", pd->idlen + 1);
-		else if ((param = getidentifier(&src[1], env)))
-			ft_strlcat(dst, param, pd->idlen + 1);
-	}
-}
-*/
 
 int
 	canbeexpanded(char c)
@@ -55,19 +31,6 @@ int
 			return (-1);
 		ft_lstadd_back(dst, tmp);
 		current = current->next;
-		/*
-		rawargv = NULL;
-		idlen = getidlen(gettokenstr(current), env);
-		if (!(rawargv = ft_calloc(idlen + 1, sizeof(char))))
-			return (-1);
-		expand_and_escape(&rawargv, gettokenstr(current), idlen, env);
-		//printf("RAW|%s|\n", rawargv);
-		tmp = parse_token_expanded(rawargv);
-		//printf("FRESH|%s|\n", rawargv);
-		ft_lstadd_back(dst, tmp);
-		free(rawargv);
-		current = current->next;
-		*/
 	}
 	if (!*dst)
 		return (-2);
