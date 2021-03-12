@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 15:28:10 by user42            #+#    #+#             */
-/*   Updated: 2021/03/10 20:04:19 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/12 13:57:18 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 int
 	expandcommand(t_list *command, t_list *env)
 {
-	t_list		*current;
+	t_list		*tmp;
 	t_list		*expandedargv;
 	t_command	*commandcontent;
 	int			r;
 
 	expandedargv = NULL;
-	current = getcommandredir(command);
-	if ((r = parse_redir(current, env)) < 0)
+	tmp = getcommandredir(command);
+	if ((r = parse_redir(tmp, env)) < 0)
 		return (r);
-	current = getcommandargv(command);
-	if (expandtoken(&expandedargv, current, env) == -1)
+	tmp = getcommandargv(command);
+	if (expandtoken(&expandedargv, tmp, env) == -1)
 		return (-1);
 	commandcontent = command->content;
 	ft_lstclear(&commandcontent->argv, deltoken);

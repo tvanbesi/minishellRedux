@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/07 17:40:07 by user42            #+#    #+#             */
-/*   Updated: 2021/03/11 20:45:35 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/12 15:14:16 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_list
 		}
 	if (addtoken(&r, &input[pd.s], pd.l - 1, WORD) == -1)
 		return (fail(&r));
-	if (operatorsanity(r) == -1)
+	if (pd.qt || operatorsanity(r) == -1)
 		return (errorparse(&r));
 	return (r);
 }

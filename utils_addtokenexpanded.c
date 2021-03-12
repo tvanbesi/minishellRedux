@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 22:00:35 by user42            #+#    #+#             */
-/*   Updated: 2021/03/11 00:23:02 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/12 15:12:08 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,17 @@
 
 int
 	addnulltoken(t_list **atoken)
+{
+	t_list	*token;
+
+	if (!(token = newtoken(WORD)))
+		return (-1);
+	ft_lstadd_back(atoken, token);
+	return (0);
+}
+
+int
+	addemptytoken(t_list **atoken)
 {
 	t_list	*token;
 	t_token	*content;
@@ -33,37 +44,21 @@ int
 }
 
 int
-	addwordexpanded(t_list **r, char *input, t_parsedata *pd)
-{
-	if (addtokenexpanded(r, &input[pd->s], pd->l - 1, WORD) == -1)
-		return (-1);
-	pd->l = 0;
-	while (ft_isspht(input[pd->i]))
-		pd->i++;
-	pd->s = pd->i;
-	pd->l = 1;
-	return (0);
-}
-
-int
-	addtokenexpanded(t_list **atoken, const char *input, size_t l, int type)
+	addtokenexpanded(t_list **atoken, const char *src)
 {
 	t_list	*token;
 	t_token	*content;
 	char	*str;
 
-	if (l)
+	if (!(str = ft_strdup(src)))
+		return (-1);
+	if (!(token = newtoken(WORD)))
 	{
-		if (!(str = ft_substr(input, 0, l)))
-			return (-1);
-		if (!(token = newtoken(type)))
-		{
-			free(str);
-			return (-1);
-		}
-		content = token->content;
-		content->s = str;
-		ft_lstadd_back(atoken, token);
+		free(str);
+		return (-1);
 	}
+	content = token->content;
+	content->s = str;
+	ft_lstadd_back(atoken, token);
 	return (0);
 }

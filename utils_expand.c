@@ -6,12 +6,12 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 14:52:09 by user42            #+#    #+#             */
-/*   Updated: 2021/03/11 12:39:09 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/12 16:25:09 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+/*
 void
 	expansion(char *dst, char *src, t_list *env, t_parsedata *pd)
 {
@@ -34,27 +34,40 @@ void
 			ft_strlcat(dst, param, pd->idlen + 1);
 	}
 }
+*/
+
+int
+	canbeexpanded(char c)
+{
+	return (ft_isalnum(c) || c == '_' || c == '?');
+}
 
 int
 	expandtoken(t_list **dst, t_list *src, t_list *env)
 {
 	t_list	*current;
-	char	*rawargv;
-	size_t	idlen;
 	t_list	*tmp;
 
 	current = src;
 	while (current)
 	{
+		if (!(tmp = expand_and_escape(gettokenstr(current), env)))
+			return (-1);
+		ft_lstadd_back(dst, tmp);
+		current = current->next;
+		/*
 		rawargv = NULL;
 		idlen = getidlen(gettokenstr(current), env);
 		if (!(rawargv = ft_calloc(idlen + 1, sizeof(char))))
 			return (-1);
 		expand_and_escape(&rawargv, gettokenstr(current), idlen, env);
+		//printf("RAW|%s|\n", rawargv);
 		tmp = parse_token_expanded(rawargv);
+		//printf("FRESH|%s|\n", rawargv);
 		ft_lstadd_back(dst, tmp);
 		free(rawargv);
 		current = current->next;
+		*/
 	}
 	if (!*dst)
 		return (-2);
@@ -69,16 +82,16 @@ static void
 }
 
 int
-	parse_redir(t_list *current, t_list *env)
+	parse_redir(t_list *redir, t_list *env)
 {
 	int		r;
 	t_list	*expandedredir;
 	t_redir	*redircontent;
 
-	while (current)
+	while (redir)
 	{
 		expandedredir = NULL;
-		redircontent = current->content;
+		redircontent = redir->content;
 		if ((r = expandtoken(&expandedredir, redircontent->fd_str, env)) < 0)
 		{
 			ft_lstclear(&expandedredir, deltoken);
@@ -93,7 +106,7 @@ int
 			badredir();
 			return (-2);
 		}
-		current = current->next;
+		redir = redir->next;
 	}
 	return (0);
 }

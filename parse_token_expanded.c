@@ -6,12 +6,12 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/10 19:37:25 by user42            #+#    #+#             */
-/*   Updated: 2021/03/11 12:41:15 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/12 14:26:20 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+/*
 static void
 	escape(char *input, t_parsedata *pd)
 {
@@ -83,3 +83,4 @@ t_list
 		return (fail(&r));
 	return (r);
 }
+*/

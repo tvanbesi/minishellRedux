@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/11 20:42:25 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/12 16:24:16 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,28 +178,25 @@ void				showcommand(void *p);
 char				*readstdin(void);
 int					prompt(char **line);
 int					expandcommand(t_list *command, t_list *env);
-char				*expand(char *s, t_list *env);
+//char				*expand(char *s, t_list *env);
 t_list				*tokenize(char *input);
 t_list				*parse_token(char *input);
 int					parse_token_loop(t_list **r, char *input, t_parsedata *pd);
-t_list				*parse_token_expanded(char *input);
+//t_list				*parse_token_expanded(char *input);
 t_list				*parse_command(t_list *token);
 int					isidentifiervalid(char *s);
-int					shouldescape(int c1, int c2, int qt);
-int					shouldexpand(int c1, int c2, int qt);
-void				expansion(char *dst, char *src, t_list *env, t_parsedata *pd);
-void				expand_and_escape(char **dst, char *src, int idlen, t_list *env);
+//int					shouldescape(int c1, int c2, int qt);
+//int					shouldexpand(int c1, int c2, int qt);
+//void				expansion(char *dst, char *src, t_list *env, t_parsedata *pd);
+t_list				*expand_and_escape(char *src, t_list *env);
 int					expandtoken(t_list **dst, t_list *src, t_list *env);
 int					parse_redircmd(t_list *token, t_list *command);
 int					trimcommand(t_list **argv);
-int					parse_redir(t_list *current, t_list *env);
+int					parse_redir(t_list *redir, t_list *env);
 int					operatorsanity(t_list *token);
 void				*errorparse(t_list **token);
 void				*fail(t_list **token);
 int					addword(t_list **r, char *input, t_parsedata *pd);
-int					addwordexpanded(t_list **r, char *input, t_parsedata *pd);
-int					openquote(char *s, t_parsedata *pd);
-int					closequote(char *s, t_parsedata *pd, t_list **r);
 
 /*
 ***	TOKENS
@@ -208,15 +205,15 @@ int					closequote(char *s, t_parsedata *pd, t_list **r);
 t_list				*newtoken(int type);
 int					addtoken(t_list **atoken, const char *input, size_t l, int type);
 int					addnulltoken(t_list **atoken);
-int					addtokenexpanded(t_list **atoken, const char *input, size_t l, int type);
+int					addemptytoken(t_list **atoken);
+int					addtokenexpanded(t_list **atoken, const char *src);
 t_token				*tokendup(void *p);
 char				*getidentifier(char *s, t_list *env);
 size_t				getidlen(char *s, t_list *env);
-//char				*unquote(char *s, t_list *env);
 int					gettokentype(t_list *token);
 char				*gettokenstr(t_list *token);
 int					gettokencommandtype(t_list *token);
-int					emptytokenexception(char *word, t_list *env);
+//int					emptytokenexception(char *word, t_list *env);
 int					isquote(int c);
 int					ismetachar(int c);
 int					isoperator(int c);
@@ -261,6 +258,7 @@ int					getenvdata(char *input, char **val,
 					char **name, t_list **aenv);
 int					addenv(t_list **aenv, char *input);
 void				delenv(void *p);
+int					canbeexpanded(char c);
 
 /*
 ***	COMMAND SANITY
