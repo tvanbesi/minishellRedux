@@ -2,7 +2,6 @@ SRCS		=	builtin.c \
 				cd.c \
 				debug.c \
 				echo.c \
-				emptytokenexception.c \
 				env.c \
 				error.c \
 				errorcmd.c \

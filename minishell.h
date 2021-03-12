@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/12 18:12:35 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/12 18:41:37 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,8 +182,10 @@ t_list				*parse_command(t_list *token);
 int					isidentifiervalid(char *s);
 t_list				*expand_and_escape(char *src, t_list *env);
 int					expandtoken(t_list **dst, t_list *src, t_list *env);
-int					expandloop(t_list **r, char *src, t_parsedata *pd, t_list *env);
-int					expand(t_list **atoken, char *src, t_parsedata *pd, t_list *env);
+int					expandloop(t_list **r,
+					char *src, t_parsedata *pd, t_list *env);
+int					expand(t_list **atoken,
+					char *src, t_parsedata *pd, t_list *env);
 int					parse_redircmd(t_list *token, t_list *command);
 int					trimcommand(t_list **argv);
 int					parse_redir(t_list *redir, t_list *env);
@@ -197,7 +199,8 @@ int					addword(t_list **r, char *input, t_parsedata *pd);
 */
 
 t_list				*newtoken(int type);
-int					addtoken(t_list **atoken, const char *input, size_t l, int type);
+int					addtoken(t_list **atoken,
+					const char *input, size_t l, int type);
 int					addnulltoken(t_list **atoken);
 int					addemptytoken(t_list **atoken);
 int					addtokenexpanded(t_list **atoken, const char *src);
@@ -272,7 +275,8 @@ void				execute(t_list *command, t_shell *shell);
 void				builtin(t_list *command, t_shell *shell, int csanity);
 int					process(t_list *command, t_shell *shell);
 int					minipipe(t_list *command, t_shell *shell);
-int					minipipechildren(t_list *command, t_shell *shell, int *fd, int npipe);
+int					minipipechildren(t_list *command,
+					t_shell *shell, int *fd, int npipe);
 int					getpipeexitstatus(int nchildren, int *pid_children);
 void				closefd(int *fd, int n);
 int					redirect(t_list *command);
