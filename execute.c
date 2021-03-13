@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 18:06:35 by user42            #+#    #+#             */
-/*   Updated: 2021/03/13 11:06:27 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 16:02:23 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void
 	if (getcommandredir(command))
 		if (redirect(command) == -1)
 		{
+			g_var.g_exitstatus = EXIT_STAT_FAIL;
 			puterror(strerror(errno));
 			return ;
 		}
