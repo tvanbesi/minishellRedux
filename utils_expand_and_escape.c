@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 18:07:13 by user42            #+#    #+#             */
-/*   Updated: 2021/03/12 18:13:52 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 15:31:23 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,16 @@ static int
 	{
 		pd->qt = 0;
 		pd->i++;
-		if (src[pd->i] == '\0' && !ft_strlen(pd->buf))
-			if (addemptytoken(r) == -1)
-				return (-1);
+		if (!ft_strlen(pd->buf))
+		{
+			if (src[pd->i] == '\0')
+			{
+				if (addemptytoken(r) == -1)
+					return (-1);
+			}
+			else if (src[pd->i] == '$')
+				pd->addempty = 1;
+		}
 		return (0);
 	}
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 14:52:09 by user42            #+#    #+#             */
-/*   Updated: 2021/03/13 10:45:45 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 15:36:05 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int
 		ft_lstadd_back(dst, tmp);
 		current = current->next;
 	}
-	if (!*dst)
+	if (!*dst || !gettokenstr(*dst))
 		return (-2);
 	return (0);
 }

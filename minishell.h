@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/13 11:46:22 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 15:25:12 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ typedef struct		s_parsedata
 	int				r;
 	char			*buf;
 	char			*param;
+	int				addempty;
 }					t_parsedata;
 
 typedef	enum		e_prompt_r

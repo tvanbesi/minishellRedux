@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 18:09:41 by user42            #+#    #+#             */
-/*   Updated: 2021/03/13 10:45:40 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 15:34:09 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,16 @@ static int
 	int	i;
 
 	i = 0;
+	if (pd->addempty)
+	{
+		pd->addempty = 0;
+		if (!pd->qt && ft_isspht(param[0]))
+			if (addemptytoken(atoken) == -1)
+				return (-1);
+	}
+	if (!pd->qt && !ft_strlen(buf))
+		while (ft_isspht(param[i]))
+			i++;
 	while (param[i])
 	{
 		if (!pd->qt && ft_isspht(param[i]))
