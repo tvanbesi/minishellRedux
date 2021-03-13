@@ -6,18 +6,15 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 18:09:41 by user42            #+#    #+#             */
-/*   Updated: 2021/03/13 15:34:09 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 15:40:07 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static int
-	parse_expansion(t_list **atoken, char *buf, char *param, t_parsedata *pd)
+	addempty(t_list **atoken, t_parsedata *pd, char *param)
 {
-	int	i;
-
-	i = 0;
 	if (pd->addempty)
 	{
 		pd->addempty = 0;
@@ -25,6 +22,17 @@ static int
 			if (addemptytoken(atoken) == -1)
 				return (-1);
 	}
+	return (0);
+}
+
+static int
+	parse_expansion(t_list **atoken, char *buf, char *param, t_parsedata *pd)
+{
+	int	i;
+
+	i = 0;
+	if (addempty(atoken, pd, param) == -1)
+		return (-1);
 	if (!pd->qt && !ft_strlen(buf))
 		while (ft_isspht(param[i]))
 			i++;
