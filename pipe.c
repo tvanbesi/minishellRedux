@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 12:09:27 by user42            #+#    #+#             */
-/*   Updated: 2021/03/13 10:45:19 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 11:06:39 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ int
 	npipe = getnpipe(command);
 	if (!(fd = (int*)malloc(sizeof(int) * npipe * 2)))
 		return (-1);
-	if ((g_var.g_exitstatus = minipipechildren(command, shell, fd, npipe)) == -1)
+	if ((g_var.g_exitstatus = minipipechildren(command,
+	shell, fd, npipe)) == -1)
 		puterror(strerror(errno));
 	g_var.g_pid = 0;
 	free(fd);

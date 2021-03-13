@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/13 10:47:21 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 11:07:06 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,6 @@ void				showcommand(void *p);
 ***	PARSING
 */
 
-char				*readstdin(void);
 int					prompt(char **line);
 int					expandcommand(t_list *command, t_list *env);
 t_list				*tokenize(char *input);

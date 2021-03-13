@@ -29,7 +29,6 @@ SRCS		=	builtin.c \
 				process.c \
 				prompt.c \
 				pwd.c \
-				readstdin.c \
 				redirection.c \
 				signal.c \
 				trimcommand.c \

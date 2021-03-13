@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 18:06:35 by user42            #+#    #+#             */
-/*   Updated: 2021/03/13 10:45:08 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 11:06:27 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ static void
 static void
 	nlsignal(void)
 {
-	if (g_var.g_exitstatus == 128 + SIGINT || g_var.g_exitstatus == 128 + SIGQUIT)
+	if (g_var.g_exitstatus == 128 + SIGINT
+	|| g_var.g_exitstatus == 128 + SIGQUIT)
 		write(STDERR, "\n", 1);
 }
 
