@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/12 14:05:34 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/01/11 16:41:30 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 11:47:55 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,13 @@ void
 {
 	puterror(msg);
 	return (NULL);
+}
+
+void
+	errorinvalidid(char *argv)
+{
+	ft_putstr_fd(ERROR_INVALID_IDENTIFIER, STDERR);
+	ft_putstr_fd(" : \" ", STDERR);
+	ft_putstr_fd(argv, STDERR);
+	ft_putendl_fd(" \"", STDERR);
 }

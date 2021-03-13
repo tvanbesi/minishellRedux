@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/13 11:26:40 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 11:46:22 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -319,6 +319,7 @@ void				resolvepath(char *rpath);
 void				puterrorcmd(char *cmd, int csanity);
 void				puterror(char *msg);
 void				*error(char *msg);
+void				errorinvalidid(char *argv);
 
 /*
 ***	MISC
