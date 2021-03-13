@@ -6,17 +6,20 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 22:31:44 by user42            #+#    #+#             */
-/*   Updated: 2021/03/13 10:45:50 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 11:26:46 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 void
-	*errorparse(t_list **token)
+	*errorparse(t_list **token, int c)
 {
 	ft_lstclear(token, deltoken);
-	puterror(ERROR_PARSE);
+	ft_putstr_fd(ERROR_PARSE, STDERR);
+	ft_putstr_fd(" near unexpected symbol : ", STDERR);
+	ft_putchar_fd(c, STDERR);
+	write(STDERR, "\n", 1);
 	g_var.g_exitstatus = EXIT_STAT_ERRORPARSE;
 	return (NULL);
 }

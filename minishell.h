@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/13 11:07:06 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 11:26:40 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 
 # define ERROR_NOCMD				"Command not found"
 # define ERROR_PARSE				"Parse error"
+# define ERROR_PARSE_QUOTE			"Parse error (unclosed quote)"
 # define ERROR_BADREDIR				"Ambiguous redirect"
 # define ERROR_TOO_MANY_ARG			"Too many arguments"
 # define ERROR_NOT_ENOUGH_ARG		"Not enough arguments"
@@ -195,7 +196,7 @@ int					parse_redircmd(t_list *token, t_list *command);
 int					trimcommand(t_list **argv);
 int					parse_redir(t_list *redir, t_list *env);
 int					operatorsanity(t_list *token);
-void				*errorparse(t_list **token);
+void				*errorparse(t_list **token, int c);
 void				*fail(t_list **token);
 int					addword(t_list **r, char *input, t_parsedata *pd);
 

@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/07 17:40:07 by user42            #+#    #+#             */
-/*   Updated: 2021/03/12 15:14:16 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 11:27:20 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,23 @@ static void
 	pd->i = 0;
 	pd->l = 1;
 	pd->qt = 0;
+}
+
+static void
+	*errorparsequote(t_list **r)
+{
+	ft_lstclear(r, deltoken);
+	puterror(ERROR_PARSE_QUOTE);
+	g_var.g_exitstatus = EXIT_STAT_ERRORPARSE;
+	return (NULL);
+}
+
+static void
+	*rett(t_list **r)
+{
+	ft_lstclear(r, deltoken);
+	g_var.g_exitstatus = EXIT_STAT_ERRORPARSE;
+	return (NULL);
 }
 
 t_list
@@ -37,11 +54,13 @@ t_list
 		{
 			if (ret == -1)
 				return (fail(&r));
-			return (errorparse(&r));
+			return (errorparse(&r, input[pd.i]));
 		}
 	if (addtoken(&r, &input[pd.s], pd.l - 1, WORD) == -1)
 		return (fail(&r));
-	if (pd.qt || operatorsanity(r) == -1)
-		return (errorparse(&r));
+	if (pd.qt)
+		return (errorparsequote(&r));
+	if (operatorsanity(r) == -1)
+		return (rett(&r));
 	return (r);
 }
