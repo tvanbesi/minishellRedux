@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 22:31:44 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 22:35:34 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 10:45:50 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void
 {
 	ft_lstclear(token, deltoken);
 	puterror(ERROR_PARSE);
-	g_exitstatus = EXIT_STAT_ERRORPARSE;
+	g_var.g_exitstatus = EXIT_STAT_ERRORPARSE;
 	return (NULL);
 }
 
@@ -26,7 +26,7 @@ void
 {
 	ft_lstclear(token, deltoken);
 	puterror(strerror(errno));
-	g_exitstatus = EXIT_STAT_FAIL;
+	g_var.g_exitstatus = EXIT_STAT_FAIL;
 	return (NULL);
 }
 

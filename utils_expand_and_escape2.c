@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/12 18:09:41 by user42            #+#    #+#             */
-/*   Updated: 2021/03/12 18:13:49 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 10:45:40 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int
 {
 	if (src[pd->i + 1] == '?')
 	{
-		if (!(pd->param = ft_itoa(g_exitstatus)))
+		if (!(pd->param = ft_itoa(g_var.g_exitstatus)))
 			return (-1);
 		pd->j += ft_strlcat(pd->buf, pd->param, pd->idlen + 1);
 		free(pd->param);

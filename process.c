@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/14 15:46:31 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/09 23:20:35 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 10:46:45 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ static int
 	if (WIFEXITED(stat_loc))
 	{
 		if (WEXITSTATUS(stat_loc) == -1)
-			g_exitstatus = EXIT_STAT_FAIL;
+			g_var.g_exitstatus = EXIT_STAT_FAIL;
 		else
-			g_exitstatus = WEXITSTATUS(stat_loc);
+			g_var.g_exitstatus = WEXITSTATUS(stat_loc);
 	}
 	else if (WIFSIGNALED(stat_loc))
-		g_exitstatus = 128 + WTERMSIG(stat_loc);
+		g_var.g_exitstatus = 128 + WTERMSIG(stat_loc);
 	return (0);
 }
 
@@ -36,9 +36,9 @@ int
 	char		**envp;
 
 	stat_loc = 0;
-	if ((g_pid = fork()) == -1)
+	if ((g_var.g_pid = fork()) == -1)
 		return (-1);
-	if (g_pid == 0)
+	if (g_var.g_pid == 0)
 	{
 		path = getcmd(command);
 		if (!(argv = getprocessargv(getcommandargv(command), path)))
@@ -49,8 +49,8 @@ int
 			puterror(strerror(errno));
 		exit(-1);
 	}
-	else if (waitpid(g_pid, &stat_loc, 0) == -1)
+	else if (waitpid(g_var.g_pid, &stat_loc, 0) == -1)
 		return (-1);
-	g_pid = 0;
+	g_var.g_pid = 0;
 	return (handleexit(stat_loc));
 }

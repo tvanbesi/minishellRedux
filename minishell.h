@@ -6,7 +6,7 @@
 /*   By: thomasvanbesien <marvin@42.fr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/29 17:09:24 by thomasvan         #+#    #+#             */
-/*   Updated: 2021/03/12 18:41:37 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 10:47:21 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,12 @@ typedef	struct		s_shell
 	int				(*b[7])(t_list *argv, t_list **aenv);
 	int				exit;
 }					t_shell;
+
+typedef struct		s_glob
+{
+	pid_t			g_pid;
+	int				g_exitstatus;
+}					t_glob;
 
 t_shell				*initshell(char **envp);
 
@@ -321,7 +327,6 @@ void				*error(char *msg);
 void				loopcollapsestr(char *s, int i, int n);
 void				collapsestr(char *s, int i);
 
-extern	int			g_pid;
-extern	int			g_exitstatus;
+extern	t_glob		g_var;
 
 #endif

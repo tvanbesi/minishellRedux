@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 18:06:35 by user42            #+#    #+#             */
-/*   Updated: 2021/03/09 23:33:34 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 10:45:08 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ static void
 	setexitstatus(int csanity)
 {
 	if (csanity == NOCMD || csanity == NOFILE)
-		g_exitstatus = EXIT_STAT_NOCMD;
+		g_var.g_exitstatus = EXIT_STAT_NOCMD;
 	else if (csanity == NOEXEC || csanity == ISDIR)
-		g_exitstatus = EXIT_STAT_NOEXEC;
+		g_var.g_exitstatus = EXIT_STAT_NOEXEC;
 	else
-		g_exitstatus = EXIT_STAT_FAIL;
+		g_var.g_exitstatus = EXIT_STAT_FAIL;
 }
 
 void
@@ -60,7 +60,7 @@ static void
 static void
 	nlsignal(void)
 {
-	if (g_exitstatus == 128 + SIGINT || g_exitstatus == 128 + SIGQUIT)
+	if (g_var.g_exitstatus == 128 + SIGINT || g_var.g_exitstatus == 128 + SIGQUIT)
 		write(STDERR, "\n", 1);
 }
 

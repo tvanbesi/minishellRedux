@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/02 17:01:08 by user42            #+#    #+#             */
-/*   Updated: 2021/03/10 00:11:14 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 10:41:28 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ t_shell
 {
 	t_shell	*shell;
 
-	g_pid = 0;
+	g_var.g_pid = 0;
 	if (!(shell = malloc(sizeof(*shell))))
 		return (NULL);
 	shell->env = NULL;

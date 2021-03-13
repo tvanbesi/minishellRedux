@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 16:29:47 by user42            #+#    #+#             */
-/*   Updated: 2021/03/11 01:24:34 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 10:44:59 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ void
 	if ((r = (*(shell->b)[csanity])(argv, &shell->env)) == -1)
 		puterror(strerror(errno));
 	if (r == 0)
-		g_exitstatus = EXIT_STAT_SUCCESS;
+		g_var.g_exitstatus = EXIT_STAT_SUCCESS;
 	else if (r == -1 || r == -3)
-		g_exitstatus = EXIT_STAT_FAIL;
+		g_var.g_exitstatus = EXIT_STAT_FAIL;
 	else if (r == -2)
-		g_exitstatus = EXIT_STAT_ERRORPARSE;
+		g_var.g_exitstatus = EXIT_STAT_ERRORPARSE;
 }

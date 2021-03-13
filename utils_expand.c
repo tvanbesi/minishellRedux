@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 14:52:09 by user42            #+#    #+#             */
-/*   Updated: 2021/03/12 17:00:34 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 10:45:45 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void
 	badredir(void)
 {
 	puterror(ERROR_BADREDIR);
-	g_exitstatus = EXIT_STAT_FAIL;
+	g_var.g_exitstatus = EXIT_STAT_FAIL;
 }
 
 int

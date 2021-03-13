@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 14:35:01 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/11 01:27:29 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 10:45:14 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int
 
 	(void)aenv;
 	if (!argv)
-		exit(g_exitstatus);
+		exit(g_var.g_exitstatus);
 	arg = gettokenstr(argv);
 	i = 0;
 	s = 1;

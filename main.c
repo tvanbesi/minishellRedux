@@ -6,14 +6,13 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 15:05:20 by user42            #+#    #+#             */
-/*   Updated: 2021/03/12 18:14:00 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/13 10:46:23 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-pid_t	g_pid;
-int		g_exitstatus;
+t_glob	g_var = {0, 0};
 
 static void
 	freedata(char **input, t_list **token, t_list **command)
