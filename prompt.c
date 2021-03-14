@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:15:05 by user42            #+#    #+#             */
-/*   Updated: 2021/03/13 11:05:42 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/14 13:44:45 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,20 @@ int
 	char	buf[1];
 
 	lfactor = 1;
-	if (!(*line = malloc(BUFFER_SIZE * lfactor + 1)))
+	if (!(*line = ft_calloc(BUFFER_SIZE * lfactor + 1, sizeof(char))))
 		return (-1);
 	i = 0;
-	while ((b = read(STDIN, buf, 1)) > 0)
+	while ((b = read(STDIN, buf, 1)) >= 0)
 	{
+		if (b == 0)
+		{
+			if (!ft_strlen(*line))
+			{
+				ft_putstr_fd("exit", STDERR);
+				exit(g_var.g_exitstatus);
+			}
+			continue ;
+		}
 		if (i == BUFFER_SIZE * lfactor && extendline(line, ++lfactor) == -1)
 			return (-1);
 		if (buf[0] == '\n')
@@ -47,11 +56,6 @@ int
 		(*line)[i++] = buf[0];
 	}
 	(*line)[i] = '\0';
-	if (b == 0 && !(*line)[0])
-	{
-		write(STDERR, "exit", 4);
-		exit(g_var.g_exitstatus);
-	}
 	b = b == -1 ? b : 0;
 	return (b);
 }
