@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 18:06:35 by user42            #+#    #+#             */
-/*   Updated: 2021/03/14 12:54:31 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/14 17:36:40 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,10 @@ static void
 static void
 	nlsignal(void)
 {
-	if (g_var.g_exitstatus == 128 + SIGINT
-	|| g_var.g_exitstatus == 128 + SIGQUIT)
+	if (g_var.g_exitstatus == 128 + SIGINT)
 		write(STDERR, "\n", 1);
+	else if (g_var.g_exitstatus == 128 + SIGQUIT)
+		ft_putendl_fd("Quit (core dumped)", STDERR);
 }
 
 void
