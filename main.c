@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/09 15:05:20 by user42            #+#    #+#             */
-/*   Updated: 2021/03/13 10:46:23 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/14 12:55:20 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ static void
 		command = parse_command(token);
 		cyclecommand(command, shell);
 		freedata(&input, &token, &command);
+		shell->exit = 0;
 	}
 }
 
