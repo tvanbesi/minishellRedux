@@ -6,11 +6,19 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 14:35:01 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/13 10:45:14 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/14 16:54:12 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void
+	exitnan()
+{
+	ft_putstr_fd("exit\n", STDERR);
+	puterror(ERROR_NAN);
+	exit(EXIT_STAT_ERRORPARSE);
+}
 
 static void
 	argsanity(int s, char *p)
@@ -18,22 +26,17 @@ static void
 	if (s == 1)
 	{
 		if (ft_strncmp(p, "9223372036854775807", 20) > 0)
-		{
-			puterror(ERROR_NAN);
-			exit(2);
-		}
+			exitnan();
 	}
 	else if (s == -1)
 		if (ft_strncmp(p, "9223372036854775808", 20) > 0)
-		{
-			puterror(ERROR_NAN);
-			exit(2);
-		}
+			exitnan();
 }
 
 static int
 	toomanyarg(void)
 {
+	ft_putstr_fd("exit\n", STDERR);
 	puterror(ERROR_TOO_MANY_ARG);
 	return (-3);
 }
@@ -55,12 +58,12 @@ int
 		if (arg[i++] == '-')
 			s = -1;
 	argsanity(s, &arg[i]);
-	while (arg[i])
-		if (!(ft_isdigit(arg[i++])))
-		{
-			puterror(ERROR_NAN);
-			exit(EXIT_STAT_ERRORPARSE);
-		}
+	if (!arg[0])
+		exitnan();
+	else
+		while (arg[i])
+			if (!(ft_isdigit(arg[i++])))
+				exitnan();
 	if (argv->next)
 		return (toomanyarg());
 	exit((unsigned)ft_atoi(arg));
