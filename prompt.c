@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/12 14:15:05 by user42            #+#    #+#             */
-/*   Updated: 2021/03/14 17:17:00 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/15 12:03:04 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,16 @@ static int
 	return (0);
 }
 
+static void
+	exiteof(char *line)
+{
+	if (!ft_strlen(line))
+	{
+		ft_putstr_fd("exit\n", STDERR);
+		exit(g_var.g_exitstatus);
+	}
+}
+
 int
 	prompt(char **line)
 {
@@ -42,11 +52,7 @@ int
 	{
 		if (b == 0)
 		{
-			if (!ft_strlen(*line))
-			{
-				ft_putstr_fd("exit\n", STDERR);
-				exit(g_var.g_exitstatus);
-			}
+			exiteof(*line);
 			continue ;
 		}
 		if (i == BUFFER_SIZE * lfactor && extendline(line, ++lfactor) == -1)
