@@ -6,14 +6,14 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 14:35:01 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/14 16:54:12 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/15 11:43:47 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static void
-	exitnan()
+	exitnan(void)
 {
 	ft_putstr_fd("exit\n", STDERR);
 	puterror(ERROR_NAN);

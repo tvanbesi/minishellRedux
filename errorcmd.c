@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 16:37:25 by user42            #+#    #+#             */
-/*   Updated: 2021/03/08 19:40:14 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/15 11:56:57 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,53 +15,81 @@
 static void
 	errornocmd(char *cmd)
 {
-	char	msg[1000];
-	int		n;
+	char	*errormsg;
+	size_t	l;
 
-	ft_strlcpy(msg, ERROR_NOCMD, BUFFER_SIZE_ERRORMSG);
-	ft_strlcat(msg, " : ", BUFFER_SIZE_ERRORMSG);
-	ft_strlcat(msg, cmd, BUFFER_SIZE_ERRORMSG);
-	n = ft_strlcat(msg, "\n", BUFFER_SIZE_ERRORMSG);
-	write(STDERR, msg, n);
+	l = ft_strlen(ERROR_NOCMD) + 3 + ft_strlen(cmd) + 1;
+	if (!(errormsg = ft_calloc(l + 1, sizeof(char))))
+	{
+		puterror(strerror(errno));
+		return ;
+	}
+	ft_strlcpy(errormsg, ERROR_NOCMD, l + 1);
+	ft_strlcat(errormsg, " : ", l + 1);
+	ft_strlcat(errormsg, cmd, l + 1);
+	ft_strlcat(errormsg, "\n", l + 1);
+	write(STDERR, errormsg, l);
+	free(errormsg);
 }
 
 static void
 	errornoexec(char *cmd)
 {
-	char	msg[1000];
-	int		n;
+	char	*errormsg;
+	size_t	l;
 
-	ft_strlcpy(msg, cmd, BUFFER_SIZE_ERRORMSG);
-	ft_strlcat(msg, " : ", BUFFER_SIZE_ERRORMSG);
-	ft_strlcat(msg, ERROR_ISNEXEC, BUFFER_SIZE_ERRORMSG);
-	n = ft_strlcat(msg, "\n", BUFFER_SIZE_ERRORMSG);
-	write(STDERR, msg, n);
+	l = ft_strlen(ERROR_NOCMD) + 3 + ft_strlen(cmd) + 1;
+	if (!(errormsg = ft_calloc(l + 1, sizeof(char))))
+	{
+		puterror(strerror(errno));
+		return ;
+	}
+	ft_strlcpy(errormsg, cmd, l + 1);
+	ft_strlcat(errormsg, " : ", l + 1);
+	ft_strlcat(errormsg, ERROR_ISNEXEC, l + 1);
+	ft_strlcat(errormsg, "\n", l + 1);
+	write(STDERR, errormsg, l);
+	free(errormsg);
 }
 
 static void
 	errornofile(char *cmd)
 {
-	char	msg[1000];
-	int		n;
+	char	*errormsg;
+	size_t	l;
 
-	ft_strlcpy(msg, cmd, BUFFER_SIZE_ERRORMSG);
-	ft_strlcat(msg, " : ", BUFFER_SIZE_ERRORMSG);
-	ft_strlcat(msg, ERROR_NOFILE, BUFFER_SIZE_ERRORMSG);
-	n = ft_strlcat(msg, "\n", BUFFER_SIZE_ERRORMSG);
-	write(STDERR, msg, n);
+	l = ft_strlen(ERROR_NOCMD) + 3 + ft_strlen(cmd) + 1;
+	if (!(errormsg = ft_calloc(l + 1, sizeof(char))))
+	{
+		puterror(strerror(errno));
+		return ;
+	}
+	ft_strlcpy(errormsg, cmd, l + 1);
+	ft_strlcat(errormsg, " : ", l + 1);
+	ft_strlcat(errormsg, ERROR_NOFILE, l + 1);
+	ft_strlcat(errormsg, "\n", l + 1);
+	write(STDERR, errormsg, l);
+	free(errormsg);
 }
 
 static void
 	errorisdir(char *cmd)
 {
-	char	msg[1000];
-	int		n;
+	char	*errormsg;
+	size_t	l;
 
-	ft_strlcpy(msg, cmd, BUFFER_SIZE_ERRORMSG);
-	ft_strlcat(msg, " : ", BUFFER_SIZE_ERRORMSG);
-	ft_strlcat(msg, ERROR_ISDIR, BUFFER_SIZE_ERRORMSG);
-	n = ft_strlcat(msg, "\n", BUFFER_SIZE_ERRORMSG);
-	write(STDERR, msg, n);
+	l = ft_strlen(ERROR_NOCMD) + 3 + ft_strlen(cmd) + 1;
+	if (!(errormsg = ft_calloc(l + 1, sizeof(char))))
+	{
+		puterror(strerror(errno));
+		return ;
+	}
+	ft_strlcpy(errormsg, cmd, l + 1);
+	ft_strlcat(errormsg, " : ", l + 1);
+	ft_strlcat(errormsg, ERROR_ISDIR, l + 1);
+	ft_strlcat(errormsg, "\n", l + 1);
+	write(STDERR, errormsg, l);
+	free(errormsg);
 }
 
 void
