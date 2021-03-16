@@ -6,7 +6,7 @@
 /*   By: user42 <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/11 16:37:25 by user42            #+#    #+#             */
-/*   Updated: 2021/03/15 11:56:57 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/16 18:33:24 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void
 	char	*errormsg;
 	size_t	l;
 
-	l = ft_strlen(ERROR_NOCMD) + 3 + ft_strlen(cmd) + 1;
+	l = ft_strlen(ERROR_ISNEXEC) + 3 + ft_strlen(cmd) + 1;
 	if (!(errormsg = ft_calloc(l + 1, sizeof(char))))
 	{
 		puterror(strerror(errno));
@@ -58,7 +58,7 @@ static void
 	char	*errormsg;
 	size_t	l;
 
-	l = ft_strlen(ERROR_NOCMD) + 3 + ft_strlen(cmd) + 1;
+	l = ft_strlen(ERROR_NOFILE) + 3 + ft_strlen(cmd) + 1;
 	if (!(errormsg = ft_calloc(l + 1, sizeof(char))))
 	{
 		puterror(strerror(errno));
@@ -78,7 +78,7 @@ static void
 	char	*errormsg;
 	size_t	l;
 
-	l = ft_strlen(ERROR_NOCMD) + 3 + ft_strlen(cmd) + 1;
+	l = ft_strlen(ERROR_ISDIR) + 3 + ft_strlen(cmd) + 1;
 	if (!(errormsg = ft_calloc(l + 1, sizeof(char))))
 	{
 		puterror(strerror(errno));
