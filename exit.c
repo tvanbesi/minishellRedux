@@ -6,7 +6,7 @@
 /*   By: tvanbesi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/13 14:35:01 by tvanbesi          #+#    #+#             */
-/*   Updated: 2021/03/15 11:43:47 by user42           ###   ########.fr       */
+/*   Updated: 2021/03/17 09:09:05 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,13 @@ static int
 	return (-3);
 }
 
+static void
+	exitandshowit(int n)
+{
+	ft_putstr_fd("exit\n", STDERR);
+	exit(n);
+}
+
 int
 	exitshell(t_list *argv, t_list **aenv)
 {
@@ -50,7 +57,7 @@ int
 
 	(void)aenv;
 	if (!argv)
-		exit(g_var.g_exitstatus);
+		exitandshowit(g_var.g_exitstatus);
 	arg = gettokenstr(argv);
 	i = 0;
 	s = 1;
@@ -66,5 +73,6 @@ int
 				exitnan();
 	if (argv->next)
 		return (toomanyarg());
+	ft_putstr_fd("exit\n", STDERR);
 	exit((unsigned)ft_atoi(arg));
 }
